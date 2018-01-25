@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Controller\AppController;
@@ -10,19 +11,19 @@ use App\Controller\AppController;
  *
  * @method \App\Model\Entity\Sticker[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class StickersController extends AppController
-{
+class StickersController extends AppController {
 
     /**
      * Index method
      *
      * @return \Cake\Http\Response|void
      */
-    public function index()
-    {
-        $stickers = $this->paginate($this->Stickers);
-
-        $this->set(compact('stickers'));
+    public function index() {
+        $stickers = $this->Stickers->find('all');
+        $this->set([
+            'stickers' => $stickers,
+            '_serialize' => ['stickers',]
+        ]);
     }
 
     /**
@@ -32,13 +33,13 @@ class StickersController extends AppController
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
-    {
-        $sticker = $this->Stickers->get($id, [
-            'contain' => ['Earnings']
-        ]);
+    public function view($id = null) {
+        $sticker = $this->Stickers->get($id);
 
-        $this->set('sticker', $sticker);
+        $this->set([
+            'sticker' => $sticker,
+            '_serialize' => ['sticker']
+        ]);
     }
 
     /**
@@ -46,19 +47,20 @@ class StickersController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
-    {
-        $sticker = $this->Stickers->newEntity();
-        if ($this->request->is('post')) {
-            $sticker = $this->Stickers->patchEntity($sticker, $this->request->getData());
-            if ($this->Stickers->save($sticker)) {
-                $this->Flash->success(__('The sticker has been saved.'));
+    public function add() {
+        $sticker = $this->Stickers->newEntity($this->request->getData());
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The sticker could not be saved. Please, try again.'));
+        if ($this->Stickers->save($sticker)) {
+            $message = 'Saved';
+        } else {
+            $message = 'Error';
         }
-        $this->set(compact('sticker'));
+
+        $this->set([
+            'message' => $message,
+            'member' => $sticker,
+            '_serialize' => ['message', 'sticker']
+        ]);
     }
 
     /**
@@ -68,21 +70,23 @@ class StickersController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
-    {
-        $sticker = $this->Stickers->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
+    public function edit($id = null) {
+        $sticker = $this->Stickers->get($id);
+
+        if ($this->request->is(['post', 'put'])) {
             $sticker = $this->Stickers->patchEntity($sticker, $this->request->getData());
             if ($this->Stickers->save($sticker)) {
-                $this->Flash->success(__('The sticker has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                $message = 'Saved';
+            } else {
+                $message = 'Error';
             }
-            $this->Flash->error(__('The sticker could not be saved. Please, try again.'));
         }
-        $this->set(compact('sticker'));
+
+        $this->set([
+            'message' => $message,
+            'sticker' => $sticker,
+            '_serialize' => ['message', 'sticker']
+        ]);
     }
 
     /**
@@ -92,16 +96,16 @@ class StickersController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
+    public function delete($id = null) {
         $sticker = $this->Stickers->get($id);
-        if ($this->Stickers->delete($sticker)) {
-            $this->Flash->success(__('The sticker has been deleted.'));
-        } else {
-            $this->Flash->error(__('The sticker could not be deleted. Please, try again.'));
+        $message = 'Deleted';
+        if (!$this->Stickers->delete($sticker)) {
+            $message = 'Error';
         }
-
-        return $this->redirect(['action' => 'index']);
+        $this->set([
+            'message' => $message,
+            '_serialize' => ['message']
+        ]);
     }
+
 }

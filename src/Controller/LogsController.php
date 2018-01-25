@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Controller\AppController;
@@ -10,22 +11,33 @@ use App\Controller\AppController;
  *
  * @method \App\Model\Entity\Log[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class LogsController extends AppController
-{
+class LogsController extends AppController {
 
     /**
      * Index method
      *
      * @return \Cake\Http\Response|void
      */
-    public function index()
-    {
-        $this->paginate = [
-            'contain' => ['Members', 'Workouts', 'Devices']
-        ];
-        $logs = $this->paginate($this->Logs);
+    public function index() {
+        $idMember = $this->request->getParam('member_id');
+        $idWorkout = $this->request->getParam('workout_id');
+        $idDevice = $this->request->getParam('device_id');
 
-        $this->set(compact('logs'));
+        $logs = $this->Logs->find('all')
+                ->matching('Members', function ($q) use ($idMember) {
+                    return $q->where(['Members.id' => $idMember]);
+                })
+                ->matching('Workouts', function ($q) use ($idWorkout) {
+                    return $q->where(['Workouts.id' => $idWorkout]);
+                })
+                ->matching('Devices', function ($q) use ($idDevice) {
+            return $q->where(['Devices.id' => $idDevice]);
+        });
+
+        $this->set([
+            'logs' => $logs,
+            '_serialize' => ['logs']
+        ]);
     }
 
     /**
@@ -35,13 +47,12 @@ class LogsController extends AppController
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
-    {
-        $log = $this->Logs->get($id, [
-            'contain' => ['Members', 'Workouts', 'Devices']
+    public function view($id = null) {
+        $log = $this->Logs->get($id);
+        $this->set([
+            'log' => $log,
+            '_serialize' => ['log']
         ]);
-
-        $this->set('log', $log);
     }
 
     /**
@@ -49,22 +60,22 @@ class LogsController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
-    {
-        $log = $this->Logs->newEntity();
-        if ($this->request->is('post')) {
-            $log = $this->Logs->patchEntity($log, $this->request->getData());
-            if ($this->Logs->save($log)) {
-                $this->Flash->success(__('The log has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The log could not be saved. Please, try again.'));
+    public function add() {
+        $log = $this->Logs->newEntity($this->request->getData());
+        $log->member_id = $this->request->getParam('member_id');
+        $log->workout_id = $this->request->getParam('workout_id');
+        $log->device_id = $this->request->getParam('device_id');
+        
+        if ($this->Logs->save($log)) {
+            $message = 'Saved';
+        } else {
+            $message = 'Error';
         }
-        $members = $this->Logs->Members->find('list', ['limit' => 200]);
-        $workouts = $this->Logs->Workouts->find('list', ['limit' => 200]);
-        $devices = $this->Logs->Devices->find('list', ['limit' => 200]);
-        $this->set(compact('log', 'members', 'workouts', 'devices'));
+        $this->set([
+            'message' => $message,
+            'log' => $log,
+            '_serialize' => ['message', 'log']
+        ]);
     }
 
     /**
@@ -74,24 +85,20 @@ class LogsController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
-    {
-        $log = $this->Logs->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
+    public function edit($id = null) {
+        $log = $this->Logs->get($id);
+        if ($this->request->is(['post', 'put'])) {
             $log = $this->Logs->patchEntity($log, $this->request->getData());
             if ($this->Logs->save($log)) {
-                $this->Flash->success(__('The log has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                $message = 'Saved';
+            } else {
+                $message = 'Error';
             }
-            $this->Flash->error(__('The log could not be saved. Please, try again.'));
         }
-        $members = $this->Logs->Members->find('list', ['limit' => 200]);
-        $workouts = $this->Logs->Workouts->find('list', ['limit' => 200]);
-        $devices = $this->Logs->Devices->find('list', ['limit' => 200]);
-        $this->set(compact('log', 'members', 'workouts', 'devices'));
+        $this->set([
+            'message' => $message,
+            '_serialize' => ['message']
+        ]);
     }
 
     /**
@@ -101,16 +108,16 @@ class LogsController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
+    public function delete($id = null) {
         $log = $this->Logs->get($id);
-        if ($this->Logs->delete($log)) {
-            $this->Flash->success(__('The log has been deleted.'));
-        } else {
-            $this->Flash->error(__('The log could not be deleted. Please, try again.'));
+        $message = 'Deleted';
+        if (!$this->Logs->delete($log)) {
+            $message = 'Error';
         }
-
-        return $this->redirect(['action' => 'index']);
+        $this->set([
+            'message' => $message,
+            '_serialize' => ['message']
+        ]);
     }
+
 }

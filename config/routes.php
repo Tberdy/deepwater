@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Routes configuration
  *
@@ -17,7 +18,6 @@
  * @link          https://cakephp.org CakePHP(tm) Project
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-
 use Cake\Core\Plugin;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
@@ -42,6 +42,24 @@ use Cake\Routing\Route\DashedRoute;
  *
  */
 Router::defaultRouteClass(DashedRoute::class);
+
+Router::scope('/api', function (RouteBuilder $routes) {
+    $routes->resources('Members', function (RouteBuilder $routes) {
+        $routes->resources('Devices');
+        $routes->resources('Earnings');
+        $routes->resources('Workouts');
+    });
+    
+    $routes->resources('Contests');
+    $routes->resources('Stickers');
+    
+    $routes->resources('Logs');
+    
+});
+
+Router::scope('/admin', function (RouteBuilder $routes) {
+    
+});
 
 Router::scope('/', function (RouteBuilder $routes) {
     /**
@@ -74,6 +92,8 @@ Router::scope('/', function (RouteBuilder $routes) {
      */
     $routes->fallbacks(DashedRoute::class);
 });
+
+
 
 /**
  * Load all plugin routes. See the Plugin documentation on

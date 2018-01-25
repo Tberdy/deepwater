@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Controller\AppController;
@@ -10,22 +11,24 @@ use App\Controller\AppController;
  *
  * @method \App\Model\Entity\Device[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class DevicesController extends AppController
-{
+class DevicesController extends AppController {
 
     /**
      * Index method
-     *
+     * 
      * @return \Cake\Http\Response|void
      */
-    public function index()
-    {
-        $this->paginate = [
-            'contain' => ['Members']
-        ];
-        $devices = $this->paginate($this->Devices);
-
-        $this->set(compact('devices'));
+    public function index() {
+        $idMember = $this->request->getParam('member_id');
+        
+        $devices = $this->Devices->find('all')->matching('Members', function ($q) use ($idMember) {
+            return $q->where(['Members.id' => $idMember]);
+        });
+        
+        $this->set([
+            'devices' => $devices,
+            '_serialize' => ['devices']
+        ]);
     }
 
     /**
@@ -35,13 +38,12 @@ class DevicesController extends AppController
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
-    {
-        $device = $this->Devices->get($id, [
-            'contain' => ['Members', 'Logs']
+    public function view($id = null) {
+        $device = $this->Devices->get($id);
+        $this->set([
+            'device' => $device,
+            '_serialize' => ['device']
         ]);
-
-        $this->set('device', $device);
     }
 
     /**
@@ -49,20 +51,20 @@ class DevicesController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
-    {
-        $device = $this->Devices->newEntity();
-        if ($this->request->is('post')) {
-            $device = $this->Devices->patchEntity($device, $this->request->getData());
-            if ($this->Devices->save($device)) {
-                $this->Flash->success(__('The device has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The device could not be saved. Please, try again.'));
+    public function add() {
+        $device = $this->Devices->newEntity($this->request->getData());
+        $device->member_id = $this->request->getParam('member_id');
+        
+        if ($this->Devices->save($device)) {
+            $message = 'Saved';
+        } else {
+            $message = 'Error';
         }
-        $members = $this->Devices->Members->find('list', ['limit' => 200]);
-        $this->set(compact('device', 'members'));
+        $this->set([
+            'message' => $message,
+            'device' => $device,
+            '_serialize' => ['message', 'device']
+        ]);
     }
 
     /**
@@ -72,22 +74,20 @@ class DevicesController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
-    {
-        $device = $this->Devices->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
+    public function edit($id = null) {
+        $device = $this->Devices->get($id);
+        if ($this->request->is(['post', 'put'])) {
             $device = $this->Devices->patchEntity($device, $this->request->getData());
             if ($this->Devices->save($device)) {
-                $this->Flash->success(__('The device has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                $message = 'Saved';
+            } else {
+                $message = 'Error';
             }
-            $this->Flash->error(__('The device could not be saved. Please, try again.'));
         }
-        $members = $this->Devices->Members->find('list', ['limit' => 200]);
-        $this->set(compact('device', 'members'));
+        $this->set([
+            'message' => $message,
+            '_serialize' => ['message']
+        ]);
     }
 
     /**
@@ -97,16 +97,16 @@ class DevicesController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
+    public function delete($id = null) {
         $device = $this->Devices->get($id);
-        if ($this->Devices->delete($device)) {
-            $this->Flash->success(__('The device has been deleted.'));
-        } else {
-            $this->Flash->error(__('The device could not be deleted. Please, try again.'));
+        $message = 'Deleted';
+        if (!$this->Devices->delete($device)) {
+            $message = 'Error';
         }
-
-        return $this->redirect(['action' => 'index']);
+        $this->set([
+            'message' => $message,
+            '_serialize' => ['message']
+        ]);
     }
+
 }

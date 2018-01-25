@@ -46,7 +46,8 @@ class WorkoutsTable extends Table
             'foreignKey' => 'contest_id'
         ]);
         $this->hasMany('Logs', [
-            'foreignKey' => 'workout_id'
+            'foreignKey' => 'workout_id',
+            'dependent' => true,
         ]);
     }
 

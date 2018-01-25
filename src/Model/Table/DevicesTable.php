@@ -42,7 +42,8 @@ class DevicesTable extends Table
             'joinType' => 'INNER'
         ]);
         $this->hasMany('Logs', [
-            'foreignKey' => 'device_id'
+            'foreignKey' => 'device_id',
+            'dependent' => true,
         ]);
     }
 

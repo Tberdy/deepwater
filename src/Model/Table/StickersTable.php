@@ -37,7 +37,8 @@ class StickersTable extends Table
         $this->setPrimaryKey('id');
 
         $this->hasMany('Earnings', [
-            'foreignKey' => 'sticker_id'
+            'foreignKey' => 'sticker_id',
+            'dependent' => true,
         ]);
     }
 

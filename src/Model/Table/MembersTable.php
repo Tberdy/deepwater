@@ -42,22 +42,28 @@ class MembersTable extends Table
         $this->setPrimaryKey('id');
 
         $this->hasMany('Bonds', [
-            'foreignKey' => 'member_id'
+            'foreignKey' => 'member_id',
+            'dependent' => true,
         ]);
         $this->hasMany('Devices', [
-            'foreignKey' => 'member_id'
+            'foreignKey' => 'member_id',
+            'dependent' => true,
         ]);
         $this->hasMany('Earnings', [
-            'foreignKey' => 'member_id'
+            'foreignKey' => 'member_id',
+            'dependent' => true,
         ]);
         $this->hasMany('Logs', [
-            'foreignKey' => 'member_id'
+            'foreignKey' => 'member_id',
+            'dependent' => true,
         ]);
         $this->hasMany('Messages', [
-            'foreignKey' => 'member_id'
+            'foreignKey' => 'member_id',
+            'dependent' => true,
         ]);
         $this->hasMany('Workouts', [
-            'foreignKey' => 'member_id'
+            'foreignKey' => 'member_id',
+            'dependent' => true,
         ]);
     }
 

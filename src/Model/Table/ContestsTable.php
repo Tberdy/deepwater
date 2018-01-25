@@ -37,7 +37,7 @@ class ContestsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->hasMany('Workouts', [
-            'foreignKey' => 'contest_id'
+            'foreignKey' => 'contest_id',
         ]);
     }
 
