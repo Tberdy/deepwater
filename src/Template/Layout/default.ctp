@@ -28,10 +28,14 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <?= $this->Html->css('final') ?>
     </head>
     <body>
     <?= $this->fetch('content') ?>
-    <script src="<?= $this->Elixir->version('js/final.js') ?>" async></script>
+
+    <?= $this->Html->script('inline.bundle') ?>
+    <?= $this->Html->script('polyfills.bundle') ?>
+    <?= $this->Html->script('styles.bundle') ?>
+    <?= $this->Html->script('vendor.bundle') ?>
+    <?= $this->Html->script('main.bundle') ?>
     </body>
 </html>
