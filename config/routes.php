@@ -57,9 +57,7 @@ Router::scope('/api', function (RouteBuilder $routes) {
     
 });
 
-Router::scope('/admin', function (RouteBuilder $routes) {
-    
-});
+$routes->connect('/', ['controller' => 'Angular', 'action' => 'index']);
 
 Router::scope('/', function (RouteBuilder $routes) {
     /**
@@ -92,6 +90,7 @@ Router::scope('/', function (RouteBuilder $routes) {
      */
     $routes->fallbacks(DashedRoute::class);
 });
+
 
 
 
