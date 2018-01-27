@@ -22,6 +22,7 @@
     <?= $this->Html->charset() ?>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Deepwater Project</title>
+        <base href="/">
 
     <?= $this->Html->meta('icon') ?>
 
@@ -32,10 +33,10 @@
     <body>
     <?= $this->fetch('content') ?>
 
-    <?= $this->Html->script('inline.bundle') ?>
-    <?= $this->Html->script('polyfills.bundle') ?>
-    <?= $this->Html->script('styles.bundle') ?>
-    <?= $this->Html->script('vendor.bundle') ?>
-    <?= $this->Html->script('main.bundle') ?>
+    <?= $this->Html->script('/inline.bundle') ?>
+    <?= $this->Html->script('/polyfills.bundle') ?>
+    <?= $this->Html->script('/styles.bundle') ?>
+    <?= $this->Html->script('/vendor.bundle') ?>
+    <?= $this->Html->script('/main.bundle') ?>
     </body>
 </html>

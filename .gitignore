@@ -42,7 +42,7 @@ nbproject/*
 
 
 # compiled output
-/webroot/js
+/webroot/*
 /dist
 /dist-server
 /tmp

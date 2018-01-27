@@ -6,10 +6,11 @@
   "apps": [
     {
       "root": "angular",
-      "outDir": "webroot/js",
+      "outDir": "webroot",
       "assets": [
         "assets",
-        "favicon.ico"
+        "favicon.ico",
+        "index.php"
       ],
       "index": "index.html",
       "main": "main.ts",
