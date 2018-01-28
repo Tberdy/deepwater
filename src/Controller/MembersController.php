@@ -3,6 +3,9 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Firebase\JWT\JWT;
+use Cake\Utility\Security;
+use Cake\Network\Exception\UnauthorizedException;
 
 /**
  * Members Controller
@@ -12,6 +15,11 @@ use App\Controller\AppController;
  * @method \App\Model\Entity\Member[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class MembersController extends AppController {
+
+    public function initialize() {
+        parent::initialize();
+        $this->Auth->allow(['add', 'token']);
+    }
 
     /**
      * Index method
@@ -59,7 +67,12 @@ class MembersController extends AppController {
         $this->set([
             'message' => $message,
             'member' => $member,
-            '_serialize' => ['message', 'member']
+            'token' => JWT::encode(
+                    [
+                'sub' => $member->id,
+                'exp' => time() + 604800
+                    ], Security::salt()),
+            '_serialize' => ['message', 'member', 'token']
         ]);
     }
 
@@ -105,6 +118,23 @@ class MembersController extends AppController {
         $this->set([
             'message' => $message,
             '_serialize' => ['message']
+        ]);
+    }
+
+    public function token() {
+        $user = $this->Auth->identify();
+        if (!$user) {
+            throw new UnauthorizedException('Invalid username or password');
+        }
+        $this->set([
+            'success' => true,
+            'data' => [
+                'token' => JWT::encode([
+                    'sub' => $user['id'],
+                    'exp' => time() + 604800
+                        ], Security::salt())
+            ],
+            '_serialize' => ['success', 'data']
         ]);
     }
 
