@@ -1,6 +1,8 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 
+import {ChatComponent} from './chat/chat.component';
+
 const routes: Routes = [{
     path: '',
     loadChildren: 'app/home/home.module#HomeModule'
@@ -12,6 +14,10 @@ const routes: Routes = [{
 {
     path: 'my-account',
     loadChildren: 'app/my-account/my-account.module#MyAccountModule'
+},
+{
+    path: 'chat',
+    component: ChatComponent,
 }];
 
 
