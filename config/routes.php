@@ -49,6 +49,7 @@ Router::scope('/api', function (RouteBuilder $routes) {
         $routes->resources('Earnings');
         $routes->resources('Workouts');
     });
+    $routes->connect('/members/register', ['controller' => 'Members', 'action' => 'add', '_method' => 'POST']);
     
     $routes->resources('Contests');
     $routes->resources('Stickers');

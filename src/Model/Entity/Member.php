@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\Auth\DefaultPasswordHasher;
 
 /**
  * Member Entity
@@ -17,8 +19,7 @@ use Cake\ORM\Entity;
  * @property \App\Model\Entity\Message[] $messages
  * @property \App\Model\Entity\Workout[] $workouts
  */
-class Member extends Entity
-{
+class Member extends Entity {
 
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -48,4 +49,9 @@ class Member extends Entity
     protected $_hidden = [
         'password'
     ];
+
+    protected function _setPassword($value) {
+        return (new DefaultPasswordHasher)->hash($value);
+    }
+
 }
