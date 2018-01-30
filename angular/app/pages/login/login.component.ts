@@ -1,7 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {NgForm} from '@angular/forms';
+
+import {MatSnackBar} from '@angular/material';
 
 import {AuthService} from '../../services/auth.service';
+
+import {LoginData} from '../../models/login-data';
+import {ApiResponse} from '../../models/api-response';
 
 @Component({
     selector: 'app-login',
@@ -12,9 +18,18 @@ export class LoginComponent implements OnInit {
 
     hide = true;
 
-    login() {
-        console.log('yo');
-        this.authService.login('yo@mamene.fr', 'corecore');
+    login(form: NgForm) {
+        this.authService.login(form.value).then((response: ApiResponse) => {
+            if (response.success) {
+                this.authService.logUser(response.data);
+                this.snackBar.open('Successful login !', 'OK', {duration: 5000});
+                this.router.navigate(['']);
+            } else {
+                this.snackBar.open('Invalid credentials !', 'OK', {duration: 5000});
+            }
+        }).catch(() => {
+            this.snackBar.open('Internal error', 'OK', {duration: 5000});
+        });
     }
 
     ngOnInit() {
@@ -22,7 +37,8 @@ export class LoginComponent implements OnInit {
 
     constructor(
         private router: Router,
-        private authService: AuthService) {
+        private authService: AuthService,
+        public snackBar: MatSnackBar) {
 
     }
 

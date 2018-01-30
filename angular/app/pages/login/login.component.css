@@ -10,7 +10,7 @@ mat-form-field {
     width: 300px;
 }
 
-a[mat-raised-button] {
+button[mat-raised-button] {
     margin-top: 16px;
     width: 300px;
 }

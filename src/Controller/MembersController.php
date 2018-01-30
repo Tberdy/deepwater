@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Firebase\JWT\JWT;
 use Cake\Utility\Security;
-use Cake\Network\Exception\UnauthorizedException;
 
 /**
  * Members Controller
@@ -129,7 +128,6 @@ class MembersController extends AppController {
                 'error' => 'Invalid username or password',
                 '_serialize' => ['success', 'error']
             ]);
-            throw new UnauthorizedException('');
         } else {
             $this->set([
                 'success' => true,
