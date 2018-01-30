@@ -22,6 +22,10 @@ npm -g install angular-cli
 npm install
 ```
 
+## Web server configuration
+
+Be sure to point your web server to webroot/index.php and not webroot/index.html otherwise you will get Angular only.
+
 ## Development
 
 To build the angular app and check for changes while development use the following:

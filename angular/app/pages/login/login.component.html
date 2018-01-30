@@ -1,0 +1,17 @@
+<div fxLayout="column" fxLayoutAlign="center center">
+
+    <h2>Log in to your account</h2>
+
+    <form fxLayout="column" fxLayoutAlign="center center">
+        <mat-form-field>
+            <input matInput name="email" type="email" placeholder="Email">
+        </mat-form-field>
+        
+        <mat-form-field>
+            <input matInput name="password" placeholder="Password" [type]="hide ? 'password' : 'text'">
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+        </mat-form-field>
+
+        <a mat-raised-button color="primary" type="submit" (click)="login()">Log in</a>
+    </form>
+</div>

@@ -4,6 +4,7 @@
         <a mat-button routerLink="/my-account">My account</a>
         <a mat-button routerLink="/login">Login</a>
         <a mat-button routerLink="/chat">Chat</a>
+        <span>{{authService.getUser().logged ? 'Logged' : 'Not'}}</span>
     </nav>
 </header>
 

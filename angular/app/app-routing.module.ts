@@ -5,15 +5,15 @@ import {ChatComponent} from './chat/chat.component';
 
 const routes: Routes = [{
     path: '',
-    loadChildren: 'app/home/home.module#HomeModule'
+    loadChildren: 'app/pages/home/home.module#HomeModule'
 },
 {
     path: 'login',
-    loadChildren: 'app/login/login.module#LoginModule'
+    loadChildren: 'app/pages/login/login.module#LoginModule'
 },
 {
     path: 'my-account',
-    loadChildren: 'app/my-account/my-account.module#MyAccountModule'
+    loadChildren: 'app/pages/my-account/my-account.module#MyAccountModule'
 },
 {
     path: 'chat',

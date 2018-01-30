@@ -124,18 +124,25 @@ class MembersController extends AppController {
     public function token() {
         $user = $this->Auth->identify();
         if (!$user) {
-            throw new UnauthorizedException('Invalid username or password');
+            $this->set([
+                'success' => false,
+                'error' => 'Invalid username or password',
+                '_serialize' => ['success', 'error']
+            ]);
+            throw new UnauthorizedException('');
+        } else {
+            $this->set([
+                'success' => true,
+                'data' => [
+                    'token' => JWT::encode([
+                        'sub' => $user['id'],
+                        'exp' => time() + 604800
+                            ], Security::salt()),
+                    'member' => $user
+                ],
+                '_serialize' => ['success', 'data']
+            ]);
         }
-        $this->set([
-            'success' => true,
-            'data' => [
-                'token' => JWT::encode([
-                    'sub' => $user['id'],
-                    'exp' => time() + 604800
-                        ], Security::salt())
-            ],
-            '_serialize' => ['success', 'data']
-        ]);
     }
 
 }

@@ -8,11 +8,13 @@ import {HttpClientModule} from '@angular/common/http';
 import {MatButtonModule} from '@angular/material/button';
 
 import {AppRoutingModule} from './app-routing.module';
+import {AuthService} from './services/auth.service';
 
 import {AppComponent} from './app.component';
-import { HeaderComponent } from './header/header.component';
-import { FooterComponent } from './footer/footer.component';
-import { ChatComponent } from './chat/chat.component';
+import {HeaderComponent} from './components/header/header.component';
+import {FooterComponent} from './components/footer/footer.component';
+
+import {ChatComponent} from './chat/chat.component';
 
 @NgModule({
     declarations: [
@@ -28,9 +30,9 @@ import { ChatComponent } from './chat/chat.component';
         FlexLayoutModule,
         HttpClientModule,
         MatButtonModule
-        
+
     ],
-    providers: [],
+    providers: [AuthService],
     bootstrap: [AppComponent]
 })
 export class AppModule {}
