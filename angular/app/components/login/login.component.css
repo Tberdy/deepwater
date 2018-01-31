@@ -1,4 +1,4 @@
-div {
+div.login-form {
     padding: 80px 0px;
 }
 
@@ -11,6 +11,6 @@ mat-form-field {
 }
 
 button[mat-raised-button] {
-    margin-top: 16px;
+    margin: 24px 0px;
     width: 300px;
 }

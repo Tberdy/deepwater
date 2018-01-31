@@ -8,16 +8,8 @@ const routes: Routes = [{
     loadChildren: 'app/modules/home/home.module#HomeModule'
 },
 {
-    path: 'login',
-    loadChildren: 'app/modules/login/login.module#LoginModule'
-},
-{
-    path: 'register',
-    loadChildren: 'app/modules/register/register.module#RegisterModule'
-},
-{
-    path: 'my-account',
-    loadChildren: 'app/modules/my-account/my-account.module#MyAccountModule'
+    path: 'account',
+    loadChildren: 'app/modules/account/account.module#AccountModule'
 },
 {
     path: 'chat',

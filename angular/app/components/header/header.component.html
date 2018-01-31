@@ -5,10 +5,10 @@
         <div *ngIf="authService.getUser().logged; then thenBlock else elseBlock"></div>
         <ng-template #thenBlock>
             <a mat-button routerLink="/chat">Chat</a>
-            <a class="right" mat-button routerLink="/my-account">{{authService.getUser().email}}</a>
+            <a class="right" mat-button routerLink="/account/my">{{authService.getUser().email}}</a>
         </ng-template>
         <ng-template #elseBlock>
-            <a class="right" mat-button routerLink="/login">Login / Register</a>
+            <a class="right" mat-button routerLink="/account/login">Login / Register</a>
         </ng-template>
     </nav>
 </header>

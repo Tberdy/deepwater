@@ -1,15 +1,25 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 
+import {LoginComponent} from '../../components/login/login.component';
 import {RegisterComponent} from '../../components/register/register.component';
+import {MyAccountComponent} from '../../components/my-account/my-account.component';
 
 const routes: Routes = [{
-    path: '',
+    path: 'login',
+    component: LoginComponent
+},
+{
+    path: 'register',
     component: RegisterComponent
+},
+{
+    path: 'my',
+    component: MyAccountComponent
 }];
 
 @NgModule({
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class RegisterRoutingModule {}
+export class AccountRoutingModule {}

@@ -18,7 +18,10 @@ export class LoginComponent implements OnInit {
     hide = true;
 
     login(form: NgForm) {
-        this.authService.login(form.value).then((response: ApiResponse) => {
+        this.authService.login(
+            form.value.email,
+            form.value.password
+        ).then((response: ApiResponse) => {
             if (response.success) {
                 this.authService.logUser(response.data);
                 this.snackBar.open('Successful login !', 'OK', {duration: 5000});

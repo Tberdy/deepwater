@@ -58,21 +58,24 @@ class MembersController extends AppController {
         $member = $this->Members->newEntity($this->request->getData());
 
         if ($this->Members->save($member)) {
-            $message = 'Saved';
+            $this->set([
+                'success' => true,
+                'data' => [
+                    'token' => JWT::encode([
+                        'sub' => $member['id'],
+                        'exp' => time() + 604800
+                            ], Security::salt()),
+                    'member' => $member
+                ],
+                '_serialize' => ['success', 'data']
+            ]);
         } else {
-            $message = 'Error';
+            $this->set([
+                'success' => false,
+                'error' => 'Invalid registration',
+                '_serialize' => ['success', 'error']
+            ]);
         }
-
-        $this->set([
-            'message' => $message,
-            'member' => $member,
-            'token' => JWT::encode(
-                    [
-                'sub' => $member->id,
-                'exp' => time() + 604800
-                    ], Security::salt()),
-            '_serialize' => ['message', 'member', 'token']
-        ]);
     }
 
     /**

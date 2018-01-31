@@ -1,4 +1,4 @@
-<div fxLayout="column" fxLayoutAlign="center center">
+<div class="login-form" fxLayout="column" fxLayoutAlign="center center">
 
     <h2>Log in to your account</h2>
 
@@ -14,4 +14,6 @@
 
         <button mat-raised-button color="primary" [disabled]="!form.valid">Log in</button>
     </form>
+    
+    <a mat-button routerLink="/account/register">Don't have an account yet ?</a>
 </div>
