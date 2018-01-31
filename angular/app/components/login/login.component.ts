@@ -6,7 +6,6 @@ import {MatSnackBar} from '@angular/material';
 
 import {AuthService} from '../../services/auth.service';
 
-import {LoginData} from '../../models/login-data';
 import {ApiResponse} from '../../models/api-response';
 
 @Component({
