@@ -24,6 +24,7 @@ export class LoginComponent implements OnInit {
         ).then((response: ApiResponse) => {
             if (response.success) {
                 this.authService.logUser(response.data);
+                this.authService.setSession(response.data.token);
                 this.snackBar.open('Successful login !', 'OK', {duration: 5000});
                 this.router.navigate([this.authService.redirectUrl]);
                 this.authService.redirectUrl = '';
