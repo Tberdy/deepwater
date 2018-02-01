@@ -25,7 +25,8 @@ export class LoginComponent implements OnInit {
             if (response.success) {
                 this.authService.logUser(response.data);
                 this.snackBar.open('Successful login !', 'OK', {duration: 5000});
-                this.router.navigate(['']);
+                this.router.navigate([this.authService.redirectUrl]);
+                this.authService.redirectUrl = '';
             } else {
                 this.snackBar.open('Invalid credentials !', 'OK', {duration: 5000});
             }
