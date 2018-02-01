@@ -4,7 +4,9 @@
 
         <div *ngIf="authService.getUser().logged; then thenBlock else elseBlock"></div>
         <ng-template #thenBlock>
-            <a mat-button routerLink="/chat">Chat</a>
+            <a mat-button routerLink="/social/chat">Chat</a>
+            <a mat-button routerLink="/social">Wall</a>
+            <a mat-button routerLink="/social/friends">Friends</a>
             <a class="right" mat-button routerLink="/account/my">{{authService.getUser().email}}</a>
         </ng-template>
         <ng-template #elseBlock>

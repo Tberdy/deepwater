@@ -4,8 +4,6 @@ import {Routes, RouterModule} from '@angular/router';
 import {AuthGuard} from './services/auth-guard.service';
 import {AuthService} from './services/auth.service';
 
-import {ChatComponent} from './chat/chat.component';
-
 const routes: Routes = [{
     path: '',
     loadChildren: 'app/modules/home/home.module#HomeModule'
@@ -15,9 +13,9 @@ const routes: Routes = [{
     loadChildren: 'app/modules/account/account.module#AccountModule'
 },
 {
-    path: 'chat',
+    path: 'social',
     canActivate: [AuthGuard],
-    component: ChatComponent,
+    loadChildren: 'app/modules/social/social.module#SocialModule'
 }];
 
 

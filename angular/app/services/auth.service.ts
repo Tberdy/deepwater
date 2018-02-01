@@ -25,13 +25,21 @@ export class AuthService {
     isLogged(): boolean {
         return this.user.logged;
     }
+    
+    getHeaders(): HttpHeaders {
+        if (this.isLogged()) {
+            return new HttpHeaders({'Accept': 'application/json', 'Authorization': 'Bearer ' + this.user.token});
+        } else {
+            return new HttpHeaders({'Accept': 'application/json'});
+        }
+    }
 
     login(email: string, password: string) {
-        return this.http.post('/api/members/login', {email: email, password: password}, {headers: new HttpHeaders({'Accept': 'application/json', })}).toPromise();
+        return this.http.post('/api/members/login', {email: email, password: password}, {headers: this.getHeaders()}).toPromise();
     }
 
     register(email: string, password: string) {
-        return this.http.post('/api/members/register', {email: email, password: password}, {headers: new HttpHeaders({'Accept': 'application/json', })}).toPromise();
+        return this.http.post('/api/members/register', {email: email, password: password}, {headers: this.getHeaders()}).toPromise();
     }
     
     logout(): void {
@@ -46,6 +54,10 @@ export class AuthService {
         this.user.id = credentials.member.id;
         this.user.email = credentials.member.email;
         this.user.logged = true;
+    }
+    
+    refreshToken(token: string) {
+        this.user.token = token;
     }
 
 }

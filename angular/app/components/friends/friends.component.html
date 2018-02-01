@@ -1,0 +1,8 @@
+<ul class="heroes">
+    <li *ngFor="let member of members" (click)="onSelect(member)" [class.selected]="member === selectedMember">
+        <span class="hero-element">
+            <span class="badge">{{member.id}}</span> {{member.email}}
+        </span>
+        <button class="delete-button" (click)="deleteMember(member, $event)">Delete</button>
+    </li>
+</ul>

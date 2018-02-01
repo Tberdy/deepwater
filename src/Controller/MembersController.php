@@ -27,10 +27,22 @@ class MembersController extends AppController {
      */
     public function index() {
         $members = $this->Members->find('all');
-        $this->set([
-            'members' => $members,
-            '_serialize' => ['members',]
-        ]);
+        
+        if ($members) {
+            $this->set([
+                'success' => true,
+                'data' => [
+                    'members' => $members
+                ],
+                '_serialize' => ['success', 'data']
+            ]);
+        } else {
+            $this->set([
+                'success' => false,
+                'error' => 'Invalid request',
+                '_serialize' => ['success', 'error']
+            ]);
+        }
     }
 
     /**
