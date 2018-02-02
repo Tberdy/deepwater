@@ -1,5 +1,7 @@
 # Deepwater Project
 
+A web app to manage sports activities. More to come !
+
 Based on CakePHP 3.5 & Angular 5
 
 ## Install & configure Cake
