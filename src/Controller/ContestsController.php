@@ -2,7 +2,8 @@
 
 namespace App\Controller;
 
-use App\Controller\AppController;
+use App\Controller\ApiController;
+use Cake\Datasource\Exception\RecordNotFoundException;
 
 /**
  * Contests Controller
@@ -11,7 +12,7 @@ use App\Controller\AppController;
  *
  * @method \App\Model\Entity\Contest[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class ContestsController extends AppController {
+class ContestsController extends ApiController {
 
     /**
      * Index method
@@ -20,10 +21,7 @@ class ContestsController extends AppController {
      */
     public function index() {
         $contests = $this->Contests->find('all');
-        $this->set([
-            'contests' => $contests,
-            '_serialize' => ['contests',]
-        ]);
+        return $this->response->withStringBody(json_encode($contests));
     }
 
     /**
@@ -34,12 +32,16 @@ class ContestsController extends AppController {
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null) {
-        $contest = $this->Contests->get($id);
+        try {
+            $contest = $this->Contests->get($id);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response
+                            ->withStatus(404)
+                            ->withStringBody(json_encode($this->error_entity_not_found));
+            
+        }
 
-        $this->set([
-            'contest' => $contest,
-            '_serialize' => ['contest']
-        ]);
+        return $this->response->withStringBody(json_encode($contest));
     }
 
     /**
@@ -51,16 +53,10 @@ class ContestsController extends AppController {
         $contest = $this->Contests->newEntity($this->request->getData());
 
         if ($this->Contests->save($contest)) {
-            $message = 'Saved';
+            return $this->response->withStringBody(json_encode($contest));
         } else {
-            $message = 'Error';
+            return $this->response->withStatus(400);
         }
-
-        $this->set([
-            'message' => $message,
-            'contest' => $contest,
-            '_serialize' => ['message', 'contest']
-        ]);
     }
 
     /**
@@ -71,22 +67,21 @@ class ContestsController extends AppController {
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function edit($id = null) {
-        $contest = $this->Contests->get($id);
-
-        if ($this->request->is(['post', 'put'])) {
-            $contest = $this->Contests->patchEntity($contest, $this->request->getData());
-            if ($this->Contests->save($contest)) {
-                $message = 'Saved';
-            } else {
-                $message = 'Error';
-            }
+        try {
+            $contest = $this->Contests->get($id);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response
+                            ->withStatus(404)
+                            ->withStringBody(json_encode($this->error_entity_not_found));
         }
 
-        $this->set([
-            'message' => $message,
-            'contest' => $contest,
-            '_serialize' => ['message', 'contest']
-        ]);
+        $contest = $this->Contests->patchEntity($contest, $this->request->getData());
+        
+        if ($this->Contests->save($contest)) {
+            return $this->response->withStringBody(json_encode($contest));
+        } else {
+            return $this->response->withStatus(400);
+        }
     }
 
     /**
@@ -97,15 +92,19 @@ class ContestsController extends AppController {
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null) {
-        $contest = $this->Contests->get($id);
-        $message = 'Deleted';
-        if (!$this->Contests->delete($contest)) {
-            $message = 'Error';
+        try {
+            $contest = $this->Contests->get($id);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response
+                            ->withStatus(404)
+                            ->withStringBody(json_encode($this->error_entity_not_found));
         }
-        $this->set([
-            'message' => $message,
-            '_serialize' => ['message']
-        ]);
+        
+        if ($this->Contests->delete($contest)) {
+            return $this->response->withStatus(204);
+        }
+       
+        return $this->response->withStatus(500);
     }
 
 }

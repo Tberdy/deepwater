@@ -2,7 +2,8 @@
 
 namespace App\Controller;
 
-use App\Controller\AppController;
+use App\Controller\ApiController;
+use Cake\Datasource\Exception\RecordNotFoundException;
 
 /**
  * Stickers Controller
@@ -11,7 +12,7 @@ use App\Controller\AppController;
  *
  * @method \App\Model\Entity\Sticker[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class StickersController extends AppController {
+class StickersController extends ApiController {
 
     /**
      * Index method
@@ -20,10 +21,7 @@ class StickersController extends AppController {
      */
     public function index() {
         $stickers = $this->Stickers->find('all');
-        $this->set([
-            'stickers' => $stickers,
-            '_serialize' => ['stickers',]
-        ]);
+        return $this->response->withStringBody(json_encode($stickers));
     }
 
     /**
@@ -34,12 +32,16 @@ class StickersController extends AppController {
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null) {
-        $sticker = $this->Stickers->get($id);
+        try {
+            $sticker = $this->Stickers->get($id);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response
+                            ->withStatus(404)
+                            ->withStringBody(json_encode($this->error_entity_not_found));
+            
+        }
 
-        $this->set([
-            'sticker' => $sticker,
-            '_serialize' => ['sticker']
-        ]);
+        return $this->response->withStringBody(json_encode($sticker));
     }
 
     /**
@@ -51,16 +53,10 @@ class StickersController extends AppController {
         $sticker = $this->Stickers->newEntity($this->request->getData());
 
         if ($this->Stickers->save($sticker)) {
-            $message = 'Saved';
+            return $this->response->withStringBody(json_encode($sticker));
         } else {
-            $message = 'Error';
+            return $this->response->withStatus(400);
         }
-
-        $this->set([
-            'message' => $message,
-            'member' => $sticker,
-            '_serialize' => ['message', 'sticker']
-        ]);
     }
 
     /**
@@ -71,22 +67,21 @@ class StickersController extends AppController {
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function edit($id = null) {
-        $sticker = $this->Stickers->get($id);
-
-        if ($this->request->is(['post', 'put'])) {
-            $sticker = $this->Stickers->patchEntity($sticker, $this->request->getData());
-            if ($this->Stickers->save($sticker)) {
-                $message = 'Saved';
-            } else {
-                $message = 'Error';
-            }
+        try {
+            $sticker = $this->Stickers->get($id);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response
+                            ->withStatus(404)
+                            ->withStringBody(json_encode($this->error_entity_not_found));
         }
 
-        $this->set([
-            'message' => $message,
-            'sticker' => $sticker,
-            '_serialize' => ['message', 'sticker']
-        ]);
+        $sticker = $this->Stickers->patchEntity($sticker, $this->request->getData());
+        
+        if ($this->Stickers->save($sticker)) {
+            return $this->response->withStringBody(json_encode($sticker));
+        } else {
+            return $this->response->withStatus(400);
+        }
     }
 
     /**
@@ -97,15 +92,19 @@ class StickersController extends AppController {
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null) {
-        $sticker = $this->Stickers->get($id);
-        $message = 'Deleted';
-        if (!$this->Stickers->delete($sticker)) {
-            $message = 'Error';
+        try {
+            $sticker = $this->Stickers->get($id);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response
+                            ->withStatus(404)
+                            ->withStringBody(json_encode($this->error_entity_not_found));
         }
-        $this->set([
-            'message' => $message,
-            '_serialize' => ['message']
-        ]);
+        
+        if ($this->Stickers->delete($sticker)) {
+            return $this->response->withStatus(204);
+        }
+       
+        return $this->response->withStatus(500);
     }
 
 }
