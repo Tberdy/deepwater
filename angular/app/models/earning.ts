@@ -1,7 +1,7 @@
 import {Member} from './member';
 import {Sticker} from './sticker';
 
-export class Device {
+export class Earning {
     id: number;
     member: Member;
     sticker: Sticker;
