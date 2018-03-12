@@ -11,7 +11,9 @@
         "cakephp/migrations": "@stable",
         "cakephp/plugin-installer": "^1.0",
         "josegonzalez/dotenv": "2.*",
-        "mobiledetect/mobiledetectlib": "2.*"
+        "league/oauth2-facebook": "^2.0",
+        "mobiledetect/mobiledetectlib": "2.*",
+        "muffin/oauth2": "^1.0"
     },
     "require-dev": {
         "cakephp/bake": "^1.1",

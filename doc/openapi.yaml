@@ -1,0 +1,1236 @@
+openapi: 3.0.0
+info:
+  title: OSP API
+  description: Extend OhSaySport possibilities with your own app, using our Restful API.
+  version: v1
+
+servers:
+  - url: https://ohsaysport.fr/api
+    description: Main (production) server
+
+paths:
+  /members:
+    get:
+      summary: List all members
+      operationId: listMembers
+      tags:
+        - members
+      responses:
+        '200':
+          description: An array of members
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/Members"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create a member
+      operationId: createMembers
+      tags:
+        - members
+      requestBody:
+        description: Member to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMember'
+      responses:
+        '200':
+          description: The created member
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Member"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /members/{memberId}:
+    get:
+      summary: Show details about a member
+      operationId: showMemberById
+      tags:
+        - members
+      parameters:
+        - name: memberId
+          in: path
+          description: ID of member to fetch
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: member response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update a member
+      operationId: updateMember
+      tags:
+        - members
+      parameters:
+        - name: memberId
+          in: path
+          description: ID of member to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Member to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Member'
+      responses:
+        '200':
+          description: The created member
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Member"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Deletes a single member based on the ID supplied
+      operationId: deleteMember
+      tags:
+        - members
+      parameters:
+        - name: memberId
+          in: path
+          description: ID of member to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Member deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /stickers:
+    get:
+      summary: List all stickers
+      operationId: listStickers
+      tags:
+        - stickers
+      responses:
+        '200':
+          description: An array of stickers
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/Stickers"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create a sticker
+      operationId: createStickers
+      tags:
+        - stickers
+      requestBody:
+        description: Sticker to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewSticker'
+      responses:
+        '200':
+          description: The created sticker
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Sticker"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /stickers/{stickerId}:
+    get:
+      summary: Show details about a sticker
+      operationId: showStickerById
+      tags:
+        - stickers
+      parameters:
+        - name: stickerId
+          in: path
+          description: ID of sticker to fetch
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: sticker response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sticker'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update a sticker
+      operationId: updateSticker
+      tags:
+        - stickers
+      parameters:
+        - name: stickerId
+          in: path
+          description: ID of sticker to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Sticker to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sticker'
+      responses:
+        '200':
+          description: The created sticker
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Sticker"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Deletes a single sticker based on the ID supplied
+      operationId: deleteSticker
+      tags:
+        - stickers
+      parameters:
+        - name: stickerId
+          in: path
+          description: ID of sticker to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Sticker deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  
+  /contests:
+    get:
+      summary: List all contests
+      operationId: listContests
+      tags:
+        - contests
+      responses:
+        '200':
+          description: An array of contests
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/Contests"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create a contest
+      operationId: createContests
+      tags:
+        - contests
+      requestBody:
+        description: Contest to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewContest'
+      responses:
+        '200':
+          description: The created contest
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contest"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /contests/{contestId}:
+    get:
+      summary: Show details about a contest
+      operationId: showContestById
+      tags:
+        - contests
+      parameters:
+        - name: contestId
+          in: path
+          description: ID of contest to fetch
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: contest response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contest'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update a contest
+      operationId: updateContest
+      tags:
+        - contests
+      parameters:
+        - name: contestId
+          in: path
+          description: ID of contest to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Contest to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contest'
+      responses:
+        '200':
+          description: The created contest
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contest"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Deletes a single contest based on the ID supplied
+      operationId: deleteContest
+      tags:
+        - contests
+      parameters:
+        - name: contestId
+          in: path
+          description: ID of contest to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Contest deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  
+  /logs:
+    get:
+      summary: List all logs
+      operationId: listLogs
+      tags:
+        - logs
+      responses:
+        '200':
+          description: An array of logs
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/Logs"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create a log
+      operationId: createLogs
+      tags:
+        - logs
+      requestBody:
+        description: Log to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewLog'
+      responses:
+        '200':
+          description: The created log
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Log"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /logs/{logId}:
+    get:
+      summary: Show details about a log
+      operationId: showLogById
+      tags:
+        - logs
+      parameters:
+        - name: logId
+          in: path
+          description: ID of log to fetch
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: log response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Log'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update a log
+      operationId: updateLog
+      tags:
+        - logs
+      parameters:
+        - name: logId
+          in: path
+          description: ID of log to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Log to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Log'
+      responses:
+        '200':
+          description: The created log
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Log"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Deletes a single log based on the ID supplied
+      operationId: deleteLog
+      tags:
+        - logs
+      parameters:
+        - name: logId
+          in: path
+          description: ID of log to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Log deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  
+  /members/{memberId}/devices:
+    get:
+      summary: List all member's devices
+      operationId: listDevices
+      tags:
+        - devices
+      parameters:
+        - name: memberId
+          in: path
+          description: ID of member
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: An array of devices
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/Devices"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create a device
+      operationId: createDevices
+      tags:
+        - devices
+      parameters:
+        - name: memberId
+          in: path
+          description: ID of member
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Device to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewDevice'
+      responses:
+        '200':
+          description: The created device
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Device"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /members/{memberId}/devices/{deviceId}:
+    get:
+      summary: Show details about a member's device
+      operationId: showDeviceById
+      tags:
+        - devices
+      parameters:
+        - name: memberId
+          in: path
+          description: ID of member
+          required: true
+          schema:
+            type: string
+        - name: deviceId
+          in: path
+          description: ID of device to fetch
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: device response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update a device
+      operationId: updateDevice
+      tags:
+        - devices
+      parameters:
+        - name: memberId
+          in: path
+          description: ID of member
+          required: true
+          schema:
+            type: string
+        - name: deviceId
+          in: path
+          description: ID of device to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Device to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Device'
+      responses:
+        '200':
+          description: The created device
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Device"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Deletes a device member based on the ID supplied
+      operationId: deleteDevice
+      tags:
+        - devices
+      parameters:
+        - name: memberId
+          in: path
+          description: ID of member
+          required: true
+          schema:
+            type: string
+        - name: deviceId
+          in: path
+          description: ID of device to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Device deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  
+  /members/{memberId}/earnings:
+    get:
+      summary: List all member's earnings
+      operationId: listEarnings
+      tags:
+        - earnings
+      parameters:
+        - name: memberId
+          in: path
+          description: ID of member
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: An array of earnings
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/Earnings"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create an earning
+      operationId: createEarnings
+      tags:
+        - earnings
+      parameters:
+        - name: memberId
+          in: path
+          description: ID of member
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Earning to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewEarning'
+      responses:
+        '200':
+          description: The created earning
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Earning"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /members/{memberId}/earnings/{earningId}:
+    get:
+      summary: Show details about a member's earning
+      operationId: showEarningById
+      tags:
+        - earnings
+      parameters:
+        - name: memberId
+          in: path
+          description: ID of member
+          required: true
+          schema:
+            type: string
+        - name: earningId
+          in: path
+          description: ID of earning to fetch
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: earning response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Earning'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update an earning
+      operationId: updateEarning
+      tags:
+        - earnings
+      parameters:
+        - name: memberId
+          in: path
+          description: ID of member
+          required: true
+          schema:
+            type: string
+        - name: earningId
+          in: path
+          description: ID of earning to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Earning to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Earning'
+      responses:
+        '200':
+          description: The created earning
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Earning"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Deletes a member's earning based on the ID supplied
+      operationId: deleteEarnings
+      tags:
+        - earnings
+      parameters:
+        - name: memberId
+          in: path
+          description: ID of member
+          required: true
+          schema:
+            type: string
+        - name: earningId
+          in: path
+          description: ID of earning to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Earning deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+                
+  /members/{memberId}/workouts:
+    get:
+      summary: List all member's workouts
+      operationId: listWorkouts
+      tags:
+        - workouts
+      parameters:
+        - name: memberId
+          in: path
+          description: ID of member
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: An array of workouts
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/Workouts"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create an workout
+      operationId: createWorkouts
+      tags:
+        - workouts
+      parameters:
+        - name: memberId
+          in: path
+          description: ID of member
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Workout to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewWorkout'
+      responses:
+        '200':
+          description: The created workout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Workout"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /members/{memberId}/workouts/{workoutId}:
+    get:
+      summary: Show details about a member's workout
+      operationId: showWorkoutById
+      tags:
+        - workouts
+      parameters:
+        - name: memberId
+          in: path
+          description: ID of member
+          required: true
+          schema:
+            type: string
+        - name: workoutId
+          in: path
+          description: ID of workout to fetch
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: workout response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workout'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update a workout
+      operationId: updateWorkout
+      tags:
+        - workouts
+      parameters:
+        - name: memberId
+          in: path
+          description: ID of member
+          required: true
+          schema:
+            type: string
+        - name: workoutId
+          in: path
+          description: ID of workout to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Workouts to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Workout'
+      responses:
+        '200':
+          description: The created workout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Workout"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Deletes a member's workout based on the ID supplied
+      operationId: deleteWorkout
+      tags:
+        - workouts
+      parameters:
+        - name: memberId
+          in: path
+          description: ID of member
+          required: true
+          schema:
+            type: string
+        - name: workoutId
+          in: path
+          description: ID of workout to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Workout deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+components:
+  schemas:
+    BaseMember:
+      required:
+        - email  
+      properties:
+        email:
+          type: string  
+    NewMember:
+      allOf:
+        - $ref: '#/components/schemas/BaseMember'
+        - required:
+          - password
+          properties:
+            password:
+              type: string
+    Member:
+      allOf:
+        - $ref: '#/components/schemas/BaseMember'
+        - required:
+          - id
+          properties:
+            id:
+              type: integer
+              format: int64
+    Members:
+      type: array
+      items:
+        $ref: "#/components/schemas/Member"
+    
+    
+    NewSticker:
+      required:
+        - name
+        - description
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    Sticker:
+      allOf:
+        - $ref: '#/components/schemas/NewSticker'
+        - required:
+          - id
+          properties:
+            id:
+              type: integer
+              format: int64
+    Stickers:
+      type: array
+      items:
+        $ref: "#/components/schemas/Sticker"
+    
+    
+    NewContest:
+      required:
+        - name
+        - type
+        - description
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+    Contest:
+      allOf:
+        - $ref: '#/components/schemas/NewContest'
+        - required:
+          - id
+          properties:
+            id:
+              type: integer
+              format: int64
+    Contests:
+      type: array
+      items:
+        $ref: "#/components/schemas/Contest"
+    
+    
+    NewDevice:
+      required:
+        - serial
+        - description
+        - trusted
+      properties:
+        serial:
+          type: string
+        description:
+          type: string
+        trusted:
+          type: boolean
+    Device:
+      allOf:
+        - $ref: '#/components/schemas/NewDevice'
+        - required:
+          - id
+          properties:
+            id:
+              type: integer
+              format: int64
+    Devices:
+      type: array
+      items:
+        $ref: "#/components/schemas/Device"
+        
+    
+    NewEarning:
+      required:
+        - sticker_id
+        - date
+      properties:
+        sticker_id:
+          type: integer
+          format: int64
+        date:
+          type: string
+          format: date
+    Earning:
+      allOf:
+        - $ref: '#/components/schemas/NewEarning'
+        - required:
+          - id
+          properties:
+            id:
+              type: integer
+              format: int64
+    Earnings:
+      type: array
+      items:
+        $ref: "#/components/schemas/Earning"
+    
+    
+    NewWorkout:
+      required:
+        - date
+        - end_date
+        - location_name
+        - description
+        - sport 
+      properties:
+        date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        location_name:
+          type: string
+        description:
+          type: string
+        sport:
+          type: string
+        contest_id:
+          type: integer
+          format: int64
+    Workout:
+      allOf:
+        - $ref: '#/components/schemas/NewWorkout'
+        - required:
+          - id
+          properties:
+            id:
+              type: integer
+              format: int64
+    Workouts:
+      type: array
+      items:
+        $ref: "#/components/schemas/Workout"
+    
+    
+    NewLog:
+      required:
+        - member_id
+        - workout_id
+        - device_id
+        - date
+        - location_latitude
+        - location_longitude
+        - log_type
+        - log_value
+      properties:
+        member_id:
+          type: string
+        workout_id:
+          type: integer
+          format: int64
+        device_id:
+          type: integer
+          format: int64
+        date:
+          type: string
+          format: date
+        location_latitude:
+          type: number
+          format: float
+        location_longitude:
+          type: number
+          format: float
+        log_type:
+          type: string
+        log_value:
+          type: integer
+          format: int64
+    Log:
+      allOf:
+        - $ref: '#/components/schemas/NewLog'
+        - required:
+          - id
+          properties:
+            id:
+              type: integer
+              format: int64
+    Logs:
+      type: array
+      items:
+        $ref: "#/components/schemas/Log"
+    
+    
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

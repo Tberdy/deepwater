@@ -51,13 +51,14 @@ Router::scope('/api', function (RouteBuilder $routes) {
     });
     $routes->connect('/members/register', ['controller' => 'Members', 'action' => 'add', '_method' => 'POST']);
     $routes->connect('/members/login', ['controller' => 'Members', 'action' => 'token', '_method' => 'POST']);
-    
+
     $routes->resources('Contests');
     $routes->resources('Stickers');
-    
+
     $routes->resources('Logs');
-    
 });
+
+Router::connect('/oauth/facebook', ['controller' => 'Members', 'action' => 'login']);
 
 Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect('*', ['controller' => 'Angular', 'action' => 'index']);
