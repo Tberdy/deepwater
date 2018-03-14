@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Controller\ApiController;
 use Firebase\JWT\JWT;
 use Cake\Utility\Security;
+use Cake\Datasource\Exception\RecordNotFoundException;
 
 /**
  * Members Controller
@@ -20,12 +21,31 @@ class MembersController extends ApiController {
         $this->Auth->allow(['add', 'token']);
     }
 
+    public function isAuthorized($user = null) {
+        $action = $this->request->getParam('action');
+        
+        switch ($action) {
+            case 'index':
+            case 'view':
+                return true;
+            case 'edit':
+            case 'delete':
+                return ($this->request->getParam('id') === $user['id']);
+            default:
+                return false;
+        }
+    }
+
     /**
      * Index method
      *
      * @return \Cake\Http\Response|void
      */
     public function index() {
+        if (!$this->isAuthorized($this->Auth->user())) {
+            return $this->fordibben();
+        }
+        
         $members = $this->Members->find('all');
         return $this->response->withStringBody(json_encode($members));
     }
@@ -38,6 +58,10 @@ class MembersController extends ApiController {
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null) {
+        if (!$this->isAuthorized($this->Auth->user())) {
+            return $this->fordibben();
+        }
+        
         try {
             $member = $this->Members->get($id);
         } catch (RecordNotFoundException $ex) {
@@ -55,7 +79,7 @@ class MembersController extends ApiController {
     public function add() {
         $member = $this->Members->newEntity($this->request->getData());
 
-        if ($this->Me->save($member)) {
+        if ($this->Members->save($member)) {
             return $this->response->withStringBody(json_encode(array(
                         'member' => $member,
                         'token' => JWT::encode([
@@ -76,21 +100,23 @@ class MembersController extends ApiController {
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function edit($id = null) {
+        if (!$this->isAuthorized($this->Auth->user())) {
+            return $this->fordibben();
+        }
+        
         try {
             $member = $this->Members->get($id);
         } catch (RecordNotFoundException $ex) {
-            return $this->response
-                            ->withStatus(404)
-                            ->withStringBody(json_encode($this->error_entity_not_found));
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
         }
 
-        $member = $this->Members->patchEntity($member, $this->request->getData());
-        
-        if ($this->Members->save($member)) {
-            return $this->response->withStringBody(json_encode($member));
-        } else {
-            return $this->response->withStatus(400);
+        $patchedMember = $this->Members->patchEntity($member, $this->request->getData());
+
+        if ($this->Members->save($patchedMember)) {
+            return $this->response->withStringBody(json_encode($patchedMember));
         }
+
+        return $this->response->withStatus(400);
     }
 
     /**
@@ -101,42 +127,34 @@ class MembersController extends ApiController {
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null) {
+        if (!$this->isAuthorized($this->Auth->user())) {
+            return $this->fordibben();
+        }
+        
         try {
             $member = $this->Members->get($id);
         } catch (RecordNotFoundException $ex) {
-            return $this->response
-                            ->withStatus(404)
-                            ->withStringBody(json_encode($this->error_entity_not_found));
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
         }
-        
+
         if ($this->Members->delete($member)) {
             return $this->response->withStatus(204);
         }
-       
+
         return $this->response->withStatus(500);
     }
 
     public function token() {
-        $user = $this->Auth->identify();
-        if (!$user) {
-            $this->set([
-                'success' => false,
-                'error' => 'Invalid username or password',
-                '_serialize' => ['success', 'error']
-            ]);
-        } else {
-            $this->set([
-                'success' => true,
-                'data' => [
-                    'token' => JWT::encode([
-                        'sub' => $user['id'],
-                        'exp' => time() + 604800
-                            ], Security::salt()),
-                    'member' => $user
-                ],
-                '_serialize' => ['success', 'data']
-            ]);
+        $member = $this->Auth->identify();
+
+        if ($member) {
+            return $this->response->withStringBody(json_encode(array(
+                        'member' => $member,
+                        'token' => JWT::encode(['sub' => $member['id'], 'exp' => time() + 604800], Security::salt())
+            )));
         }
+
+        return $this->response->withStatus(401);
     }
 
 }

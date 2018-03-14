@@ -13,6 +13,12 @@ use Cake\Datasource\Exception\RecordNotFoundException;
  * @method \App\Model\Entity\Contest[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class ContestsController extends ApiController {
+    
+    public function initialize() {
+        parent::initialize();
+
+        $this->Auth->allow(['index', 'view']);
+    }
 
     /**
      * Index method
@@ -36,7 +42,6 @@ class ContestsController extends ApiController {
             $contest = $this->Contests->get($id);
         } catch (RecordNotFoundException $ex) {
             return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
-            
         }
 
         return $this->response->withStringBody(json_encode($contest));
@@ -68,18 +73,16 @@ class ContestsController extends ApiController {
         try {
             $contest = $this->Contests->get($id);
         } catch (RecordNotFoundException $ex) {
-            return $this->response
-                            ->withStatus(404)
-                            ->withStringBody(json_encode($this->error_entity_not_found));
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
         }
 
-        $contest = $this->Contests->patchEntity($contest, $this->request->getData());
+        $patchedContest = $this->Contests->patchEntity($contest, $this->request->getData());
         
-        if ($this->Contests->save($contest)) {
-            return $this->response->withStringBody(json_encode($contest));
-        } else {
-            return $this->response->withStatus(400);
+        if ($this->Contests->save($patchedContest)) {
+            return $this->response->withStringBody(json_encode($patchedContest));
         }
+        
+        return $this->response->withStatus(400);
     }
 
     /**
@@ -93,9 +96,7 @@ class ContestsController extends ApiController {
         try {
             $contest = $this->Contests->get($id);
         } catch (RecordNotFoundException $ex) {
-            return $this->response
-                            ->withStatus(404)
-                            ->withStringBody(json_encode($this->error_entity_not_found));
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
         }
         
         if ($this->Contests->delete($contest)) {

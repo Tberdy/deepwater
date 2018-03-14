@@ -13,6 +13,12 @@ use Cake\Datasource\Exception\RecordNotFoundException;
  * @method \App\Model\Entity\Sticker[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class StickersController extends ApiController {
+    
+    public function initialize() {
+        parent::initialize();
+
+        $this->Auth->allow(['index', 'view']);
+    }
 
     /**
      * Index method
@@ -70,10 +76,10 @@ class StickersController extends ApiController {
             return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
         }
 
-        $sticker = $this->Stickers->patchEntity($sticker, $this->request->getData());
+        $patchedSticker = $this->Stickers->patchEntity($sticker, $this->request->getData());
         
-        if ($this->Stickers->save($sticker)) {
-            return $this->response->withStringBody(json_encode($sticker));
+        if ($this->Stickers->save($patchedSticker)) {
+            return $this->response->withStringBody(json_encode($patchedSticker));
         }
         
         return $this->response->withStatus(400);
@@ -90,9 +96,7 @@ class StickersController extends ApiController {
         try {
             $sticker = $this->Stickers->get($id);
         } catch (RecordNotFoundException $ex) {
-            return $this->response
-                            ->withStatus(404)
-                            ->withStringBody(json_encode($this->error_entity_not_found));
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
         }
         
         if ($this->Stickers->delete($sticker)) {

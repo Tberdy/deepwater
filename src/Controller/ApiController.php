@@ -22,5 +22,9 @@ class ApiController extends AppController {
 
         $this->response = $this->response->withType('application/json');
     }
-
+    
+    protected function fordibben() {
+        return $this->response->withStatus(403)->withStringBody(json_encode(array('message' => 'You are not allowed to access to this ressource.')));
+    }
+    
 }
