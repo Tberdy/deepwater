@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
-use App\Controller\AppController;
+use App\Controller\ApiController;
+use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\TableRegistry;
+use Cake\I18n\Time;
 
 /**
  * Workouts Controller
@@ -11,7 +14,15 @@ use App\Controller\AppController;
  *
  * @method \App\Model\Entity\Workout[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class WorkoutsController extends AppController {
+class WorkoutsController extends ApiController {
+
+    protected $repoMembers;
+
+    public function initialize() {
+        parent::initialize();
+
+        $this->repoMembers = TableRegistry::get('members');
+    }
 
     /**
      * Index method
@@ -20,15 +31,18 @@ class WorkoutsController extends AppController {
      */
     public function index() {
         $idMember = $this->request->getParam('member_id');
-        
+
+        try {
+            $member = $this->repoMembers->get($idMember);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
+        }
+
         $workouts = $this->Workouts->find('all')->matching('Members', function ($q) use ($idMember) {
             return $q->where(['Members.id' => $idMember]);
         });
-        
-        $this->set([
-            'workouts' => $workouts,
-            '_serialize' => ['workouts']
-        ]);
+
+        return $this->response->withStringBody(json_encode($workouts));
     }
 
     /**
@@ -39,11 +53,13 @@ class WorkoutsController extends AppController {
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null) {
-        $workout = $this->Workouts->get($id);
-        $this->set([
-            'workout' => $workout,
-            '_serialize' => ['workout']
-        ]);
+        try {
+            $workout = $this->Workouts->get($id);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
+        }
+
+        return $this->response->withStringBody(json_encode($workout));
     }
 
     /**
@@ -53,18 +69,26 @@ class WorkoutsController extends AppController {
      */
     public function add() {
         $workout = $this->Workouts->newEntity($this->request->getData());
-        $workout->member_id = $this->request->getParam('member_id');
-        
-        if ($this->Workouts->save($workout)) {
-            $message = 'Saved';
-        } else {
-            $message = 'Error';
+
+        try {
+            $member = $this->repoMembers->get($this->request->getParam('member_id'));
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(400);
         }
-        $this->set([
-            'message' => $message,
-            'workout' => $workout,
-            '_serialize' => ['message', 'workout']
-        ]);
+
+        if (!isset($this->request->getData()['date']) || !isset($this->request->getData()['end_date'])) {
+            return $this->response->withStatus(400);
+        }
+
+        $workout->member_id = $member->id;
+        $workout->date = Time::parse($this->request->getData()['date']);
+        $workout->end_date = Time::parse($this->request->getData()['end_date']);
+
+        if ($this->Workouts->save($workout)) {
+            return $this->response->withStringBody(json_encode($workout));
+        } else {
+            return $this->response->withStatus(400);
+        }
     }
 
     /**
@@ -75,19 +99,26 @@ class WorkoutsController extends AppController {
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function edit($id = null) {
-        $workout = $this->Workouts->get($id);
-        if ($this->request->is(['post', 'put'])) {
-            $workout = $this->Workouts->patchEntity($workout, $this->request->getData());
-            if ($this->Devices->save($workout)) {
-                $message = 'Saved';
-            } else {
-                $message = 'Error';
-            }
+        try {
+            $workout = $this->Workouts->get($id);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
         }
-        $this->set([
-            'message' => $message,
-            '_serialize' => ['message']
-        ]);
+
+        $workout = $this->Workouts->patchEntity($workout, $this->request->getData());
+
+        if (isset($this->request->getData()['date'])) {
+            $workout->date = Time::parse($this->request->getData()['date']);
+        }
+        if (isset($this->request->getData()['end_date'])) {
+            $workout->end_date = Time::parse($this->request->getData()['end_date']);
+        }
+
+        if ($this->Workouts->save($workout)) {
+            return $this->response->withStringBody(json_encode($workout));
+        } else {
+            return $this->response->withStatus(400);
+        }
     }
 
     /**
@@ -98,15 +129,17 @@ class WorkoutsController extends AppController {
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null) {
-        $workout = $this->Workouts->get($id);
-        $message = 'Deleted';
-        if (!$this->Workouts->delete($workout)) {
-            $message = 'Error';
+        try {
+            $workout = $this->Workouts->get($id);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
         }
-        $this->set([
-            'message' => $message,
-            '_serialize' => ['message']
-        ]);
+        
+        if ($this->Workouts->delete($workout)) {
+            return $this->response->withStatus(204);
+        }
+       
+        return $this->response->withStatus(500);
     }
 
 }

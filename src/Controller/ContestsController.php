@@ -35,9 +35,7 @@ class ContestsController extends ApiController {
         try {
             $contest = $this->Contests->get($id);
         } catch (RecordNotFoundException $ex) {
-            return $this->response
-                            ->withStatus(404)
-                            ->withStringBody(json_encode($this->error_entity_not_found));
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
             
         }
 

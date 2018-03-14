@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
-use App\Controller\AppController;
+use App\Controller\ApiController;
+use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\TableRegistry;
+use Cake\I18n\Time;
 
 /**
  * Earnings Controller
@@ -11,7 +14,15 @@ use App\Controller\AppController;
  *
  * @method \App\Model\Entity\Earning[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class EarningsController extends AppController {
+class EarningsController extends ApiController {
+    
+    protected $repoMembers;
+
+    public function initialize() {
+        parent::initialize();
+
+        $this->repoMembers = TableRegistry::get('members');
+    }
 
     /**
      * Index method
@@ -20,15 +31,18 @@ class EarningsController extends AppController {
      */
     public function index() {
         $idMember = $this->request->getParam('member_id');
-        
+
+        try {
+            $member = $this->repoMembers->get($idMember);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
+        }
+
         $earnings = $this->Earnings->find('all')->matching('Members', function ($q) use ($idMember) {
             return $q->where(['Members.id' => $idMember]);
         });
-        
-        $this->set([
-            'earnings' => $earnings,
-            '_serialize' => ['earnings']
-        ]);
+
+        return $this->response->withStringBody(json_encode($earnings));
     }
 
     /**
@@ -39,11 +53,13 @@ class EarningsController extends AppController {
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null) {
-        $earning = $this->Earnings->get($id);
-        $this->set([
-            'earning' => $earning,
-            '_serialize' => ['earning']
-        ]);
+        try {
+            $earning = $this->Earnings->get($id);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
+        }
+
+        return $this->response->withStringBody(json_encode($earning));
     }
 
     /**
@@ -53,18 +69,25 @@ class EarningsController extends AppController {
      */
     public function add() {
         $earning = $this->Earnings->newEntity($this->request->getData());
-        $earning->member_id = $this->request->getParam('member_id');
-        
-        if ($this->Earnings->save($earning)) {
-            $message = 'Saved';
-        } else {
-            $message = 'Error';
+
+        try {
+            $member = $this->repoMembers->get($this->request->getParam('member_id'));
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(400);
         }
-        $this->set([
-            'message' => $message,
-            'earning' => $earning,
-            '_serialize' => ['message', 'earning']
-        ]);
+
+        if (!isset($this->request->getData()['date'])) {
+            return $this->response->withStatus(400);
+        }
+
+        $earning->member_id = $member->id;
+        $earning->date = Time::parse($this->request->getData()['date']);
+
+        if ($this->Earnings->save($earning)) {
+            return $this->response->withStringBody(json_encode($earning));
+        } else {
+            return $this->response->withStatus(400);
+        }
     }
 
     /**
@@ -75,19 +98,23 @@ class EarningsController extends AppController {
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function edit($id = null) {
-        $earning = $this->Earnings->get($id);
-        if ($this->request->is(['post', 'put'])) {
-            $earning = $this->Earnings->patchEntity($earning, $this->request->getData());
-            if ($this->Earnings->save($earning)) {
-                $message = 'Saved';
-            } else {
-                $message = 'Error';
-            }
+        try {
+            $earning = $this->Earnings->get($id);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
         }
-        $this->set([
-            'message' => $message,
-            '_serialize' => ['message']
-        ]);
+
+        $earning = $this->Earnings->patchEntity($earning, $this->request->getData());
+
+        if (isset($this->request->getData()['date'])) {
+            $earning->date = Time::parse($this->request->getData()['date']);
+        }
+
+        if ($this->Earnings->save($earning)) {
+            return $this->response->withStringBody(json_encode($earning));
+        } else {
+            return $this->response->withStatus(400);
+        }
     }
 
     /**
@@ -98,15 +125,17 @@ class EarningsController extends AppController {
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null) {
-        $earning = $this->Earnings->get($id);
-        $message = 'Deleted';
-        if (!$this->Earnings->delete($earning)) {
-            $message = 'Error';
+        try {
+            $earning = $this->Earnings->get($id);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
         }
-        $this->set([
-            'message' => $message,
-            '_serialize' => ['message']
-        ]);
+        
+        if ($this->Earnings->delete($earning)) {
+            return $this->response->withStatus(204);
+        }
+       
+        return $this->response->withStatus(500);
     }
 
 }

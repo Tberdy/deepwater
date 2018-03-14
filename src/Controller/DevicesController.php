@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
-use App\Controller\AppController;
+use App\Controller\ApiController;
+use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\TableRegistry;
 
 /**
  * Devices Controller
@@ -11,7 +13,15 @@ use App\Controller\AppController;
  *
  * @method \App\Model\Entity\Device[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class DevicesController extends AppController {
+class DevicesController extends ApiController {
+    
+    protected $repoMembers;
+
+    public function initialize() {
+        parent::initialize();
+
+        $this->repoMembers = TableRegistry::get('members');
+    }
 
     /**
      * Index method
@@ -20,15 +30,18 @@ class DevicesController extends AppController {
      */
     public function index() {
         $idMember = $this->request->getParam('member_id');
-        
-        $devices = $this->Devices->find('all')->matching('Members', function ($q) use ($idMember) {
-            return $q->where(['Members.id' => $idMember]);
+
+        try {
+            $member = $this->repoMembers->get($idMember);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
+        }
+
+        $devices = $this->Devices->find('all')->matching('Members', function ($q) use ($member) {
+            return $q->where(['Members.id' => $member->id]);
         });
-        
-        $this->set([
-            'devices' => $devices,
-            '_serialize' => ['devices']
-        ]);
+
+        return $this->response->withStringBody(json_encode($devices));
     }
 
     /**
@@ -39,11 +52,13 @@ class DevicesController extends AppController {
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null) {
-        $device = $this->Devices->get($id);
-        $this->set([
-            'device' => $device,
-            '_serialize' => ['device']
-        ]);
+        try {
+            $device = $this->Devices->get($id);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
+        }
+
+        return $this->response->withStringBody(json_encode($device));
     }
 
     /**
@@ -53,18 +68,20 @@ class DevicesController extends AppController {
      */
     public function add() {
         $device = $this->Devices->newEntity($this->request->getData());
-        $device->member_id = $this->request->getParam('member_id');
-        
-        if ($this->Devices->save($device)) {
-            $message = 'Saved';
-        } else {
-            $message = 'Error';
+
+        try {
+            $member = $this->repoMembers->get($this->request->getParam('member_id'));
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(400);
         }
-        $this->set([
-            'message' => $message,
-            'device' => $device,
-            '_serialize' => ['message', 'device']
-        ]);
+
+        $device->member_id = $member->id;
+
+        if ($this->Devices->save($device)) {
+            return $this->response->withStringBody(json_encode($device));
+        } else {
+            return $this->response->withStatus(400);
+        }
     }
 
     /**
@@ -75,19 +92,19 @@ class DevicesController extends AppController {
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function edit($id = null) {
-        $device = $this->Devices->get($id);
-        if ($this->request->is(['post', 'put'])) {
-            $device = $this->Devices->patchEntity($device, $this->request->getData());
-            if ($this->Devices->save($device)) {
-                $message = 'Saved';
-            } else {
-                $message = 'Error';
-            }
+        try {
+            $device = $this->Devices->get($id);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
         }
-        $this->set([
-            'message' => $message,
-            '_serialize' => ['message']
-        ]);
+
+        $device = $this->Devices->patchEntity($device, $this->request->getData());
+
+        if ($this->Devices->save($device)) {
+            return $this->response->withStringBody(json_encode($device));
+        } else {
+            return $this->response->withStatus(400);
+        }
     }
 
     /**
@@ -98,15 +115,17 @@ class DevicesController extends AppController {
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null) {
-        $device = $this->Devices->get($id);
-        $message = 'Deleted';
-        if (!$this->Devices->delete($device)) {
-            $message = 'Error';
+        try {
+            $device = $this->Devices->get($id);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
         }
-        $this->set([
-            'message' => $message,
-            '_serialize' => ['message']
-        ]);
+        
+        if ($this->Devices->delete($device)) {
+            return $this->response->withStatus(204);
+        }
+       
+        return $this->response->withStatus(500);
     }
 
 }

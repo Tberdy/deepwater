@@ -10,6 +10,7 @@ use App\Controller\AppController;
 class ApiController extends AppController {
     
     protected $error_entity_not_found = array('message' => 'Entity ID does not exist.');
+    protected $error_wrong_params = array('message' => 'Bad request, check your parameters.');
     
     /**
      * Initialization hook method.

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Controller\AppController;
+use App\Controller\ApiController;
 use Firebase\JWT\JWT;
 use Cake\Utility\Security;
 
@@ -13,7 +13,7 @@ use Cake\Utility\Security;
  *
  * @method \App\Model\Entity\Member[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class MembersController extends AppController {
+class MembersController extends ApiController {
 
     public function initialize() {
         parent::initialize();
@@ -27,22 +27,7 @@ class MembersController extends AppController {
      */
     public function index() {
         $members = $this->Members->find('all');
-        
-        if ($members) {
-            $this->set([
-                'success' => true,
-                'data' => [
-                    'members' => $members
-                ],
-                '_serialize' => ['success', 'data']
-            ]);
-        } else {
-            $this->set([
-                'success' => false,
-                'error' => 'Invalid request',
-                '_serialize' => ['success', 'error']
-            ]);
-        }
+        return $this->response->withStringBody(json_encode($members));
     }
 
     /**
@@ -53,12 +38,13 @@ class MembersController extends AppController {
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null) {
-        $member = $this->Members->get($id);
+        try {
+            $member = $this->Members->get($id);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
+        }
 
-        $this->set([
-            'member' => $member,
-            '_serialize' => ['member']
-        ]);
+        return $this->response->withStringBody(json_encode($member));
     }
 
     /**
@@ -69,24 +55,16 @@ class MembersController extends AppController {
     public function add() {
         $member = $this->Members->newEntity($this->request->getData());
 
-        if ($this->Members->save($member)) {
-            $this->set([
-                'success' => true,
-                'data' => [
-                    'token' => JWT::encode([
-                        'sub' => $member['id'],
-                        'exp' => time() + 604800
-                            ], Security::salt()),
-                    'member' => $member
-                ],
-                '_serialize' => ['success', 'data']
-            ]);
+        if ($this->Me->save($member)) {
+            return $this->response->withStringBody(json_encode(array(
+                        'member' => $member,
+                        'token' => JWT::encode([
+                            'sub' => $member['id'],
+                            'exp' => time() + 604800
+                                ], Security::salt())
+            )));
         } else {
-            $this->set([
-                'success' => false,
-                'error' => 'Invalid registration',
-                '_serialize' => ['success', 'error']
-            ]);
+            return $this->response->withStatus(400);
         }
     }
 
@@ -98,22 +76,21 @@ class MembersController extends AppController {
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function edit($id = null) {
-        $member = $this->Members->get($id);
-
-        if ($this->request->is(['post', 'put'])) {
-            $member = $this->Members->patchEntity($member, $this->request->getData());
-            if ($this->Members->save($member)) {
-                $message = 'Saved';
-            } else {
-                $message = 'Error';
-            }
+        try {
+            $member = $this->Members->get($id);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response
+                            ->withStatus(404)
+                            ->withStringBody(json_encode($this->error_entity_not_found));
         }
 
-        $this->set([
-            'message' => $message,
-            'member' => $member,
-            '_serialize' => ['message', 'member']
-        ]);
+        $member = $this->Members->patchEntity($member, $this->request->getData());
+        
+        if ($this->Members->save($member)) {
+            return $this->response->withStringBody(json_encode($member));
+        } else {
+            return $this->response->withStatus(400);
+        }
     }
 
     /**
@@ -124,15 +101,19 @@ class MembersController extends AppController {
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null) {
-        $member = $this->Members->get($id);
-        $message = 'Deleted';
-        if (!$this->Members->delete($member)) {
-            $message = 'Error';
+        try {
+            $member = $this->Members->get($id);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response
+                            ->withStatus(404)
+                            ->withStringBody(json_encode($this->error_entity_not_found));
         }
-        $this->set([
-            'message' => $message,
-            '_serialize' => ['message']
-        ]);
+        
+        if ($this->Members->delete($member)) {
+            return $this->response->withStatus(204);
+        }
+       
+        return $this->response->withStatus(500);
     }
 
     public function token() {
