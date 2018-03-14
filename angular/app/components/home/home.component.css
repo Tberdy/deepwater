@@ -1,0 +1,12 @@
+* {
+  max-height: 100%;
+}
+
+.blocks {
+    text-align: center;
+}
+
+button[mat-raised-button] {
+    margin: 24px 0px;
+    width: 300px;
+}
