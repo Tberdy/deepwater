@@ -1,6 +1,7 @@
 <header>
     <nav>
-        <a mat-button routerLink="">{{title}}</a>
+        <img src="logo.png" alt="Logo"/>
+        <a mat-button routerLink="" id="title">{{title}}</a>
 
         <div *ngIf="authService.getUser().logged; then thenBlock else elseBlock"></div>
         <ng-template #thenBlock>
@@ -14,4 +15,3 @@
         </ng-template>
     </nav>
 </header>
-

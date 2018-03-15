@@ -2,10 +2,6 @@
 
 @import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
 
-* {
-    font-family: 'Roboto', sans-serif;
-}
-
 body {
     margin: 0px;
     background-color: #f3f3f3;
