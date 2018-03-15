@@ -10,3 +10,45 @@ button[mat-raised-button] {
     margin: 24px 0px;
     width: 300px;
 }
+
+h1 {
+  padding: 20px;
+  padding-top: 100px;
+  margin: 0;
+  color: white;
+  font-family: 'Montserrat';
+  letter-spacing: 2px;
+}
+
+h1:hover {
+  padding-left: 25px;
+  padding-right: 15px;
+}
+
+p:hover {
+  padding-right: 15px;
+  padding-left: 25px;
+}
+
+p{
+  text-align: justify;
+  padding: 20px;
+  margin: 0;
+  color: white;
+  font-family: 'Montserrat';
+  font-size: 110%;
+  letter-spacing: 0.1em;
+}
+
+a {
+  background-color: #b3d9ff;
+  margin-top: 50px;
+  margin-bottom: 200px;
+}
+
+#apropos {
+  background: url(truc.png);
+  background-repeat: no-repeat;
+  background-size: 120%;
+  height: 100%;
+}
