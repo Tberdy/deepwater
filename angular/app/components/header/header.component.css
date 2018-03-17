@@ -8,6 +8,17 @@ header nav {
     padding: 8px 16px;
 }
 
+#title {
+  font-family: 'Nunito', sans-serif;
+  letter-spacing: 4px;
+  font-size: 120%;
+}
+
+
 a.right {
     float: right;
+}
+
+img {
+  margin-right: 30px;
 }
