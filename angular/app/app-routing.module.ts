@@ -16,6 +16,16 @@ const routes: Routes = [{
     path: 'social',
     canActivate: [AuthGuard],
     loadChildren: 'app/modules/social/social.module#SocialModule'
+},
+{
+    path: 'workouts',
+    canActivate: [AuthGuard],
+    loadChildren: 'app/modules/workouts/workouts.module#WorkoutsModule'
+},
+{
+    path: 'devices',
+    canActivate: [AuthGuard],
+    loadChildren: 'app/modules/devices/devices.module#DevicesModule'
 }];
 
 

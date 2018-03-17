@@ -1,3 +1,15 @@
-<p>
-  my-account works!
-</p>
+<div class="login-form" fxLayout="column" fxLayoutAlign="center center">
+
+    <h2>My account</h2>
+
+    <mat-card fxLayout="column" fxLayoutAlign="center center" class="example-card">
+        <mat-card-header>
+            <div mat-card-avatar class="example-header-image"></div>
+            <mat-card-title>{{authService.getUser().email}}</mat-card-title>
+            <mat-card-subtitle>Member</mat-card-subtitle>
+        </mat-card-header>
+        <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+    </mat-card>
+</div>
+
+

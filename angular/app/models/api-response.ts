@@ -1,7 +1,11 @@
-export class ApiResponse {
-    success: boolean;
-    data: any;
-    error: string;
-}
+import {Member} from './member'
+
+export class LoginResponse {
+    member: Member;
+    token: string;
+} 
+
+    
+
 
 

@@ -6,7 +6,7 @@ import {MatSnackBar} from '@angular/material';
 
 import {AuthService} from '../../services/auth.service';
 
-import {ApiResponse} from '../../models/api-response';
+import {LoginResponse} from '../../models/api-response';
 
 @Component({
     selector: 'app-register',
@@ -38,14 +38,10 @@ export class RegisterComponent implements OnInit {
         this.authService.register(
             this.emailFormGroup.value.email,
             this.passwordFormGroup.value.password
-        ).then((response: ApiResponse) => {
-            if (response.success) {
-                this.authService.logUser(response.data);
-                this.snackBar.open('Successful registration !', 'OK', {duration: 5000});
-                this.router.navigate(['']);
-            } else {
-                this.snackBar.open('An error occured', 'OK', {duration: 5000});
-            }
+        ).then((response: LoginResponse) => {
+            this.authService.logUser(response);
+            this.snackBar.open('Successful registration !', 'OK', {duration: 5000});
+            this.router.navigate(['']);
         }).catch(() => {
             this.snackBar.open('Internal error', 'OK', {duration: 5000});
         });

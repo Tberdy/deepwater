@@ -3,7 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 
 import {Credentials} from '../models/credentials';
-import {ApiResponse} from '../models/api-response';
+import {LoginResponse} from '../models/api-response';
 
 @Injectable()
 export class AuthService {
@@ -60,10 +60,8 @@ export class AuthService {
             this.user.token = token;
             this.user.logged = true;
             this.http.post('/api/members/login', {}, {headers: this.getHeaders()}).toPromise()
-                .then((response: ApiResponse) => {
-                    if (response.success) {
-                        this.logUser(response.data);
-                    }
+                .then((response: LoginResponse) => {
+                    this.logUser(response);
                 });
         }
     }

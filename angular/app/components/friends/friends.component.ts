@@ -4,7 +4,6 @@ import {Router} from '@angular/router';
 import {MemberService} from '../../services/member.service';
 
 import {Member} from '../../models/member';
-import {ApiResponse} from '../../models/api-response';
 
 @Component({
     selector: 'app-friends',
@@ -28,10 +27,8 @@ export class FriendsComponent implements OnInit {
     getMembers(): void {
         this.memberService
             .getMembers()
-            .then((response: ApiResponse) => {
-                if (response.success) {
-                    this.members = response.data.members;
-                }
+            .then((response: Member[]) => {
+                this.members = response;
             })
             .catch(error => this.error = error);
     }

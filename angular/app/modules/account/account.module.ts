@@ -4,6 +4,8 @@ import {CommonModule} from '@angular/common';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule, MatInputModule, MatIconModule, MatSnackBarModule, MatStepperModule} from '@angular/material';
+import {MatCardModule} from '@angular/material/card';
+
 
 import {AccountRoutingModule} from './account-routing.module';
 
@@ -17,7 +19,7 @@ import {MyAccountComponent} from '../../components/my-account/my-account.compone
         AccountRoutingModule,
         FlexLayoutModule,
         FormsModule, ReactiveFormsModule,
-        MatButtonModule, MatInputModule, MatIconModule, MatSnackBarModule, MatStepperModule
+        MatButtonModule, MatInputModule, MatIconModule, MatSnackBarModule, MatStepperModule, MatCardModule
     ],
     declarations: [
         LoginComponent,

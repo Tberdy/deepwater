@@ -3,8 +3,6 @@ import 'rxjs/add/operator/toPromise';
 
 import {AuthService} from '../services/auth.service';
 
-import {ApiResponse} from '../models/api-response';
-
 export abstract class RestApi {
     
     protected apiBaseUrl: string;
