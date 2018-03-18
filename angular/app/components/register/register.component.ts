@@ -45,9 +45,6 @@ export class RegisterComponent implements OnInit {
         }).catch(() => {
             this.snackBar.open('Internal error', 'OK', {duration: 5000});
         });
-
-
-        console.log(this.emailFormGroup.value, this.passwordFormGroup.value);
     }
 
 }

@@ -2,6 +2,10 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 
+import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
+import { catchError, map, tap } from 'rxjs/operators';
+
 import {RestApi} from '../lib/rest-api';
 
 import {AuthService} from '../services/auth.service';
@@ -17,23 +21,24 @@ export class WorkoutService extends RestApi {
     }
 
     getWorkouts() {
-        return this.get(this.apiBaseUrl);
+        return this.http.get<Workout[]>(this.apiBaseUrl, {headers: this.getHeaders()}).toPromise();
     }
+
 
     getWorkout(id: number) {
         return this.get(this.apiBaseUrl + '/' + id);
     }
     
-    addWorkout(workout: Workout) {
-        return this.post(this.apiBaseUrl, JSON.stringify(workout));
+    addWorkout(workout: object) {
+        return this.http.post<Workout>(this.apiBaseUrl, JSON.stringify(workout), {headers: this.getHeaders()}).toPromise();
     }
     
     putWorkout(workout: Workout) {
         return this.put(this.apiBaseUrl + '/' + workout.id, JSON.stringify(workout));
     }
     
-    deleteWorkout(workout: Workout) {
-        return this.delete(this.apiBaseUrl + '/' + workout.id);
+    deleteWorkout(id: number) {
+        return this.delete(this.apiBaseUrl + '/' + id);
     }
 
 }

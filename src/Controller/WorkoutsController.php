@@ -70,19 +70,23 @@ class WorkoutsController extends ApiController {
     public function add() {
         $workout = $this->Workouts->newEntity($this->request->getData());
 
+        $this->response->withStringBody(json_encode(array(
+            'yolo' => $workout,
+            'sport' => $this->request->getData('sport'),
+            'location_name' => $this->request->getData('location_name'),
+        )));
+        
+        
         try {
             $member = $this->repoMembers->get($this->request->getParam('member_id'));
         } catch (RecordNotFoundException $ex) {
             return $this->response->withStatus(400);
         }
 
-        if (!isset($this->request->getData()['date']) || !isset($this->request->getData()['end_date'])) {
-            return $this->response->withStatus(400);
-        }
-
         $workout->member_id = $member->id;
-        $workout->date = Time::parse($this->request->getData()['date']);
-        $workout->end_date = Time::parse($this->request->getData()['end_date']);
+        $workout->contest_id = null;
+        $workout->date = Time::parse($this->request->getData('date'));
+        $workout->end_date = Time::parse($this->request->getData('end_date'));
 
         if ($this->Workouts->save($workout)) {
             return $this->response->withStringBody(json_encode($workout));

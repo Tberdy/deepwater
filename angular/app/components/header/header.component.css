@@ -9,9 +9,9 @@ header nav {
 }
 
 #title {
-  font-family: 'Nunito', sans-serif;
-  letter-spacing: 4px;
-  font-size: 120%;
+    font-family: 'Nunito', sans-serif;
+    letter-spacing: 4px;
+    font-size: 120%;
 }
 
 
@@ -20,5 +20,5 @@ a.right {
 }
 
 img {
-  margin-right: 30px;
+    margin-right: 30px;
 }

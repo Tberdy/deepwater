@@ -1,0 +1,41 @@
+<h1 mat-dialog-title>Ajouter une nouvelle séance</h1>
+
+<form fxLayout="column" fxLayoutAlign="center center" #form="ngForm" (ngSubmit)="submit(form)">
+    <mat-dialog-content fxLayout="column" fxLayoutAlign="center center">
+
+        <mat-form-field>
+            <input required matInput name="description" placeholder="Description" ngModel #description="ngModel">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input required matInput name="date" placeholder="Choisir une date de début" ngModel #date="ngModel" [matDatepicker]="picker_date" >
+            <mat-datepicker-toggle matSuffix [for]="picker_date"></mat-datepicker-toggle>
+            <mat-datepicker #picker_date></mat-datepicker>
+        </mat-form-field>
+        
+        <mat-form-field>
+            <input required matInput name="end_date" placeholder="Choisir une date de fin" ngModel #end_date="ngModel" [matDatepicker]="picker_end_date" >
+            <mat-datepicker-toggle matSuffix [for]="picker_end_date"></mat-datepicker-toggle>
+            <mat-datepicker #picker_end_date></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input required matInput name="location_name" placeholder="Location" ngModel #location_name="ngModel">
+        </mat-form-field>
+        
+        <mat-form-field>
+            <input required matInput name="sport" placeholder="Sport" ngModel #sport="ngModel">
+        </mat-form-field>
+
+    </mat-dialog-content>
+
+    <mat-dialog-actions>
+        <button mat-button [disabled]="!form.valid">Add</button>
+        <button mat-button type="button" (click)="close()">Cancel</button>
+    </mat-dialog-actions>
+</form>
+
+
+
+
+

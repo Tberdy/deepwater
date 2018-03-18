@@ -9,9 +9,9 @@ export abstract class RestApi {
         
     getHeaders(): HttpHeaders {
         if (this.authService.isLogged()) {
-            return new HttpHeaders({'Accept': 'application/json', 'Authorization': 'Bearer ' + this.authService.getUser().token});
+            return new HttpHeaders({'Accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authService.getUser().token});
         } else {
-            return new HttpHeaders({'Accept': 'application/json'});
+            return new HttpHeaders({'Accept': 'application/json', 'Content-Type': 'application/json'});
         }
     }
     
