@@ -59,23 +59,49 @@ export class WorkoutsComponent implements OnInit {
     }
 
     formDialog(action: string, workout: Workout | null): void {
-        let dialogRef = this.dialog.open(WorkoutFormDialog, {
+        let params: any = {
             disableClose: true,
-            width: '500px',
-            data: {workout: this.workoutForm}
-        });
+            width: '500px'
+        };
+
+        switch (action) {
+            case 'add':
+                params.data = {
+                    workout: new Workout,
+                    action: 'add'
+                };
+                break;
+            case 'edit':
+                params.data = {
+                    workout: workout,
+                    action: 'edit'
+                };
+                break;
+        }
+
+        let dialogRef = this.dialog.open(WorkoutFormDialog, params);
 
         dialogRef.afterClosed().subscribe(result => {
-            console.log('The dialog was closed');
-            console.log(result);
             if (result) {
-                this.workoutService.addWorkout(result)
-                    .then((workout: Workout) => {
-                        this.workouts.push(workout);
-                        this.refreshTable();
-                    }).catch(() => {
-                        console.log('Errot while adding workout');
-                    });
+                switch (action) {
+                    case 'add':
+                        this.workoutService.addWorkout(result)
+                            .then((workout: Workout) => {
+                                this.workouts.push(workout);
+                                this.refreshTable();
+                            }).catch(() => {
+                                console.log('Errot while adding workout');
+                            });
+                        break;
+                    case 'edit':
+                        this.workoutService.putWorkout(result)
+                            .then((workout: Workout) => {
+                                this.updateWorkoutInTable(workout);
+                            }).catch(() => {
+                                console.log('Errot while adding workout');
+                            });
+                        break;
+                }
             }
         });
     }
@@ -105,6 +131,12 @@ export class WorkoutsComponent implements OnInit {
                 });
             }
         });
+    }
+    
+    updateWorkoutInTable(updateWorkout: Workout) {
+        let array_index = this.workouts.findIndex(workout => workout.id == updateWorkout.id); 
+        this.workouts[array_index] = updateWorkout;
+        this.refreshTable();
     }
 
     removeWorkoutFromTable(id: number) {

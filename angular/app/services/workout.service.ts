@@ -26,7 +26,7 @@ export class WorkoutService extends RestApi {
 
 
     getWorkout(id: number) {
-        return this.get(this.apiBaseUrl + '/' + id);
+        return this.http.get(this.apiBaseUrl + '/' + id, {headers: this.getHeaders()}).toPromise();
     }
     
     addWorkout(workout: object) {
@@ -34,11 +34,11 @@ export class WorkoutService extends RestApi {
     }
     
     putWorkout(workout: Workout) {
-        return this.put(this.apiBaseUrl + '/' + workout.id, JSON.stringify(workout));
+        return this.http.put<Workout>(this.apiBaseUrl + '/' + workout.id, JSON.stringify(workout), {headers: this.getHeaders()}).toPromise();
     }
     
     deleteWorkout(id: number) {
-        return this.delete(this.apiBaseUrl + '/' + id);
+        return this.http.delete(this.apiBaseUrl + '/' + id, {headers: this.getHeaders()}).toPromise();
     }
 
 }

@@ -1,30 +1,30 @@
 <h1 mat-dialog-title>Ajouter une nouvelle séance</h1>
 
-<form fxLayout="column" fxLayoutAlign="center center" #form="ngForm" (ngSubmit)="submit(form)">
+<form fxLayout="column" fxLayoutAlign="center center" #form="ngForm" (ngSubmit)="submit()">
     <mat-dialog-content fxLayout="column" fxLayoutAlign="center center">
 
         <mat-form-field>
-            <input required matInput name="description" placeholder="Description" ngModel #description="ngModel">
+            <input required matInput name="description" placeholder="Description" ngModel #description="ngModel" [(ngModel)]="workout.description">
         </mat-form-field>
 
         <mat-form-field>
-            <input required matInput name="date" placeholder="Choisir une date de début" ngModel #date="ngModel" [matDatepicker]="picker_date" >
+            <input required matInput name="date" placeholder="Choisir une date de début" ngModel #date="ngModel" [matDatepicker]="picker_date" [(ngModel)]="workout.date">
             <mat-datepicker-toggle matSuffix [for]="picker_date"></mat-datepicker-toggle>
             <mat-datepicker #picker_date></mat-datepicker>
         </mat-form-field>
         
         <mat-form-field>
-            <input required matInput name="end_date" placeholder="Choisir une date de fin" ngModel #end_date="ngModel" [matDatepicker]="picker_end_date" >
+            <input required matInput name="end_date" placeholder="Choisir une date de fin" ngModel #end_date="ngModel" [matDatepicker]="picker_end_date" [(ngModel)]="workout.end_date">
             <mat-datepicker-toggle matSuffix [for]="picker_end_date"></mat-datepicker-toggle>
             <mat-datepicker #picker_end_date></mat-datepicker>
         </mat-form-field>
 
         <mat-form-field>
-            <input required matInput name="location_name" placeholder="Location" ngModel #location_name="ngModel">
+            <input required matInput name="location_name" placeholder="Location" ngModel #location_name="ngModel" [(ngModel)]="workout.location_name">
         </mat-form-field>
         
         <mat-form-field>
-            <input required matInput name="sport" placeholder="Sport" ngModel #sport="ngModel">
+            <input required matInput name="sport" placeholder="Sport" ngModel #sport="ngModel" [(ngModel)]="workout.sport">
         </mat-form-field>
 
     </mat-dialog-content>

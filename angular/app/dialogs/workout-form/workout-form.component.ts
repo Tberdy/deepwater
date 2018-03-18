@@ -1,5 +1,4 @@
 import {Component, Inject} from '@angular/core';
-import {NgForm} from '@angular/forms';
 
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
@@ -18,6 +17,8 @@ import {Workout} from '../../models/workout';
     ],
 })
 export class WorkoutFormDialog {
+    
+    workout: Workout
 
     constructor(
         private adapter: DateAdapter<any>,
@@ -25,14 +26,15 @@ export class WorkoutFormDialog {
         @Inject(MAT_DIALOG_DATA) public data: any
     ) {
         this.adapter.setLocale('fr');
+        this.workout = data.workout;
     }
 
     close(): void {
         this.dialogRef.close();
     }
     
-    submit(form: NgForm) {
-        this.dialogRef.close(form.value);
+    submit() {
+        this.dialogRef.close(this.workout);
     }
 
 }
