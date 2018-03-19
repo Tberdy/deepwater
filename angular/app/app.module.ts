@@ -25,7 +25,6 @@ import {FooterComponent} from './components/footer/footer.component';
         BrowserAnimationsModule,
         FlexLayoutModule,
         HttpClientModule,
-        
         MatButtonModule
 
     ],

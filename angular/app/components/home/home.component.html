@@ -8,8 +8,31 @@
             <a mat-button routerLink="/account/register" class="blocks">Créer un compte</a>
         </div>
     </div>
-    <div class="blocks" fxFlex = "100%">
-        Slider
-    </div>
+    <div class="blocks" fxFlex = "50%">
+				<div
+					ng2-carouselamos
+					class="slides-wrapper"
+					[items]="items"
+					[width]="900"
+					[$prev]="prev"
+					[$next]="next"
+					[$item]="item"
+				>
+				</div>
+
+
+				<ng-template #prev>
+					<img src="assets/images/left.png" id="left" />
+				</ng-template>
+				<ng-template #next>
+					<img src="assets/images/right.png" id="right" />
+				</ng-template>
+				<ng-template #item let-item let-i="index">
+
+					<div class="items">
+						<img src="{{item.name}}">
+					</div>
+
+				</ng-template>
 	</div>
 </div>

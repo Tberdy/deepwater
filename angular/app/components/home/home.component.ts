@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -7,7 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  items: Array<any> = [];
+  constructor() {
+    this.items = [
+      { name: 'assets/images/thumb1.png' },
+      { name: 'assets/images/thumb2.png' },
+      { name: 'assets/images/thumb3.png' }
+    ]
+  }
 
   ngOnInit() {
   }
