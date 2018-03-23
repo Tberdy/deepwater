@@ -48,3 +48,28 @@ a {
   background-size: 120%;
   height: 100%;
 }
+
+.slides-wrapper {
+  height: 674px;
+}
+
+.items img {
+    width: 750px;
+    height: 674px;
+    object-fit: cover;
+}
+
+#left, #right {
+    margin: 30px;
+}
+
+h2 {
+  position: absolute;
+  color: white;
+  top: 400px;
+  height: 50px;
+  width: 750px;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 1000;
+  padding-top: 15px;
+}

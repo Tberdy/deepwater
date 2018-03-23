@@ -29,7 +29,6 @@ import {ConfirmDialog} from './dialogs/confirm/confirm.component';
         BrowserAnimationsModule,
         FlexLayoutModule,
         HttpClientModule,
-        
         MatButtonModule
 
     ],
