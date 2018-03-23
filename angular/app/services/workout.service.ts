@@ -26,7 +26,7 @@ export class WorkoutService extends RestApi {
 
 
     getWorkout(id: number) {
-        return this.http.get(this.apiBaseUrl + '/' + id, {headers: this.getHeaders()}).toPromise();
+        return this.http.get<Workout>(this.apiBaseUrl + '/' + id, {headers: this.getHeaders()}).toPromise();
     }
     
     addWorkout(workout: object) {

@@ -6,4 +6,8 @@ export class Device {
     serial: string;
     description: string;
     trusted: boolean;
+    
+    constructor() {
+        this.trusted = false;
+    }
 }

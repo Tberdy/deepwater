@@ -13,11 +13,15 @@ import {AppComponent} from './app.component';
 import {HeaderComponent} from './components/header/header.component';
 import {FooterComponent} from './components/footer/footer.component';
 
+import {ConfirmDialog} from './dialogs/confirm/confirm.component';
+
 @NgModule({
     declarations: [
         AppComponent,
         HeaderComponent,
         FooterComponent,
+        
+        ConfirmDialog,
     ],
     imports: [
         BrowserModule,
@@ -28,6 +32,9 @@ import {FooterComponent} from './components/footer/footer.component';
         
         MatButtonModule
 
+    ],
+    entryComponents: [
+        ConfirmDialog,
     ],
     providers: [AuthService],
     bootstrap: [AppComponent]
