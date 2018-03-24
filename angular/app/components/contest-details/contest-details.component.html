@@ -1,0 +1,7 @@
+<div *ngIf="!error && contest;else error_temp">
+    <div>{{contest.name}}</div>
+    <div>{{contest.type}}</div>
+    <div>{{contest.description}}</div>
+</div>
+<button (click)="goBack()">Back</button>
+<ng-template #error_temp><div *ngIf="error">{{error}}</div></ng-template>

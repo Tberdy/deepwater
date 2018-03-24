@@ -25,6 +25,7 @@ import {LogService} from '../../services/log.service';
 import {ContestService} from '../../services/contest.service';
 
 import {ContestsComponent} from '../../components/contests/contests.component';
+import { ContestDetailsComponent } from '../../components/contest-details/contest-details.component';
 
 import {ContestFormDialog} from '../../dialogs/contest-form/contest-form.component';
 
@@ -48,6 +49,7 @@ import {ContestFormDialog} from '../../dialogs/contest-form/contest-form.compone
     ],
     declarations: [
         ContestsComponent,
+        ContestDetailsComponent,
         ContestFormDialog
     ],
     entryComponents: [

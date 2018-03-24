@@ -15,6 +15,7 @@ import {FooterComponent} from './components/footer/footer.component';
 
 import {ConfirmDialog} from './dialogs/confirm/confirm.component';
 
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -22,6 +23,7 @@ import {ConfirmDialog} from './dialogs/confirm/confirm.component';
         FooterComponent,
         
         ConfirmDialog,
+
     ],
     imports: [
         BrowserModule,
