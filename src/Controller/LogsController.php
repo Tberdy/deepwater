@@ -112,7 +112,7 @@ class LogsController extends ApiController {
         if ($this->Logs->save($log)) {
             return $this->response->withStringBody(json_encode($log));
         } else {
-            return $this->response->withStatus(400);
+            return $this->response->withStatus(400)->withStringBody(json_encode($log));
         }
     }
 

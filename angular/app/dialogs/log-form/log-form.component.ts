@@ -5,6 +5,7 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-mome
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
 import {Log} from '../../models/log';
+import {Device} from '../../models/device';
 
 @Component({
     selector: 'log-form',
@@ -18,7 +19,9 @@ import {Log} from '../../models/log';
 })
 export class LogFormDialog {
     
-    log: Log
+    log: Log;
+    devices: Device[];
+    deviceSelected: Device;
 
     constructor(
         private adapter: DateAdapter<any>,
@@ -27,6 +30,7 @@ export class LogFormDialog {
     ) {
         this.adapter.setLocale('fr');
         this.log = data.log;
+        this.devices = data.devices;
     }
 
     close(): void {
@@ -34,6 +38,7 @@ export class LogFormDialog {
     }
     
     submit() {
+        this.log.device = this.devices[this.devices.findIndex(device => device.id == this.log.device_id)];
         this.dialogRef.close(this.log);
     }
 

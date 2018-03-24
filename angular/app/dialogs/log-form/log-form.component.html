@@ -6,23 +6,31 @@
         <mat-form-field>
             <input required matInput name="log_type" placeholder="Type de relevé" ngModel #log_type="ngModel" [(ngModel)]="log.log_type">
         </mat-form-field>
-        
+
         <mat-form-field>
-            <input required matInput name="log_value" placeholder="Valeur" ngModel #log_value="ngModel" [(ngModel)]="log.log_valeur">
+            <input required matInput name="log_value" placeholder="Valeur" ngModel #log_value="ngModel" [(ngModel)]="log.log_value">
         </mat-form-field>
 
         <mat-form-field>
             <input required matInput name="date" placeholder="Choisir une date de début" ngModel #date="ngModel" [matDatepicker]="picker_date" [(ngModel)]="log.date">
-            <mat-datepicker-toggle matSuffix [for]="picker_date"></mat-datepicker-toggle>
+                   <mat-datepicker-toggle matSuffix [for]="picker_date"></mat-datepicker-toggle>
             <mat-datepicker #picker_date></mat-datepicker>
         </mat-form-field>
-        
+
         <mat-form-field>
             <input required matInput name="location_latitude" placeholder="Position (Latitude)" ngModel #location_latitude="ngModel" [(ngModel)]="log.location_latitude">
         </mat-form-field>
-        
+
         <mat-form-field>
             <input required matInput name="location_logitude" placeholder="Position (Longitude)" ngModel #location_logitude="ngModel" [(ngModel)]="log.location_logitude">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-select required matInput name="device_id" placeholder="Appareil" #device_id="ngModel" [(ngModel)]="log.device_id">
+                <mat-option *ngFor="let device of devices" [value]="device.id">
+                    {{ device.description }}
+                </mat-option>
+            </mat-select>
         </mat-form-field>
 
     </mat-dialog-content>

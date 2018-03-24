@@ -14,6 +14,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatIconModule} from '@angular/material/icon';
 import {MatCardModule} from '@angular/material/card';
+import {MatSelectModule} from '@angular/material/select';
 
 import {AgmCoreModule} from '@agm/core';
 
@@ -21,6 +22,7 @@ import {WorkoutsRoutingModule} from './workouts-routing.module';
 
 import {WorkoutService} from '../../services/workout.service';
 import {LogService} from '../../services/log.service';
+import {DeviceService} from '../../services/device.service';
 
 import {WorkoutsComponent} from '../../components/workouts/workouts.component';
 import {LogsComponent} from '../../components/logs/logs.component';
@@ -40,7 +42,7 @@ import {LogFormDialog} from '../../dialogs/log-form/log-form.component';
         MatInputModule, MatFormFieldModule,
         MatTableModule, MatPaginatorModule, MatSortModule,
         MatDialogModule, MatDatepickerModule, MatNativeDateModule,
-        MatCardModule,
+        MatCardModule, MatSelectModule,
         
         AgmCoreModule.forRoot({
             apiKey: 'AIzaSyC2_rXFG_O_ciEydc2VYw0514v9iEAjvqY'
@@ -56,6 +58,6 @@ import {LogFormDialog} from '../../dialogs/log-form/log-form.component';
         WorkoutFormDialog,
         LogFormDialog,
     ],
-    providers: [WorkoutService, LogService],
+    providers: [WorkoutService, LogService, DeviceService],
 })
 export class WorkoutsModule {}
