@@ -17,23 +17,23 @@ export class ContestService extends RestApi {
     }
 
     getContests() {
-        return this.get(this.apiBaseUrl);
+        return this.http.get<Contest[]>(this.apiBaseUrl, {headers: this.getHeaders()}).toPromise();
     }
-
+    
     getContest(id: number) {
-        return this.get(this.apiBaseUrl + '/' + id);
+        return this.http.get<Contest>(this.apiBaseUrl + '/' + id, {headers: this.getHeaders()}).toPromise();
     }
     
-    addContest(contest: Contest) {
-        return this.post(this.apiBaseUrl, JSON.stringify(contest));
+    addContest(workout: object) {
+        return this.http.post<Contest>(this.apiBaseUrl, JSON.stringify(workout), {headers: this.getHeaders()}).toPromise();
     }
     
-    putContest(contest: Contest) {
-        return this.put(this.apiBaseUrl + '/' + contest.id, JSON.stringify(contest));
+    putContest(workout: Contest) {
+        return this.http.put<Contest>(this.apiBaseUrl + '/' + workout.id, JSON.stringify(workout), {headers: this.getHeaders()}).toPromise();
     }
     
-    deleteContest(contest: Contest) {
-        return this.delete(this.apiBaseUrl + '/' + contest.id);
+    deleteContest(id: number) {
+        return this.http.delete(this.apiBaseUrl + '/' + id, {headers: this.getHeaders()}).toPromise();
     }
 
 }
