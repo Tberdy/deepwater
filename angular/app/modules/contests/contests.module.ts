@@ -23,11 +23,14 @@ import {ContestsRoutingModule} from './contests-routing.module';
 import {WorkoutService} from '../../services/workout.service';
 import {LogService} from '../../services/log.service';
 import {ContestService} from '../../services/contest.service';
+import {MemberService} from '../../services/member.service';
 
 import {ContestsComponent} from '../../components/contests/contests.component';
 import { ContestDetailsComponent } from '../../components/contest-details/contest-details.component';
 
 import {ContestFormDialog} from '../../dialogs/contest-form/contest-form.component';
+import { MatchFormDialog } from '../../dialogs/match-form/match-form.component';
+import { MatchEndFormDialog } from '../../dialogs/match-end-form/match-end-form.component';
 
 @NgModule({
     imports: [
@@ -50,11 +53,15 @@ import {ContestFormDialog} from '../../dialogs/contest-form/contest-form.compone
     declarations: [
         ContestsComponent,
         ContestDetailsComponent,
-        ContestFormDialog
+        ContestFormDialog,
+        MatchFormDialog,
+        MatchEndFormDialog
     ],
     entryComponents: [
-        ContestFormDialog
+        ContestFormDialog,
+        MatchFormDialog,
+        MatchEndFormDialog
     ],
-    providers: [WorkoutService, LogService, ContestService],
+    providers: [WorkoutService, LogService, ContestService, MemberService],
 })
 export class ContestsModule {}

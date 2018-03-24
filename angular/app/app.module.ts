@@ -16,14 +16,13 @@ import {FooterComponent} from './components/footer/footer.component';
 import {ConfirmDialog} from './dialogs/confirm/confirm.component';
 
 
+
 @NgModule({
     declarations: [
         AppComponent,
         HeaderComponent,
         FooterComponent,
-        
         ConfirmDialog,
-
     ],
     imports: [
         BrowserModule,

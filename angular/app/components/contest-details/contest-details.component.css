@@ -1,0 +1,46 @@
+div.contest-details-container {
+    margin: 32px;
+}
+
+.table-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+    width: 100%;
+    max-width: 1200px !important;
+}
+
+.table-container .mat-table,
+.table-container .mat-paginator {
+    width: 100%;
+}
+
+.table-header {
+    min-height: 64px;
+    min-width: 20%;
+    padding: 8px 24px 0;
+}
+
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+.mat-table {
+    overflow: auto;
+    max-height: 500px;
+}
+
+.mat-cell button {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+button {
+    margin-top: 16px
+}
+ul
+{
+    list-style-type: none;
+    padding-left: 20px;
+}
