@@ -12,28 +12,31 @@ import {Log} from '../models/log';
 export class LogService extends RestApi {
 
     constructor(http: HttpClient, authService: AuthService) {
-        super(http, authService);
-        this.apiBaseUrl = '/api/members/' + this.authService.getUser().id + '/logs';
+        super(http, authService);        
+    }
+    
+    init(workout_id: number) {
+        this.apiBaseUrl = '/api/members/' + this.authService.getUser().id + '/workouts/' + workout_id + '/logs';
     }
 
     getLogs() {
-        return this.get(this.apiBaseUrl);
+        return this.http.get<Log[]>(this.apiBaseUrl, {headers: this.getHeaders()}).toPromise();;
     }
 
     getLog(id: number) {
-        return this.get(this.apiBaseUrl + '/' + id);
+        return this.http.get<Log>(this.apiBaseUrl + '/' + id, {headers: this.getHeaders()}).toPromise();;
     }
     
     addLog(log: Log) {
-        return this.post(this.apiBaseUrl, JSON.stringify(log));
+        return this.http.post<Log>(this.apiBaseUrl, JSON.stringify(log), {headers: this.getHeaders()}).toPromise();
     }
     
     putLog(log: Log) {
-        return this.put(this.apiBaseUrl + '/' + log.id, JSON.stringify(log));
+        return this.http.put<Log>(this.apiBaseUrl + '/' + log.id, JSON.stringify(log), {headers: this.getHeaders()}).toPromise();
     }
     
-    deleteLog(log: Log) {
-        return this.delete(this.apiBaseUrl + '/' + log.id);
+    deleteLog(id: number) {
+        return this.http.delete(this.apiBaseUrl + '/' + id, {headers: this.getHeaders()}).toPromise();
     }
 
 }

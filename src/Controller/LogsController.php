@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
-use App\Controller\AppController;
+use App\Controller\ApiController;
+use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\TableRegistry;
+use Cake\I18n\Time;
 
 /**
  * Logs Controller
@@ -11,7 +14,19 @@ use App\Controller\AppController;
  *
  * @method \App\Model\Entity\Log[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class LogsController extends AppController {
+class LogsController extends ApiController {
+
+    protected $repoMembers;
+    protected $repoWorkouts;
+    protected $repoDevices;
+
+    public function initialize() {
+        parent::initialize();
+
+        $this->repoMembers = TableRegistry::get('members');
+        $this->repoWorkouts = TableRegistry::get('workouts');
+        $this->repoDevices = TableRegistry::get('devices');
+    }
 
     /**
      * Index method
@@ -21,23 +36,29 @@ class LogsController extends AppController {
     public function index() {
         $idMember = $this->request->getParam('member_id');
         $idWorkout = $this->request->getParam('workout_id');
-        $idDevice = $this->request->getParam('device_id');
+
+        try {
+            $member = $this->repoMembers->get($idMember);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
+        }
+
+        try {
+            $workout = $this->repoWorkouts->get($idWorkout);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
+        }
 
         $logs = $this->Logs->find('all')
-                ->matching('Members', function ($q) use ($idMember) {
-                    return $q->where(['Members.id' => $idMember]);
+                ->matching('Members', function ($q) use ($member) {
+                    return $q->where(['Members.id' => $member->id]);
                 })
-                ->matching('Workouts', function ($q) use ($idWorkout) {
-                    return $q->where(['Workouts.id' => $idWorkout]);
+                ->matching('Workouts', function ($q) use ($workout) {
+                    return $q->where(['Workouts.id' => $workout->id]);
                 })
-                ->matching('Devices', function ($q) use ($idDevice) {
-            return $q->where(['Devices.id' => $idDevice]);
-        });
+        ;
 
-        $this->set([
-            'logs' => $logs,
-            '_serialize' => ['logs']
-        ]);
+        return $this->response->withStringBody(json_encode($logs));
     }
 
     /**
@@ -48,11 +69,13 @@ class LogsController extends AppController {
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null) {
-        $log = $this->Logs->get($id);
-        $this->set([
-            'log' => $log,
-            '_serialize' => ['log']
-        ]);
+        try {
+            $log = $this->Logs->get($id);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
+        }
+
+        return $this->response->withStringBody(json_encode($log));
     }
 
     /**
@@ -61,21 +84,36 @@ class LogsController extends AppController {
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
     public function add() {
-        $log = $this->Logs->newEntity($this->request->getData());
-        $log->member_id = $this->request->getParam('member_id');
-        $log->workout_id = $this->request->getParam('workout_id');
-        $log->device_id = $this->request->getParam('device_id');
+        $log = $this->Logs->newEntity($this->request->getData());        
         
-        if ($this->Logs->save($log)) {
-            $message = 'Saved';
-        } else {
-            $message = 'Error';
+        try {
+            $member = $this->repoMembers->get($this->request->getParam('member_id'));
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(400)->withStringBody(json_encode($this->error_entity_not_found));
         }
-        $this->set([
-            'message' => $message,
-            'log' => $log,
-            '_serialize' => ['message', 'log']
-        ]);
+        
+        try {
+            $workout = $this->repoWorkouts->get($this->request->getParam('workout_id'));
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
+        }
+        
+        try {
+            $device = $this->repoDevices->get($this->request->getData('device_id'));
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
+        }
+
+        $log->member_id = $member->id;
+        $log->workout_id = $workout->id;
+        $log->device_id = $device->id;
+        $log->date = Time::parse($this->request->getData('date'));
+
+        if ($this->Logs->save($log)) {
+            return $this->response->withStringBody(json_encode($log));
+        } else {
+            return $this->response->withStatus(400);
+        }
     }
 
     /**
@@ -86,19 +124,23 @@ class LogsController extends AppController {
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function edit($id = null) {
-        $log = $this->Logs->get($id);
-        if ($this->request->is(['post', 'put'])) {
-            $log = $this->Logs->patchEntity($log, $this->request->getData());
-            if ($this->Logs->save($log)) {
-                $message = 'Saved';
-            } else {
-                $message = 'Error';
-            }
+        try {
+            $log = $this->Logs->get($id);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
         }
-        $this->set([
-            'message' => $message,
-            '_serialize' => ['message']
-        ]);
+
+        $log = $this->Logs->patchEntity($log, $this->request->getData());
+
+        if (isset($this->request->getData()['date'])) {
+            $log->date = Time::parse($this->request->getData()['date']);
+        }
+
+        if ($this->Logs->save($log)) {
+            return $this->response->withStringBody(json_encode($log));
+        } else {
+            return $this->response->withStatus(400);
+        }
     }
 
     /**
@@ -109,15 +151,17 @@ class LogsController extends AppController {
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null) {
-        $log = $this->Logs->get($id);
-        $message = 'Deleted';
-        if (!$this->Logs->delete($log)) {
-            $message = 'Error';
+        try {
+            $log = $this->Logs->get($id);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
         }
-        $this->set([
-            'message' => $message,
-            '_serialize' => ['message']
-        ]);
+        
+        if ($this->Logs->delete($log)) {
+            return $this->response->withStatus(204);
+        }
+       
+        return $this->response->withStatus(500);
     }
 
 }

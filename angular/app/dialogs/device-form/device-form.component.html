@@ -1,0 +1,25 @@
+<h1 mat-dialog-title>Ajouter un nouvel appareil</h1>
+
+<form fxLayout="column" fxLayoutAlign="center center" #form="ngForm" (ngSubmit)="submit()">
+    <mat-dialog-content fxLayout="column" fxLayoutAlign="center center">
+
+        <mat-form-field>
+            <input required matInput name="description" placeholder="Description" ngModel #description="ngModel" [(ngModel)]="device.description">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input required matInput name="serial" placeholder="Serial" ngModel #serial="ngModel" [(ngModel)]="device.serial">
+        </mat-form-field>
+        
+    </mat-dialog-content>
+
+    <mat-dialog-actions>
+        <button mat-button [disabled]="!form.valid">Add</button>
+        <button mat-button type="button" (click)="close()">Cancel</button>
+    </mat-dialog-actions>
+</form>
+
+
+
+
+

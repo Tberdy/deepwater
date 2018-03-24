@@ -26,8 +26,9 @@ Router::scope('/api', function (RouteBuilder $routes) {
     $routes->resources('Members', function (RouteBuilder $routes) {
         $routes->resources('Devices');
         $routes->resources('Earnings');
-        $routes->resources('Workouts');
-        $routes->resources('Logs');
+        $routes->resources('Workouts', function (RouteBuilder $routes) {
+            $routes->resources('Logs');
+        });
     });
     $routes->connect('/members/register', ['controller' => 'Members', 'action' => 'add', '_method' => 'POST']);
     $routes->connect('/members/login', ['controller' => 'Members', 'action' => 'token', '_method' => 'POST']);

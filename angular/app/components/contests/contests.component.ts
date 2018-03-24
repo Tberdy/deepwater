@@ -1,4 +1,5 @@
 import {Component, ViewChild, OnInit} from '@angular/core';
+import {MatPaginator, MatSort, MatTableDataSource, MatDialog} from '@angular/material';
 
 import {Contest} from '../../models/contest';
 import {ContestService} from '../../services/contest.service';

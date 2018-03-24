@@ -68,14 +68,7 @@ class WorkoutsController extends ApiController {
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
     public function add() {
-        $workout = $this->Workouts->newEntity($this->request->getData());
-
-        $this->response->withStringBody(json_encode(array(
-            'yolo' => $workout,
-            'sport' => $this->request->getData('sport'),
-            'location_name' => $this->request->getData('location_name'),
-        )));
-        
+        $workout = $this->Workouts->newEntity($this->request->getData());        
         
         try {
             $member = $this->repoMembers->get($this->request->getParam('member_id'));

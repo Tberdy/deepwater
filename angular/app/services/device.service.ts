@@ -17,23 +17,23 @@ export class DeviceService extends RestApi {
     }
 
     getDevices() {
-        return this.get(this.apiBaseUrl);
+        return this.http.get<Device[]>(this.apiBaseUrl, {headers: this.getHeaders()}).toPromise();
     }
 
     getDevice(id: number) {
-        return this.get(this.apiBaseUrl + '/' + id);
+        return this.http.get<Device>(this.apiBaseUrl + '/' + id, {headers: this.getHeaders()}).toPromise();
     }
     
     addDevice(device: Device) {
-        return this.post(this.apiBaseUrl, JSON.stringify(device));
+        return this.http.post<Device>(this.apiBaseUrl, JSON.stringify(device), {headers: this.getHeaders()}).toPromise();
     }
     
     putDevice(device: Device) {
-        return this.put(this.apiBaseUrl + '/' + device.id, JSON.stringify(device));
+        return this.http.put<Device>(this.apiBaseUrl + '/' + device.id, JSON.stringify(device), {headers: this.getHeaders()}).toPromise();
     }
     
-    deleteDevice(device: Device) {
-        return this.delete(this.apiBaseUrl + '/' + device.id);
+    deleteDevice(id: number) {
+        return this.http.delete(this.apiBaseUrl + '/' + id, {headers: this.getHeaders()}).toPromise();
     }
 
 }

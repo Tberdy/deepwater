@@ -13,15 +13,21 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatIconModule} from '@angular/material/icon';
+import {MatCardModule} from '@angular/material/card';
+
+import {AgmCoreModule} from '@agm/core';
 
 import {WorkoutsRoutingModule} from './workouts-routing.module';
 
 import {WorkoutService} from '../../services/workout.service';
+import {LogService} from '../../services/log.service';
 
 import {WorkoutsComponent} from '../../components/workouts/workouts.component';
+import {LogsComponent} from '../../components/logs/logs.component';
+
 import {WorkoutFormDialog} from '../../dialogs/workout-form/workout-form.component';
-import {DeleteConfirmDialog} from '../../dialogs/delete-confirm/delete-confirm.component';
 import {ContestsComponent} from '../../components/contests/contests.component';
+import {LogFormDialog} from '../../dialogs/log-form/log-form.component';
 
 @NgModule({
     imports: [
@@ -35,17 +41,23 @@ import {ContestsComponent} from '../../components/contests/contests.component';
         MatInputModule, MatFormFieldModule,
         MatTableModule, MatPaginatorModule, MatSortModule,
         MatDialogModule, MatDatepickerModule, MatNativeDateModule,
+        MatCardModule,
+        
+        AgmCoreModule.forRoot({
+            apiKey: 'AIzaSyC2_rXFG_O_ciEydc2VYw0514v9iEAjvqY'
+        }),
     ],
     declarations: [
         WorkoutsComponent,
+        LogsComponent,
         WorkoutFormDialog,
-        DeleteConfirmDialog,
-        ContestsComponent
+        ContestsComponent,
+        LogFormDialog,
     ],
     entryComponents: [
         WorkoutFormDialog,
-        DeleteConfirmDialog,
+        LogFormDialog,
     ],
-    providers: [WorkoutService],
+    providers: [WorkoutService, LogService],
 })
 export class WorkoutsModule {}
