@@ -21,6 +21,7 @@ import {WorkoutService} from '../../services/workout.service';
 import {WorkoutsComponent} from '../../components/workouts/workouts.component';
 import {WorkoutFormDialog} from '../../dialogs/workout-form/workout-form.component';
 import {DeleteConfirmDialog} from '../../dialogs/delete-confirm/delete-confirm.component';
+import {ContestsComponent} from '../../components/contests/contests.component';
 
 @NgModule({
     imports: [
@@ -39,6 +40,7 @@ import {DeleteConfirmDialog} from '../../dialogs/delete-confirm/delete-confirm.c
         WorkoutsComponent,
         WorkoutFormDialog,
         DeleteConfirmDialog,
+        ContestsComponent
     ],
     entryComponents: [
         WorkoutFormDialog,

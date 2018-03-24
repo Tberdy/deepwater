@@ -5,6 +5,7 @@ import {AuthGuard} from '../../services/auth-guard.service';
 
 import {WorkoutsComponent} from '../../components/workouts/workouts.component';
 
+
 const routes: Routes = [{
     path: '',
     canActivate: [AuthGuard],
