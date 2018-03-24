@@ -35,6 +35,11 @@ Router::scope('/api', function (RouteBuilder $routes) {
 
     $routes->resources('Contests');
     $routes->resources('Stickers');
+
+    $routes->connect('/registerdevice/:member_id/:device_serial/:device_description', ['controller' => 'DirtyApis', 'action' => 'registerdevice', '_method' => 'GET'], ['pass' => ['member_id', 'device_serial', 'device_description']]);
+    $routes->connect('/workoutparameters/:device_id/:workout_id', ['controller' => 'DirtyApis', 'action' => 'workoutparameters', '_method' => 'GET'], ['pass' => ['device_id', 'workout_id']]);
+    $routes->connect('/getsummary/:device_id', ['controller' => 'DirtyApis', 'action' => 'getsummary', '_method' => 'GET'], ['pass' => ['device_id']]);
+    $routes->connect('/addlog/:device_id/:match_id/:member_id/points/:points', ['controller' => 'DirtyApis', 'action' => 'addlog', '_method' => 'GET'], ['pass' => ['device_id', 'match_id', 'member_id', 'points']]);
 });
 
 Router::connect('/oauth/facebook', ['controller' => 'Members', 'action' => 'login']);

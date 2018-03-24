@@ -7,9 +7,11 @@ import {ConfirmDialog} from '../../dialogs/confirm/confirm.component';
 
 import {Workout} from '../../models/workout';
 import {Log} from '../../models/log';
+import {Device} from '../../models/device'
 
 import {WorkoutService} from '../../services/workout.service';
 import {LogService} from '../../services/log.service';
+import {DeviceService} from '../../services/device.service';
 
 @Component({
     selector: 'app-logs',
@@ -17,12 +19,13 @@ import {LogService} from '../../services/log.service';
     styleUrls: ['./logs.component.css']
 })
 export class LogsComponent implements OnInit {
-    displayedColumns = ['log_type', 'log_value', 'date', 'actions'];
+    displayedColumns = ['log_type', 'log_value', 'date', 'device', 'actions'];
     dataSource: MatTableDataSource<Log>;
 
     workout_id: number;
     workout: Workout;
     logs: Log[];
+    devices: Device[];
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
@@ -30,12 +33,13 @@ export class LogsComponent implements OnInit {
     constructor(
         private workoutService: WorkoutService,
         private logService: LogService,
+        private deviceService: DeviceService,
         public dialog: MatDialog,
         private route: ActivatedRoute
     ) {
         this.dataSource = new MatTableDataSource(this.logs);
         this.workout = new Workout;
-        
+
         this.workout_id = +this.route.snapshot.paramMap.get('workout_id')
         this.logService.init(this.workout_id);
     }
@@ -43,19 +47,24 @@ export class LogsComponent implements OnInit {
     ngOnInit() {
         this.workoutService.getWorkout(this.workout_id)
             .then((workout: Workout) => {
-                this.workout = workout; 
-            }).catch(() => {
-                
-            });
+                this.workout = workout;
+            }).catch(() => {});
 
-        this.logService.getLogs()
-            .then((logs: Log[]) => {
-                this.logs = logs;
-                this.refreshTable();
-            }).catch(() => {
-                //this.snackBar.open('Invalid credentials !', 'OK', {duration: 5000});
-                //this.snackBar.open('Internal error', 'OK', {duration: 5000});
-            });
+        this.deviceService.getDevices()
+            .then((devices: Device[]) => {
+                this.devices = devices;
+
+                this.logService.getLogs()
+                    .then((logs: Log[]) => {
+                        this.logs = logs;
+
+                        this.logs.forEach(log => {
+                            log.device = this.devices[this.devices.findIndex(device => device.id == log.device_id)]
+                        });
+
+                        this.refreshTable();
+                    }).catch(() => {});
+            }).catch(() => {});
     }
 
     /**
@@ -83,13 +92,15 @@ export class LogsComponent implements OnInit {
             case 'add':
                 params.data = {
                     log: new Log,
-                    action: 'add'
+                    action: 'add',
+                    devices: this.devices
                 };
                 break;
             case 'edit':
                 params.data = {
                     log: log,
-                    action: 'edit'
+                    action: 'edit',
+                    devices: this.devices
                 };
                 break;
         }
@@ -102,6 +113,7 @@ export class LogsComponent implements OnInit {
                     case 'add':
                         this.logService.addLog(result)
                             .then((log: Log) => {
+                                log = this.bindLogDevice(log);
                                 this.logs.push(log);
                                 this.refreshTable();
                             }).catch(() => {
@@ -111,6 +123,7 @@ export class LogsComponent implements OnInit {
                     case 'edit':
                         this.logService.putLog(result)
                             .then((log: Log) => {
+                                log = this.bindLogDevice(log);
                                 this.updateLogInTable(log);
                             }).catch(() => {
                                 console.log('Error while updating log');
@@ -159,6 +172,11 @@ export class LogsComponent implements OnInit {
         this.logs.splice(array_index, 1);
         this.refreshTable();
 
+    }
+    
+    bindLogDevice(log: Log) {
+        log.device = this.devices[this.devices.findIndex(device => device.id == log.device_id)]
+        return log;
     }
 
 }

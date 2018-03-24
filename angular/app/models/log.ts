@@ -1,11 +1,11 @@
 import {Member} from './member';
-import {Workout} from './workout';
 import {Device} from './device';
 
 export class Log {
     id: number;
     member: Member;
-    workout: Workout;
+    workout_id: number;
+    device_id: number;
     device: Device;
     date: string;
     location_latitude: number;

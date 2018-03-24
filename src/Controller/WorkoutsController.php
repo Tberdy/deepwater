@@ -44,6 +44,7 @@ class WorkoutsController extends ApiController {
 
         return $this->response->withStringBody(json_encode($workouts));
     }
+    
 
     /**
      * View method

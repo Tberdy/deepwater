@@ -28,10 +28,14 @@ export class LogService extends RestApi {
     }
     
     addLog(log: Log) {
+        log.device_id = log.device.id;
+        delete log.device;
         return this.http.post<Log>(this.apiBaseUrl, JSON.stringify(log), {headers: this.getHeaders()}).toPromise();
     }
     
     putLog(log: Log) {
+        log.device_id = log.device.id;
+        delete log.device;
         return this.http.put<Log>(this.apiBaseUrl + '/' + log.id, JSON.stringify(log), {headers: this.getHeaders()}).toPromise();
     }
     
