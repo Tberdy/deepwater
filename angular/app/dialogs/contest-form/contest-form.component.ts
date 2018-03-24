@@ -1,15 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, Inject} from '@angular/core';
+
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+
+import {Contest} from '../../models/contest';
 
 @Component({
-  selector: 'app-contest-form',
-  templateUrl: './contest-form.component.html',
-  styleUrls: ['./contest-form.component.css']
+    selector: 'app-contest-form',
+    templateUrl: './contest-form.component.html',
+    styleUrls: ['./contest-form.component.css']
 })
-export class ContestFormComponent implements OnInit {
+export class ContestFormDialog implements OnInit {
 
-  constructor() { }
+    ngOnInit() {
+    }
+    contest: Contest
+    action: string
 
-  ngOnInit() {
-  }
+    constructor(
+        public dialogRef: MatDialogRef<ContestFormDialog>,
+        @Inject(MAT_DIALOG_DATA) public data: any
+    ) {
+        this.contest = data.contest;
+        this.action = data.action;
+    }
+
+    close(): void {
+        this.dialogRef.close();
+    }
+
+    submit() {
+        this.dialogRef.close(this.contest);
+    }
 
 }

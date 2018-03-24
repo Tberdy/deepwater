@@ -26,6 +26,8 @@ import {ContestService} from '../../services/contest.service';
 
 import {ContestsComponent} from '../../components/contests/contests.component';
 
+import {ContestFormDialog} from '../../dialogs/contest-form/contest-form.component';
+
 @NgModule({
     imports: [
         CommonModule,
@@ -39,15 +41,17 @@ import {ContestsComponent} from '../../components/contests/contests.component';
         MatTableModule, MatPaginatorModule, MatSortModule,
         MatDialogModule, MatDatepickerModule, MatNativeDateModule,
         MatCardModule, MatSelectModule,
-        
+
         AgmCoreModule.forRoot({
             apiKey: 'AIzaSyC2_rXFG_O_ciEydc2VYw0514v9iEAjvqY'
         }),
     ],
     declarations: [
         ContestsComponent,
+        ContestFormDialog
     ],
     entryComponents: [
+        ContestFormDialog
     ],
     providers: [WorkoutService, LogService, ContestService],
 })

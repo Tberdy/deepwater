@@ -1,6 +1,7 @@
 import {Component, ViewChild, OnInit} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource, MatDialog} from '@angular/material';
 
+import {ContestFormDialog} from '../../dialogs/contest-form/contest-form.component';
 import {ConfirmDialog} from '../../dialogs/confirm/confirm.component';
 
 import {Contest} from '../../models/contest';
@@ -12,7 +13,7 @@ import {ContestService} from '../../services/contest.service';
     styleUrls: ['./contests.component.css']
 })
 export class ContestsComponent implements OnInit {
-    displayedColumns = ['name', 'type', 'description'];
+    displayedColumns = ['name', 'type', 'description','actions'];
     dataSource: MatTableDataSource<Contest>;
 
     contests: Contest[];
@@ -47,7 +48,7 @@ export class ContestsComponent implements OnInit {
             disableClose: true,
             data: {
                 title: 'Etes vous sûr de vouloir supprimer ça ?',
-                content: 'Compétition "' + contest.description + '"'
+                content: 'Compétition : "' + contest.name + '"'
             }
         });
 
@@ -62,7 +63,53 @@ export class ContestsComponent implements OnInit {
             }
         });
     }
-    
+    formDialog(action: string, contest: Contest | null): void {
+        let params: any = {
+            disableClose: true,
+            width: '500px'
+        };
+
+        switch (action) {
+            case 'add':
+                params.data = {
+                    contest: new Contest,
+                    action: 'add'
+                };
+                break;
+            case 'edit':
+                params.data = {
+                    contest: contest,
+                    action: 'edit'
+                };
+                break;
+        }
+
+        let dialogRef = this.dialog.open(ContestFormDialog, params);
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                switch (action) {
+                    case 'add':
+                        this.contestService.addContest(result)
+                            .then((contest: Contest) => {
+                                this.contests.push(contest);
+                                this.refreshTable();
+                            }).catch(() => {
+                                console.log('Errot while adding contest');
+                            });
+                        break;
+                    case 'edit':
+                        this.contestService.putContest(result)
+                            .then((contest: Contest) => {
+                                this.updateContestInTable(contest);
+                            }).catch(() => {
+                                console.log('Errot while adding contest');
+                            });
+                        break;
+                }
+            }
+        });
+    }
     updateContestInTable(updateContest: Contest) {
         let array_index = this.contests.findIndex(contest => contest.id == updateContest.id); 
         this.contests[array_index] = updateContest;
