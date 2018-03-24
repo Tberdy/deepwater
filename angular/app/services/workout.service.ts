@@ -40,5 +40,13 @@ export class WorkoutService extends RestApi {
     deleteWorkout(id: number) {
         return this.http.delete(this.apiBaseUrl + '/' + id, {headers: this.getHeaders()}).toPromise();
     }
+    
+    getMatchsByMember() {
+        return this.http.get<Workout[]>('/api/members/' + this.authService.getUser().id + '/matchs', {headers: this.getHeaders()}).toPromise();
+    }
+    
+    getMatchsByContest(contest_id: number) {
+        return this.http.get<Workout[]>('/api/contests/' + contest_id + '/matchs', {headers: this.getHeaders()}).toPromise();
+    }
 
 }

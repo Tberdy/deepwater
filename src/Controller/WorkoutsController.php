@@ -17,11 +17,15 @@ use Cake\I18n\Time;
 class WorkoutsController extends ApiController {
 
     protected $repoMembers;
+    protected $repoContests;
 
     public function initialize() {
         parent::initialize();
 
         $this->repoMembers = TableRegistry::get('members');
+        $this->repoContests = TableRegistry::get('contests');
+        
+        $this->Auth->allow(['indexMatchByContest']);
     }
 
     /**
@@ -44,7 +48,48 @@ class WorkoutsController extends ApiController {
 
         return $this->response->withStringBody(json_encode($workouts));
     }
+
+    /**
+     * List match by member
+     *
+     * @return \Cake\Http\Response|void
+     */
+    public function indexMatchByMember() {
+        $idMember = $this->request->getParam('member_id');
+
+        try {
+            $member = $this->repoMembers->get($idMember);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
+        }
+
+        $workouts = $this->Workouts->find('all')->matching('Members', function ($q) use ($idMember) {
+                    return $q->where(['Members.id' => $idMember]);
+                })->where(['Workouts.contest_id' => 5]);
+
+        return $this->response->withStringBody(json_encode($workouts));
+    }
     
+    /**
+     * List match by contest
+     *
+     * @return \Cake\Http\Response|void
+     */
+    public function indexMatchByContest() {
+        $idContest = $this->request->getParam('contest_id');
+
+        try {
+            $contest = $this->repoContests->get($idContest);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
+        }
+
+        $workouts = $this->Workouts->find('all')->matching('Contests', function ($q) use ($idContest) {
+                    return $q->where(['Contests.id' => $idContest]);
+                });
+
+        return $this->response->withStringBody(json_encode($workouts));
+    }
 
     /**
      * View method
@@ -69,8 +114,8 @@ class WorkoutsController extends ApiController {
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
     public function add() {
-        $workout = $this->Workouts->newEntity($this->request->getData());        
-        
+        $workout = $this->Workouts->newEntity($this->request->getData());
+
         try {
             $member = $this->repoMembers->get($this->request->getParam('member_id'));
         } catch (RecordNotFoundException $ex) {
@@ -78,7 +123,7 @@ class WorkoutsController extends ApiController {
         }
 
         $workout->member_id = $member->id;
-        $workout->contest_id = null;
+        $workout->contest_id = $this->request->getData('contest_id', null);
         $workout->date = Time::parse($this->request->getData('date'));
         $workout->end_date = Time::parse($this->request->getData('end_date'));
 
@@ -132,11 +177,11 @@ class WorkoutsController extends ApiController {
         } catch (RecordNotFoundException $ex) {
             return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
         }
-        
+
         if ($this->Workouts->delete($workout)) {
             return $this->response->withStatus(204);
         }
-       
+
         return $this->response->withStatus(500);
     }
 
