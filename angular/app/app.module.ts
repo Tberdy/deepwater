@@ -14,6 +14,7 @@ import {HeaderComponent} from './components/header/header.component';
 import {FooterComponent} from './components/footer/footer.component';
 
 import {ConfirmDialog} from './dialogs/confirm/confirm.component';
+import { ContestFormComponent } from './dialogs/contest-form/contest-form.component';
 
 @NgModule({
     declarations: [
@@ -22,6 +23,8 @@ import {ConfirmDialog} from './dialogs/confirm/confirm.component';
         FooterComponent,
         
         ConfirmDialog,
+        
+        ContestFormComponent,
     ],
     imports: [
         BrowserModule,
