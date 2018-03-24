@@ -21,12 +21,14 @@ import {WorkoutsRoutingModule} from './workouts-routing.module';
 
 import {WorkoutService} from '../../services/workout.service';
 import {LogService} from '../../services/log.service';
+import {ContestService} from '../../services/contest.service';
 
 import {WorkoutsComponent} from '../../components/workouts/workouts.component';
 import {LogsComponent} from '../../components/logs/logs.component';
+import {ContestsComponent} from '../../components/contests/contests.component';
 
 import {WorkoutFormDialog} from '../../dialogs/workout-form/workout-form.component';
-import {ContestsComponent} from '../../components/contests/contests.component';
+
 import {LogFormDialog} from '../../dialogs/log-form/log-form.component';
 
 @NgModule({
@@ -58,6 +60,6 @@ import {LogFormDialog} from '../../dialogs/log-form/log-form.component';
         WorkoutFormDialog,
         LogFormDialog,
     ],
-    providers: [WorkoutService, LogService],
+    providers: [WorkoutService, LogService, ContestService],
 })
 export class WorkoutsModule {}

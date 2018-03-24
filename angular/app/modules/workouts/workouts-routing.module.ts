@@ -5,7 +5,7 @@ import {AuthGuard} from '../../services/auth-guard.service';
 
 import {WorkoutsComponent} from '../../components/workouts/workouts.component';
 import {LogsComponent} from '../../components/logs/logs.component';
-
+import {ContestsComponent} from '../../components/contests/contests.component';
 
 const routes: Routes = [{
     path: '',
@@ -13,10 +13,16 @@ const routes: Routes = [{
     component: WorkoutsComponent,
 },
 {
+    path: 'contests',
+    canActivate: [AuthGuard],
+    component: ContestsComponent,
+},
+{
     path: ':workout_id',
     canActivate: [AuthGuard],
     component: LogsComponent,
-}];
+}
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
