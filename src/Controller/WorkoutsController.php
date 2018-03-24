@@ -65,7 +65,7 @@ class WorkoutsController extends ApiController {
 
         $workouts = $this->Workouts->find('all')->matching('Members', function ($q) use ($idMember) {
                     return $q->where(['Members.id' => $idMember]);
-                })->where(['Workouts.contest_id' => 5]);
+                })->matching('Contests');
 
         return $this->response->withStringBody(json_encode($workouts));
     }
