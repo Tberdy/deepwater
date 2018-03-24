@@ -22,12 +22,10 @@ import {WorkoutsRoutingModule} from './workouts-routing.module';
 
 import {WorkoutService} from '../../services/workout.service';
 import {LogService} from '../../services/log.service';
-import {ContestService} from '../../services/contest.service';
 import {DeviceService} from '../../services/device.service';
 
 import {WorkoutsComponent} from '../../components/workouts/workouts.component';
 import {LogsComponent} from '../../components/logs/logs.component';
-import {ContestsComponent} from '../../components/contests/contests.component';
 
 import {WorkoutFormDialog} from '../../dialogs/workout-form/workout-form.component';
 
@@ -55,13 +53,12 @@ import {LogFormDialog} from '../../dialogs/log-form/log-form.component';
         WorkoutsComponent,
         LogsComponent,
         WorkoutFormDialog,
-        ContestsComponent,
         LogFormDialog,
     ],
     entryComponents: [
         WorkoutFormDialog,
         LogFormDialog,
     ],
-    providers: [WorkoutService, LogService, ContestService, DeviceService],
+    providers: [WorkoutService, LogService, DeviceService],
 })
 export class WorkoutsModule {}
