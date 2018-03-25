@@ -4,6 +4,7 @@ import {Contest} from './contest';
 export class Workout {
     id: number;
     member: Member;
+    opponent : Member;
     date: string;
     end_date: string;
     location_name: string;

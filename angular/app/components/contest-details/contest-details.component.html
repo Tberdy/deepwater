@@ -42,7 +42,7 @@
                 
                 <ng-container matColumnDef="opponent">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Adversaire </mat-header-cell>
-                    <mat-cell *matCellDef="let row"> {{row.opponent.email}} </mat-cell>
+                    <mat-cell *matCellDef="let row" > <span *ngIf="row.opponent">{{row.opponent.email}}</span> </mat-cell>
                 </ng-container>
                 
                 <ng-container matColumnDef="actions">

@@ -48,5 +48,18 @@ export class WorkoutService extends RestApi {
     getMatchsByContest(contest_id: number) {
         return this.http.get<Workout[]>('/api/contests/' + contest_id + '/matchs', {headers: this.getHeaders()}).toPromise();
     }
+    getPastWorkouts(member_id: number)
+    {
+        
+    }
+    getMissedWorkouts(member_id: number)
+    {
+        
+    }
+    updateWorkout()
+    {
+        
+    }
+    
 
 }
