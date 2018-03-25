@@ -11,6 +11,7 @@ import {MatchEndFormDialog} from '../../dialogs/match-end-form/match-end-form.co
 import {ContestService} from '../../services/contest.service';
 import {WorkoutService} from '../../services/workout.service'
 import {MemberService} from '../../services/member.service';
+import {AuthService} from '../../services/auth.service'
 
 import {Contest} from '../../models/contest';
 import {Workout} from '../../models/workout';
@@ -26,7 +27,7 @@ export class ContestDetailsComponent implements OnInit {
     contest: Contest;
     workouts: Workout[];
     members: Member[];
-
+    
     displayedColumns = ['sport', 'description', 'date', 'end_date', 'location_name', 'opponent', 'actions'];
     dataSource: MatTableDataSource<Workout>;
     @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -37,6 +38,7 @@ export class ContestDetailsComponent implements OnInit {
         private memberService: MemberService,
         private contestService: ContestService,
         private workoutService: WorkoutService,
+        private authService: AuthService,
         private location: Location,
         private cdRef: ChangeDetectorRef,
         public dialog: MatDialog) {
@@ -80,7 +82,6 @@ export class ContestDetailsComponent implements OnInit {
             console.log('Error while loading members.');
         })
     }
-
     goBack(): void {
         this.location.back();
     }
@@ -98,12 +99,6 @@ export class ContestDetailsComponent implements OnInit {
         let params: any = {
             disableClose: true,
             width: '500px'
-        };
-        params.data = {
-            workout: new Workout,
-            members: this.members,
-            contest: this.contest,
-            action: 'add'
         };
         switch (action) {
             case 'add':
@@ -155,23 +150,12 @@ export class ContestDetailsComponent implements OnInit {
             width: '500px'
         };
         params.data = {
-            workout: new Workout,
-            members: this.members,
+            opponent: this.authService.getUser(),//workout.opponent,
+            user: this.authService.getUser(),
             action: 'end'
         };
         let dialogRef = this.dialog.open(MatchEndFormDialog, params);
-        dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                this.workoutService.addWorkout(result)
-                    .then((workout: Workout) => {
-                        this.workouts.push(workout);
-                        this.refreshTable();
-                    }).catch(() => {
-                        console.log('Error while adding match.');
-                    });
 
-            }
-        });
     }
     deleteWorkout(workout: Workout) {
         let dialogRef = this.dialog.open(ConfirmDialog, {

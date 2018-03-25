@@ -3,7 +3,9 @@ import {CommonModule} from '@angular/common';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
-import {MatNativeDateModule} from '@angular/material'
+import {MatNativeDateModule} from '@angular/material';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatSliderModule} from '@angular/material/slider';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -26,11 +28,11 @@ import {ContestService} from '../../services/contest.service';
 import {MemberService} from '../../services/member.service';
 
 import {ContestsComponent} from '../../components/contests/contests.component';
-import { ContestDetailsComponent } from '../../components/contest-details/contest-details.component';
+import {ContestDetailsComponent} from '../../components/contest-details/contest-details.component';
 
 import {ContestFormDialog} from '../../dialogs/contest-form/contest-form.component';
-import { MatchFormDialog } from '../../dialogs/match-form/match-form.component';
-import { MatchEndFormDialog } from '../../dialogs/match-end-form/match-end-form.component';
+import {MatchFormDialog} from '../../dialogs/match-form/match-form.component';
+import {MatchEndFormDialog} from '../../dialogs/match-end-form/match-end-form.component';
 
 @NgModule({
     imports: [
@@ -44,7 +46,7 @@ import { MatchEndFormDialog } from '../../dialogs/match-end-form/match-end-form.
         MatInputModule, MatFormFieldModule,
         MatTableModule, MatPaginatorModule, MatSortModule,
         MatDialogModule, MatDatepickerModule, MatNativeDateModule,
-        MatCardModule, MatSelectModule,
+        MatCardModule, MatSelectModule, MatRadioModule, MatSliderModule,
 
         AgmCoreModule.forRoot({
             apiKey: 'AIzaSyC2_rXFG_O_ciEydc2VYw0514v9iEAjvqY'

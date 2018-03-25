@@ -5,6 +5,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import {MatNativeDateModule} from '@angular/material'
 import {MatButtonModule} from '@angular/material/button';
+import {MatSliderModule} from '@angular/material/slider';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTableModule} from '@angular/material/table';
@@ -43,7 +44,7 @@ import {LogFormDialog} from '../../dialogs/log-form/log-form.component';
         MatInputModule, MatFormFieldModule,
         MatTableModule, MatPaginatorModule, MatSortModule,
         MatDialogModule, MatDatepickerModule, MatNativeDateModule,
-        MatCardModule, MatSelectModule,
+        MatCardModule, MatSelectModule, MatSliderModule,
         
         AgmCoreModule.forRoot({
             apiKey: 'AIzaSyC2_rXFG_O_ciEydc2VYw0514v9iEAjvqY'

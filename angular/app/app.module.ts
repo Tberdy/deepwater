@@ -5,6 +5,8 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {HttpClientModule} from '@angular/common/http';
 
 import {MatButtonModule} from '@angular/material/button';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatSliderModule} from '@angular/material/slider';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AuthService} from './services/auth.service';
@@ -30,7 +32,9 @@ import {ConfirmDialog} from './dialogs/confirm/confirm.component';
         BrowserAnimationsModule,
         FlexLayoutModule,
         HttpClientModule,
-        MatButtonModule
+        MatButtonModule,
+        MatRadioModule,
+        MatSliderModule
 
     ],
     entryComponents: [
