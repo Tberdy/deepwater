@@ -28,10 +28,13 @@ export class ContestDetailsComponent implements OnInit {
     id: number;
     contest: Contest;
     workouts: Workout[];
+    
     members: Member[];
 
     displayedColumns = ['sport', 'description', 'date', 'end_date', 'location_name', 'opponent', 'actions'];
-    dataSource: MatTableDataSource<Workout>;
+    dataMyWorkouts: MatTableDataSource<Workout>;
+    dataSourceOthersWorkouts : MatTableDataSource<Workout>;
+    
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
 
@@ -45,7 +48,7 @@ export class ContestDetailsComponent implements OnInit {
         private location: Location,
         private cdRef: ChangeDetectorRef,
         public dialog: MatDialog) {
-        this.dataSource = new MatTableDataSource(this.workouts);
+        this.dataMyWorkouts = new MatTableDataSource(this.workouts);
     }
 
     ngOnInit() {
@@ -56,8 +59,8 @@ export class ContestDetailsComponent implements OnInit {
         this.cdRef.detectChanges();
     }
     ngAfterViewInit() {
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.dataMyWorkouts.paginator = this.paginator;
+        this.dataMyWorkouts.sort = this.sort;
     }
     getContest(): void {
         const id = +this.route.snapshot.paramMap.get('id');
@@ -89,14 +92,14 @@ export class ContestDetailsComponent implements OnInit {
         this.location.back();
     }
     refreshTable() {
-        this.dataSource = new MatTableDataSource(this.workouts);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.dataMyWorkouts = new MatTableDataSource(this.workouts);
+        this.dataMyWorkouts.paginator = this.paginator;
+        this.dataMyWorkouts.sort = this.sort;
     }
     applyFilter(filterValue: string) {
         filterValue = filterValue.trim(); // Remove whitespace
         filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-        this.dataSource.filter = filterValue;
+        this.dataMyWorkouts.filter = filterValue;
     }
     matchFormDialog(action: string, workout: Workout | null): void {
         let params: any = {
