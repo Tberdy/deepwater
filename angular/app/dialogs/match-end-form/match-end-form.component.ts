@@ -31,6 +31,11 @@ export class MatchEndFormDialog implements OnInit {
     }
 
     submit() {
-        this.dialogRef.close();
+        let result : any = {
+            winner : this.winner,
+            looser : this.looser,
+            draw : this.draw
+        };
+        this.dialogRef.close(result);
     }
 }

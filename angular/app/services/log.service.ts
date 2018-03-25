@@ -12,9 +12,9 @@ import {Log} from '../models/log';
 export class LogService extends RestApi {
 
     constructor(http: HttpClient, authService: AuthService) {
-        super(http, authService);        
+        super(http, authService);
     }
-    
+
     init(workout_id: number) {
         this.apiBaseUrl = '/api/members/' + this.authService.getUser().id + '/workouts/' + workout_id + '/logs';
     }
@@ -26,19 +26,22 @@ export class LogService extends RestApi {
     getLog(id: number) {
         return this.http.get<Log>(this.apiBaseUrl + '/' + id, {headers: this.getHeaders()}).toPromise();;
     }
-    
+
     addLog(log: Log) {
-        log.device_id = log.device.id;
-        delete log.device;
+        if (log.device) {
+            log.device_id = log.device.id;
+            delete log.device;
+        }
+        
         return this.http.post<Log>(this.apiBaseUrl, JSON.stringify(log), {headers: this.getHeaders()}).toPromise();
     }
-    
+
     putLog(log: Log) {
         log.device_id = log.device.id;
         delete log.device;
         return this.http.put<Log>(this.apiBaseUrl + '/' + log.id, JSON.stringify(log), {headers: this.getHeaders()}).toPromise();
     }
-    
+
     deleteLog(id: number) {
         return this.http.delete(this.apiBaseUrl + '/' + id, {headers: this.getHeaders()}).toPromise();
     }
