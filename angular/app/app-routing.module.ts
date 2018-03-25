@@ -28,6 +28,16 @@ const routes: Routes = [{
     loadChildren: 'app/modules/devices/devices.module#DevicesModule'
 },
 {
+    path: 'contact',
+    canActivate: [AuthGuard],
+    loadChildren: 'app/modules/contact/contact.module#ContactModule'
+},
+{
+    path: 'wall',
+    canActivate: [AuthGuard],
+    loadChildren: 'app/modules/wall/wall.module#WallModule'
+},
+{
     path: 'contests',
     canActivate: [AuthGuard],
     loadChildren: 'app/modules/contests/contests.module#ContestsModule'

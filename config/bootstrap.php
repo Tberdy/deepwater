@@ -220,3 +220,5 @@ Plugin::load('Migrations');
 Plugin::load('ADmad/JwtAuth');
 
 Plugin::load('Muffin/OAuth2');
+
+Plugin::load('Muffin/OAuth2');

@@ -5,11 +5,13 @@
 
         <div *ngIf="authService.getUser().logged; then thenBlock else elseBlock"></div>
         <ng-template #thenBlock>
-            <a mat-button routerLink="/social/chat">Chat</a>
-            <a mat-button routerLink="/contests">Compétitions</a>
-            <a mat-button routerLink="/workouts">Mes séances</a>
-            <a mat-button routerLink="/devices">Mes appareils</a>
-            <a class="right" mat-button routerLink="/account/my">{{authService.getUser().email}}</a>
+            <a id='header-button' mat-button routerLink="/social/chat">Chat</a>
+            <a id='header-button' mat-button routerLink="/contests">Compétitions</a>
+            <a id='header-button' mat-button routerLink="/workouts">Mes séances</a>
+            <a id='header-button' mat-button routerLink="/devices">Mes appareils</a>
+            <a id='header-button' mat-button routerLink="/contact">Contact</a>
+            <a id='header-button' mat-button routerLink="/wall">Mur</a>
+            <a id='header-button' class="right" mat-button routerLink="/account/my">{{authService.getUser().email}}</a>
         </ng-template>
         <ng-template #elseBlock>
             <a class="right" mat-button routerLink="/account/login">Login / Register</a>
