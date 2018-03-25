@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Controller\ApiController;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\TableRegistry;
 
 /**
  * Contests Controller
@@ -13,11 +14,15 @@ use Cake\Datasource\Exception\RecordNotFoundException;
  * @method \App\Model\Entity\Contest[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class ContestsController extends ApiController {
-    
+
+    protected $repoLogs;
+
     public function initialize() {
         parent::initialize();
 
         $this->Auth->allow(['index', 'view']);
+
+        $this->repoLogs = TableRegistry::get('logs');
     }
 
     /**
@@ -77,11 +82,11 @@ class ContestsController extends ApiController {
         }
 
         $patchedContest = $this->Contests->patchEntity($contest, $this->request->getData());
-        
+
         if ($this->Contests->save($patchedContest)) {
             return $this->response->withStringBody(json_encode($patchedContest));
         }
-        
+
         return $this->response->withStatus(400);
     }
 
@@ -98,12 +103,38 @@ class ContestsController extends ApiController {
         } catch (RecordNotFoundException $ex) {
             return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
         }
-        
+
         if ($this->Contests->delete($contest)) {
             return $this->response->withStatus(204);
         }
-       
+
         return $this->response->withStatus(500);
+    }
+
+    public function getScoreByContest() {
+        $idContest = $this->request->getParam('contest_id');
+
+        try {
+            $contest = $this->Contests->get($idContest);
+        } catch (RecordNotFoundException $ex) {
+            return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
+        }
+
+        $logs = $this->repoLogs->find('all')->matching('Workouts', function ($q) use ($contest) {
+            return $q->where(['Workouts.contest_id' => $contest->id]);
+        });
+        
+        $score = array();
+        
+        foreach ($logs as $log) {
+            if (array_key_exists($log->member_id, $score)) {
+                $score[$log->member_id] += $log->log_value;
+            } else {
+                $score[$log->member_id] = $log->log_value;
+            }
+        }
+        
+        return $this->response->withStatus(200);
     }
 
 }

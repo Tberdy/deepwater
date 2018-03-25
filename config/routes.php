@@ -36,6 +36,7 @@ Router::scope('/api', function (RouteBuilder $routes) {
 
     $routes->resources('Contests', function (RouteBuilder $routes) {
         $routes->connect('/matchs', ['controller' => 'Workouts', 'action' => 'indexMatchByContest', '_method' => 'GET']);
+        $routes->connect('/score', ['controller' => 'Contests', 'action' => 'getScoreByContest', '_method' => 'GET']);
     });
     $routes->resources('Stickers');
 
