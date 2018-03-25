@@ -9,6 +9,10 @@ const routes: Routes = [{
     loadChildren: 'app/modules/home/home.module#HomeModule'
 },
 {
+    path: 'mention',
+    loadChildren: 'app/modules/mention/mention.module#MentionModule'
+},
+{
     path: 'account',
     loadChildren: 'app/modules/account/account.module#AccountModule'
 },

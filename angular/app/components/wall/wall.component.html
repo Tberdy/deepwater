@@ -1,67 +1,31 @@
 <!-- Template open source : https://blackrockdigital.github.io/startbootstrap-sb-admin/ !-->
 
-<mat-grid-list cols="2" rowHeight="2:1">
-  <mat-grid-tile>1</mat-grid-tile>
-  <mat-grid-tile>2</mat-grid-tile>
-  <mat-grid-tile>3</mat-grid-tile>
-  <mat-grid-tile>4</mat-grid-tile>
-</mat-grid-list>
 
-<div class="container">
-    <i class="fa fa-newspaper-o"></i>
-          <div class="col justify-content-md-center">
-            <!-- Example Social Card-->
-            <div class="col lg-2">
-            <div class="card-header" style='margin-top:20px'>
-              <i class="fa fa-bell-o"></i> Notifications </div>
-            <div class="list-group list-group-flush small">
-              <a class="list-group-item list-group-item-action" href="#">
-                <div class="media">
-                  <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
-                  <div class="media-body">
-                    <strong>David Miller</strong>posted a new article to
-                    <strong>David Miller Website</strong>.
-                    <div class="text-muted smaller">Today at 5:43 PM - 5m ago</div>
-                  </div>
-                </div>
-              </a>
-              <a class="list-group-item list-group-item-action" href="#">
-                <div class="media">
-                  <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
-                  <div class="media-body">
-                    <strong>Samantha King</strong>sent you a new message!
-                    <div class="text-muted smaller">Today at 4:37 PM - 1hr ago</div>
-                  </div>
-                </div>
-              </a>
-              <a class="list-group-item list-group-item-action" href="#">
-                <div class="media">
-                  <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
-                  <div class="media-body">
-                    <strong>Jeffery Wellings</strong>added a new photo to the album
-                    <strong>Beach</strong>.
-                    <div class="text-muted smaller">Today at 4:31 PM - 1hr ago</div>
-                  </div>
-                </div>
-              </a>
-              <a class="list-group-item list-group-item-action" href="#">
-                <div class="media">
-                  <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
-                  <div class="media-body">
-                    <i class="fa fa-code-fork"></i>
-                    <strong>Monica Dennis</strong>forked the
-                    <strong>startbootstrap-sb-admin</strong>repository on
-                    <strong>GitHub</strong>.
-                    <div class="text-muted smaller">Today at 3:54 PM - 2hrs ago</div>
-                  </div>
-                </div>
-              </a>
-              <a class="list-group-item list-group-item-action" style='margin-bottom:20px;' href="#">View all activity...</a>
+<div class="coloredContainerX box" fxLayoutAlign="space-evenly" fxflex="" fxlayout="row" fxlayout.sm="column" fxlayout.xs="column" style=" flex-direction: row; box-sizing: border-box; display: flex; flex: 1 1 0%;margin-top:50px;align-items:flex-start;">
+   
+    
+    <div fxFlex="noshrink" style="flex: 1 1 0%; box-sizing: border-box; margin-left:0; width: 5%; min-width: 100px; "> 
+
+        <mat-drawer-container class="example-container" style="background-color: #f3f3f3; position:fixed;">
+            
+            <mat-drawer #drawer class="example-sidenav" style="position:relative;">
+                <a href=""><mat-card _ngcontent-c36="" class="mat-card">Link 1</mat-card></a>
+                <a href=""><mat-card _ngcontent-c36="" class="mat-card">Link 2</mat-card></a>
+                <a href=""><mat-card _ngcontent-c36="" class="mat-card">Link 3</mat-card></a>
+                <a href=""><mat-card _ngcontent-c36="" class="mat-card">Link 4</mat-card></a>
+            </mat-drawer>
+            
+            <div class="example-sidenav-content">
+                <button type="button" mat-button (click)="drawer.toggle()">
+                    Navigation
+                </button>
             </div>
-          </div>
             
-            
-            <div class="col lg-6">
+        </mat-drawer-container>
+    </div>
+    
+    
+    <div fxFlex="noshrink" style="flex: 1 1 0%; box-sizing: border-box; margin-left: 150px; width: 48%; "> 
               <a href="#">
                 <img class="card-img-top img-fluid w-100" src="https://unsplash.it/700/450?image=610" alt="">
               </a>
@@ -116,8 +80,7 @@
                 </div>
               </div>
               <div class="card-footer small text-muted">Posted 32 mins ago</div>
-            </div>
-            <div class="col lg-6">
+
               <a href="#">
                 <img class="card-img-top img-fluid w-100" src="https://unsplash.it/700/450?image=180" alt="">
               </a>
@@ -155,8 +118,62 @@
                 </div>
               </div>
               <div class="card-footer small text-muted" style='margin-bottom:100px' >Posted 46 mins ago</div>
+        </div>
+    <div fxFlex="noshrink" style="flex: 1 1 0%; box-sizing: border-box;"> 
+        <i class="fa fa-newspaper-o"></i>
+          <div class="col justify-content-md-center">
+            <!-- Example Social Card-->
+            <div class="card-header" style='margin-top:20px'>
+              <i class="fa fa-bell-o"></i> Notifications </div>
+            <div class="list-group list-group-flush small">
+              <a class="list-group-item list-group-item-action" href="#">
+                <div class="media">
+                  <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
+                  <div class="media-body">
+                    <strong>David Miller</strong>posted a new article to
+                    <strong>David Miller Website</strong>.
+                    <div class="text-muted smaller">Today at 5:43 PM - 5m ago</div>
+                  </div>
+                </div>
+              </a>
+              <a class="list-group-item list-group-item-action" href="#">
+                <div class="media">
+                  <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
+                  <div class="media-body">
+                    <strong>Samantha King</strong>sent you a new message!
+                    <div class="text-muted smaller">Today at 4:37 PM - 1hr ago</div>
+                  </div>
+                </div>
+              </a>
+              <a class="list-group-item list-group-item-action" href="#">
+                <div class="media">
+                  <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
+                  <div class="media-body">
+                    <strong>Jeffery Wellings</strong>added a new photo to the album
+                    <strong>Beach</strong>.
+                    <div class="text-muted smaller">Today at 4:31 PM - 1hr ago</div>
+                  </div>
+                </div>
+              </a>
+              <a class="list-group-item list-group-item-action" href="#">
+                <div class="media">
+                  <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
+                  <div class="media-body">
+                    <i class="fa fa-code-fork"></i>
+                    <strong>Monica Dennis</strong>forked the
+                    <strong>startbootstrap-sb-admin</strong>repository on
+                    <strong>GitHub</strong>.
+                    <div class="text-muted smaller">Today at 3:54 PM - 2hrs ago</div>
+                  </div>
+                </div>
+              </a>
+              <a class="list-group-item list-group-item-action" style='margin-bottom:20px;' href="#">View all activity...</a>
             </div>
           </div>
     </div>
+    
+    
+    </div>
+
 
             

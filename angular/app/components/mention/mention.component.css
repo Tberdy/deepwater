@@ -1,0 +1,34 @@
+.table-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+    width: 100%;
+    max-width: 1200px !important;
+}
+
+.container-text{
+    background-color : #3f51b5;
+    margin-top: 50px;
+    padding-top : 75px;
+    padding-bottom : 75px;
+}
+
+.text-container-big{
+    font-size: 200%;
+    color : white;
+    max-width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+i{
+    padding-top: 5px;
+    padding-bottom: 1px;
+    padding-left: 8px;
+    padding-right: 25px;
+    
+}
+
+.fade-text{
+    opacity:0.5;
+}
