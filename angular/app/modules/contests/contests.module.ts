@@ -4,6 +4,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import {MatNativeDateModule} from '@angular/material';
+import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatButtonModule} from '@angular/material/button';
@@ -46,7 +47,7 @@ import {MatchEndFormDialog} from '../../dialogs/match-end-form/match-end-form.co
         MatInputModule, MatFormFieldModule,
         MatTableModule, MatPaginatorModule, MatSortModule,
         MatDialogModule, MatDatepickerModule, MatNativeDateModule,
-        MatSlideToggleModule, MatCardModule, MatSelectModule, MatRadioModule,
+        MatSlideToggleModule, MatCardModule, MatSelectModule, MatRadioModule, MatSidenavModule,
 
         AgmCoreModule.forRoot({
             apiKey: 'AIzaSyC2_rXFG_O_ciEydc2VYw0514v9iEAjvqY'
