@@ -24,8 +24,8 @@ class WorkoutsController extends ApiController {
 
         $this->repoMembers = TableRegistry::get('members');
         $this->repoContests = TableRegistry::get('contests');
-        
-        $this->Auth->allow(['indexMatchByContest']);
+
+        $this->Auth->allow(['index', 'indexMatchByContest']);
     }
 
     /**
@@ -69,7 +69,7 @@ class WorkoutsController extends ApiController {
 
         return $this->response->withStringBody(json_encode($workouts));
     }
-    
+
     /**
      * List match by contest
      *
@@ -85,8 +85,8 @@ class WorkoutsController extends ApiController {
         }
 
         $workouts = $this->Workouts->find('all')->matching('Contests', function ($q) use ($idContest) {
-                    return $q->where(['Contests.id' => $idContest]);
-                });
+            return $q->where(['Contests.id' => $idContest]);
+        });
 
         return $this->response->withStringBody(json_encode($workouts));
     }
@@ -127,6 +127,19 @@ class WorkoutsController extends ApiController {
         $workout->date = Time::parse($this->request->getData('date'));
         $workout->end_date = Time::parse($this->request->getData('end_date'));
 
+        $opponent_id = $this->request->getData('opponent_id', null);
+        if (!is_null($opponent_id)) {
+            $opponent_workout = $this->Workouts->newEntity($this->request->getData());
+            $opponent_workout->member_id = $opponent_id;
+            $opponent_workout->contest_id = $this->request->getData('contest_id', null);
+            $opponent_workout->date = Time::parse($this->request->getData('date'));
+            $opponent_workout->end_date = Time::parse($this->request->getData('end_date'));
+
+            if (!$this->Workouts->save($opponent_workout)) {
+                return $this->response->withStatus(400);
+            }
+        }
+
         if ($this->Workouts->save($workout)) {
             return $this->response->withStringBody(json_encode($workout));
         } else {
@@ -146,6 +159,29 @@ class WorkoutsController extends ApiController {
             $workout = $this->Workouts->get($id);
         } catch (RecordNotFoundException $ex) {
             return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
+        }
+
+        if ($workout->isMatch()) {
+            $opponent_workout = $this->Workouts->find('all')->where([
+                        'sport ' => $workout->sport,
+                        'description ' => $workout->description,
+                        'date ' => $workout->date,
+                        'end_date ' => $workout->end_date,
+                        'location_name' => $workout->location_name,
+                    ])->first();
+
+            $opponent_workout = $this->Workouts->patchEntity($opponent_workout, $this->request->getData());
+
+            if (isset($this->request->getData()['date'])) {
+                $opponent_workout->date = Time::parse($this->request->getData()['date']);
+            }
+            if (isset($this->request->getData()['end_date'])) {
+                $opponent_workout->end_date = Time::parse($this->request->getData()['end_date']);
+            }
+
+            if (!$this->Workouts->save($opponent_workout)) {
+                return $this->response->withStatus(400);
+            }
         }
 
         $workout = $this->Workouts->patchEntity($workout, $this->request->getData());
@@ -178,11 +214,25 @@ class WorkoutsController extends ApiController {
             return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
         }
 
-        if ($this->Workouts->delete($workout)) {
-            return $this->response->withStatus(204);
+        if ($workout->isMatch()) {
+            $opponent_workout = $this->Workouts->find('all')->where([
+                        'sport ' => $workout->sport,
+                        'description ' => $workout->description,
+                        'date ' => $workout->date,
+                        'end_date ' => $workout->end_date,
+                        'location_name' => $workout->location_name,
+                    ])->first();
+
+            if (!$this->Workouts->delete($opponent_workout)) {
+                return $this->response->withStatus(500);
+            }
         }
 
-        return $this->response->withStatus(500);
+        if (!$this->Workouts->delete($workout)) {
+            return $this->response->withStatus(500);
+        }
+
+        return $this->response->withStatus(204);
     }
 
 }

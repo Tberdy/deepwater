@@ -85,24 +85,29 @@ class DirtyApisController extends ApiController {
         $member = $this->repoMembers->get($device->member_id);
 
         $next_workout = $this->repoWorkouts->find('all')
-                ->matching('Members', function ($q) use ($member) {
+                ->innerJoinWith('Members', function ($q) use ($member) {
                     return $q->where(['Members.id' => $member->id]);
                 })
-                
-                
+                ->where(['date >' => new \DateTime('now')])
+                ->orderAsc('date')
+                ->limit(1)
                 ->contain('Logs')
         ;
 
         $past_workouts = $this->repoWorkouts->find('all')
-                ->matching('Members', function ($q) use ($member) {
+                ->innerJoinWith('Members', function ($q) use ($member) {
                     return $q->where(['Members.id' => $member->id]);
                 })
-                ->orderDesc('Workout.date')
+                ->where(['end_date <' => new \DateTime('now')])
+                ->orderDesc('date')
                 ->limit(3)
                 ->contain('Logs')
         ;
 
-        return $this->response->withStringBody(json_encode($member));
+        return $this->response->withStringBody(json_encode(array(
+                    'next' => $next_workout,
+                    'past' => $past_workouts
+        )));
     }
 
     public function addlog($device_id, $match_id, $member_id, $points) {

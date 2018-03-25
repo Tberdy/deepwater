@@ -6,6 +6,7 @@ use App\Controller\ApiController;
 use Firebase\JWT\JWT;
 use Cake\Utility\Security;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\ORM\TableRegistry;
 
 /**
  * Members Controller
@@ -15,10 +16,14 @@ use Cake\Datasource\Exception\RecordNotFoundException;
  * @method \App\Model\Entity\Member[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class MembersController extends ApiController {
+    
+    protected $repoDevices;
 
     public function initialize() {
         parent::initialize();
         $this->Auth->allow(['add', 'token']);
+        
+        $this->repoDevices = TableRegistry::get('devices');
     }
 
     public function isAuthorized($user = null) {
@@ -80,6 +85,13 @@ class MembersController extends ApiController {
         $member = $this->Members->newEntity($this->request->getData());
 
         if ($this->Members->save($member)) {
+            
+            $device = $this->repoDevices->newEntity();
+            $device->description = '@match';
+            $device->serial = '@match';
+            $device->trusted = true;
+            $device->member_id = $member->id;
+            
             return $this->response->withStringBody(json_encode(array(
                         'member' => $member,
                         'token' => JWT::encode([
