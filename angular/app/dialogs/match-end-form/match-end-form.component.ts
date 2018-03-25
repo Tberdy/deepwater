@@ -11,16 +11,14 @@ export class MatchEndFormDialog implements OnInit {
 
     opponent: Member;
     user: Member;
-    users: Member[];
     winner : Member;
     looser : Member;
     draw: boolean;
-
+    error : string;
     constructor(public dialogRef: MatDialogRef<MatchEndFormDialog>,
         @Inject(MAT_DIALOG_DATA) public data: any) {
         this.opponent = data.opponent;
         this.user = data.user;
-        this.users = [this.user, this.opponent];
         this.draw = false;
     }
 
@@ -31,6 +29,20 @@ export class MatchEndFormDialog implements OnInit {
     }
 
     submit() {
+        
+        if (this.draw)
+        {
+            this.winner = this.user;
+            this.looser = this.opponent;
+        }
+        else if (!this.winner) {
+            this.error = 'Aucune séléction !';
+            return;
+        }
+        else{
+            if (this.winner == this.user) this.looser = this.opponent;
+            else this.looser = this.user;
+        }
         let result : any = {
             winner : this.winner,
             looser : this.looser,

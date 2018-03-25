@@ -9,7 +9,7 @@ export class Log {
     device: Device;
     date: string;
     location_latitude: number;
-    location_longitude: number;
+    location_logitude: number;
     log_type: string
     log_value: number;
 }
