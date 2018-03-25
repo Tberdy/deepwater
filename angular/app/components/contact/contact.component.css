@@ -29,23 +29,17 @@ i{
     
 }
 
+iframe{
+    margin-left:25% ; 
+    margin-bottom:50px;
+    margin-top:50px;
+    width: 75%;
+}
 .message{
     border-bottom:20px;
     text-align: justify;
 }
 
-.wrapper {
-  display: flex;
-}
-.wrapper > div {
-  font-size: 4vh;
-  color: white;
-  background: gray;
-  margin: .1em;
-  padding: .3em;
-  border-radius: 3px;
-  flex: 1;
-}
 
 
 .message:hover{
@@ -56,8 +50,10 @@ i{
 
 
 .container-left{
-  float: left;
-  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   padding-top: 50px;
   padding-bottom : 50px;
   padding-left : 10%;
@@ -67,11 +63,14 @@ i{
 
 .container-right{
   float: right;
-  width: 50%;  
+
   padding-left : 10%;
   padding-right : 10%;
   padding-top: 50px;
   padding-bottom : 50px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .fade-text{
