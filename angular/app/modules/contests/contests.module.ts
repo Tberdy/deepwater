@@ -5,7 +5,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import {MatNativeDateModule} from '@angular/material';
 import {MatRadioModule} from '@angular/material/radio';
-import {MatSliderModule} from '@angular/material/slider';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -46,7 +46,7 @@ import {MatchEndFormDialog} from '../../dialogs/match-end-form/match-end-form.co
         MatInputModule, MatFormFieldModule,
         MatTableModule, MatPaginatorModule, MatSortModule,
         MatDialogModule, MatDatepickerModule, MatNativeDateModule,
-        MatCardModule, MatSelectModule, MatRadioModule, MatSliderModule,
+        MatSlideToggleModule, MatCardModule, MatSelectModule, MatRadioModule,
 
         AgmCoreModule.forRoot({
             apiKey: 'AIzaSyC2_rXFG_O_ciEydc2VYw0514v9iEAjvqY'
