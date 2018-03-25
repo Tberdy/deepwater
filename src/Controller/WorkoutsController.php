@@ -25,7 +25,7 @@ class WorkoutsController extends ApiController {
         $this->repoMembers = TableRegistry::get('members');
         $this->repoContests = TableRegistry::get('contests');
 
-        $this->Auth->allow(['indexMatchByContest']);
+        $this->Auth->allow(['index', 'indexMatchByContest']);
     }
 
     /**
@@ -127,10 +127,13 @@ class WorkoutsController extends ApiController {
         $workout->date = Time::parse($this->request->getData('date'));
         $workout->end_date = Time::parse($this->request->getData('end_date'));
 
-        $opponent_id = $this->request->getData('opponent_id');
+        $opponent_id = $this->request->getData('opponent_id', null);
         if (!is_null($opponent_id)) {
-            $opponent_workout = $this->Workouts->newEntities($workout);
+            $opponent_workout = $this->Workouts->newEntity($this->request->getData());
             $opponent_workout->member_id = $opponent_id;
+            $opponent_workout->contest_id = $this->request->getData('contest_id', null);
+            $opponent_workout->date = Time::parse($this->request->getData('date'));
+            $opponent_workout->end_date = Time::parse($this->request->getData('end_date'));
 
             if (!$this->Workouts->save($opponent_workout)) {
                 return $this->response->withStatus(400);
