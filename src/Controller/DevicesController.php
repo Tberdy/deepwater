@@ -37,7 +37,7 @@ class DevicesController extends ApiController {
             return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
         }
 
-        $devices = $this->Devices->find('all')->matching('Members', function ($q) use ($member) {
+        $devices = $this->Devices->find('all', ['conditions' => ['Devices.serial !=' => '@match']])->matching('Members', function ($q) use ($member) {
             return $q->where(['Members.id' => $member->id]);
         });
 
