@@ -1,0 +1,9 @@
+.mat-dialog-content .mat-radio-group, mat-dialog-content .mat-slide-toggle{
+    width: 204px;
+    height: auto;
+    margin: 20px;
+}
+.mat-dialog-content{
+    height: auto;
+    overflow: visible;
+}

@@ -2,21 +2,24 @@
 
 <form fxLayout="column" fxLayoutAlign="center center" #form="ngForm" (ngSubmit)="submit()">
     <mat-dialog-content fxLayout="column" fxLayoutAlign="center center">
+        <div>Vainqueur :</div>
+        <mat-radio-group [(ngModel)]="winner" [disabled]="draw" name="winner_radios">
 
-        <mat-radio-group [(ngModel)]="winner" [disabled]="draw" name="winner">
-            <mat-radio-button [value]="user">Vous</mat-radio-button>
-            <mat-radio-button [value]="opponent">Adversaire ({{opponent.email}})</mat-radio-button>
+            <mat-radio-button [value]="user" name="user_radio">Vous</mat-radio-button>
+            <mat-radio-button [value]="opponent" name="opponent_radio">Adversaire ({{opponent.email}})</mat-radio-button>
         </mat-radio-group>
-        <mat-slide-toggle [value]="draw">
-            Match nul
-        </mat-slide-toggle>
-    </mat-dialog-content>
 
-    <mat-dialog-actions>
-        <button mat-button [disabled]="!form.valid">Add</button>
-        <button mat-button type="button" (click)="close()">Cancel</button>
-    </mat-dialog-actions>
+    <mat-slide-toggle [(ngModel)]="draw" name="draw_toggle">
+        Match nul
+    </mat-slide-toggle>
+</mat-dialog-content>
+<div *ngIf="winner">{{winner.name}}</div>
+<mat-dialog-actions>
+    <button mat-button [disabled]="!form.valid">Add</button>
+    <button mat-button type="button" (click)="close()">Cancel</button>
+</mat-dialog-actions>
 </form>
+
 
 
 

@@ -9,6 +9,7 @@ import {MatchFormDialog} from '../../dialogs/match-form/match-form.component';
 import {MatchEndFormDialog} from '../../dialogs/match-end-form/match-end-form.component';
 
 import {ContestService} from '../../services/contest.service';
+import {LogService} from '../../services/log.service'
 import {WorkoutService} from '../../services/workout.service'
 import {MemberService} from '../../services/member.service';
 import {AuthService} from '../../services/auth.service'
@@ -16,6 +17,7 @@ import {AuthService} from '../../services/auth.service'
 import {Contest} from '../../models/contest';
 import {Workout} from '../../models/workout';
 import {Member} from '../../models/member';
+import {Log} from '../../models/log';
 
 @Component({
     selector: 'app-contest-details',
@@ -27,7 +29,7 @@ export class ContestDetailsComponent implements OnInit {
     contest: Contest;
     workouts: Workout[];
     members: Member[];
-    
+
     displayedColumns = ['sport', 'description', 'date', 'end_date', 'location_name', 'opponent', 'actions'];
     dataSource: MatTableDataSource<Workout>;
     @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -38,6 +40,7 @@ export class ContestDetailsComponent implements OnInit {
         private memberService: MemberService,
         private contestService: ContestService,
         private workoutService: WorkoutService,
+        private logService: LogService,
         private authService: AuthService,
         private location: Location,
         private cdRef: ChangeDetectorRef,
@@ -128,7 +131,7 @@ export class ContestDetailsComponent implements OnInit {
                                 this.workouts.push(workout);
                                 this.refreshTable();
                             }).catch(() => {
-                                console.log('Errot while adding match');
+                                console.log('Error while adding match');
                             });
                         break;
                     case 'edit':
@@ -136,7 +139,7 @@ export class ContestDetailsComponent implements OnInit {
                             .then((workout: Workout) => {
                                 this.updateWorkoutInTable(workout);
                             }).catch(() => {
-                                console.log('Errot while editing match');
+                                console.log('Error while editing match');
                             });
                         break;
                 }
@@ -147,7 +150,8 @@ export class ContestDetailsComponent implements OnInit {
     matchEndFormDialog(workout: Workout): void {
         let params: any = {
             disableClose: true,
-            width: '500px'
+            width: '500px',
+            heigth: 'auto'
         };
         params.data = {
             opponent: this.authService.getUser(),//workout.opponent,
@@ -155,6 +159,46 @@ export class ContestDetailsComponent implements OnInit {
             action: 'end'
         };
         let dialogRef = this.dialog.open(MatchEndFormDialog, params);
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                let logWinner = new Log;
+                let logLooser = new Log;
+                logWinner.member = result.winner;
+                logWinner.workout_id = workout.id;
+                logWinner.date = new Date().toString();
+                logWinner.location_latitude = 0;
+                logWinner.location_longitude = 0;
+                logWinner.log_type = '@contest:' + this.contest.id;
+
+                logLooser.member = result.looser;
+                logLooser.workout_id = workout.id;
+                logLooser.date = new Date().toString();
+                logLooser.location_latitude = 0;
+                logLooser.location_longitude = 0;
+                logLooser.log_type = '@contest:' + this.contest.id;
+                if (result.draw) {
+                    logWinner.log_value = 2;
+                    logLooser.log_value = 2;
+                }
+                else
+                {
+                    logWinner.log_value = 3;
+                    logLooser.log_value = 1;
+                }
+                console.log(logWinner);
+                console.log(logLooser);
+                this.logService.addLog(logWinner).then(() => {
+                    this.logService.addLog(logLooser).then(() => {
+                        
+                    }).catch(() => {
+                        console.log('Error while adding log of looser');
+                    })
+                }).catch(() => {
+                    console.log('Error while adding log of winner');
+                })
+
+            }
+        });
 
     }
     deleteWorkout(workout: Workout) {
