@@ -43,4 +43,8 @@ class Workout extends Entity
         'contest' => true,
         'logs' => true
     ];
+    
+    public function isMatch() {
+        return is_null($this->contest_id);
+    }
 }
