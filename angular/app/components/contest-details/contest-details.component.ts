@@ -127,6 +127,8 @@ export class ContestDetailsComponent implements OnInit {
         let dialogRef = this.dialog.open(MatchFormDialog, params);
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
+                result.contest_id = this.contest.id;
+                delete result.contest
                 switch (action) {
                     case 'add':
                         this.workoutService.addWorkout(result)

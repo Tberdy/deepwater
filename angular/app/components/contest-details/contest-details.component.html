@@ -66,6 +66,7 @@
 
             <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
         </div>
+        <button mat-raised-button (click)="matchFormDialog('add', null)">Créer un match</button>
         <div>Les matchs terminées</div>
         <div fxLayout="column" fxLayoutAlign="center center" class="table-container mat-elevation-z8">
             <mat-table [dataSource]="dataSource" matSort>
@@ -121,7 +122,7 @@
 
             <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
         </div>
-        <button mat-raised-button (click)="matchFormDialog('add', null)">Créer un match</button>
+        
     </div>
     <div>Classement</div>
     <div fxLayout="column" fxLayoutAlign="center center" class="table-container mat-elevation-z8">
