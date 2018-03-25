@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a043dace7d4577e31f231c823e968059",
+    "content-hash": "d60e8f9ac5bd74983c2eefd9f5d6c6f2",
     "packages": [
         {
             "name": "admad/cakephp-jwt-auth",
@@ -735,6 +735,61 @@
             "time": "2017-07-22T01:25:00+00:00"
         },
         {
+            "name": "league/oauth2-github",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/oauth2-github.git",
+                "reference": "416e2ac8d96f582ab2285b136c25a2f8857064c5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/oauth2-github/zipball/416e2ac8d96f582ab2285b136c25a2f8857064c5",
+                "reference": "416e2ac8d96f582ab2285b136c25a2f8857064c5",
+                "shasum": ""
+            },
+            "require": {
+                "league/oauth2-client": "^2.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9",
+                "phpunit/phpunit": "~4.0",
+                "squizlabs/php_codesniffer": "~2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\OAuth2\\Client\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Steven Maguire",
+                    "email": "stevenmaguire@gmail.com",
+                    "homepage": "https://github.com/stevenmaguire"
+                }
+            ],
+            "description": "Github OAuth 2.0 Client Provider for The PHP League OAuth2-Client",
+            "keywords": [
+                "authorisation",
+                "authorization",
+                "client",
+                "github",
+                "oauth",
+                "oauth2"
+            ],
+            "time": "2017-09-12T01:49:21+00:00"
+        },
+        {
             "name": "m1/env",
             "version": "2.1.0",
             "source": {
@@ -846,7 +901,7 @@
         },
         {
             "name": "muffin/oauth2",
-            "version": "v1.0.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/UseMuffin/OAuth2.git",
@@ -3107,6 +3162,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "cakephp/migrations": 0,
+        "league/oauth2-github": 20,
+        "muffin/oauth2": 20,
         "psy/psysh": 0
     },
     "prefer-stable": true,
