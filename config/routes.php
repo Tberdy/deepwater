@@ -30,6 +30,7 @@ Router::scope('/api', function (RouteBuilder $routes) {
             $routes->resources('Logs');
         });
         $routes->connect('/matchs', ['controller' => 'Workouts', 'action' => 'indexMatchByMember', '_method' => 'GET']);
+        $routes->connect('/performance', ['controller' => 'Members', 'action' => 'getPerformance', '_method' => 'GET']);
     });
     $routes->connect('/members/register', ['controller' => 'Members', 'action' => 'add', '_method' => 'POST']);
     $routes->connect('/members/login', ['controller' => 'Members', 'action' => 'token', '_method' => 'POST']);

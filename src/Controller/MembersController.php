@@ -21,9 +21,10 @@ class MembersController extends ApiController {
 
     public function initialize() {
         parent::initialize();
-        $this->Auth->allow(['add', 'token']);
+        $this->Auth->allow(['add', 'token', 'getPerformance']);
         
         $this->repoDevices = TableRegistry::get('devices');
+        $this->repoLogs = TableRegistry::get('logs');
     }
 
     public function isAuthorized($user = null) {
@@ -167,6 +168,22 @@ class MembersController extends ApiController {
         }
 
         return $this->response->withStatus(401);
+    }
+    
+    public function getPerformance() {
+        $logs = $this->repoLogs->find('all');
+        
+        $score = array();
+        
+        foreach ($logs as $log) {
+            if (array_key_exists($log->member_id, $score)) {
+                $score[$log->member_id] += $log->log_value;
+            } else {
+                $score[$log->member_id] = $log->log_value;
+            }
+        }
+        
+        return $this->response->withStringBody(json_encode($score));
     }
 
 }

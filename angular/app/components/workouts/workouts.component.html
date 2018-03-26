@@ -3,21 +3,6 @@
         <mat-form-field>
             <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
         </mat-form-field>
-        <mat-drawer-container class="example-container" autosize>
-    <mat-drawer #drawer class="example-sidenav" mode="side">
-      <p>Auto-resizing sidenav</p>
-      <p *ngIf="showFiller">Lorem, ipsum dolor sit amet consectetur.</p>
-      <button (click)="showFiller = !showFiller" mat-raised-button>
-        Toggle extra text
-      </button>
-    </mat-drawer>
-
-    <div class="example-sidenav-content">
-      <button type="button" mat-button (click)="drawer.toggle()">
-        Toggle sidenav
-        </button>
-    </div>
-    </mat-drawer-container>
     </div>
 
     <div fxLayout="column" fxLayoutAlign="center center" class="table-container mat-elevation-z8">
@@ -27,7 +12,7 @@
                 <mat-header-cell *matHeaderCellDef mat-sort-header> Sport </mat-header-cell>
                 <mat-cell *matCellDef="let row"> {{row.sport}} </mat-cell>
             </ng-container>
-            
+
             <ng-container matColumnDef="description">
                 <mat-header-cell *matHeaderCellDef mat-sort-header> Description </mat-header-cell>
                 <mat-cell *matCellDef="let row"> {{row.description}} </mat-cell>
@@ -55,7 +40,7 @@
                         <mat-icon aria-label="View">note</mat-icon>
                     </button>
                     <button mat-icon-button color="primary" (click)="formDialog('edit', row)">
-                        <mat-icon aria-label="Edit">edit</mat-icon>
+                            <mat-icon aria-label="Edit">edit</mat-icon>
                     </button>
                     <button mat-icon-button color="primary" (click)="deleteWorkout(row)">
                         <mat-icon aria-label="Delete">delete</mat-icon>
