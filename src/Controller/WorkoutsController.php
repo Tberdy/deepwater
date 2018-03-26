@@ -136,7 +136,7 @@ class WorkoutsController extends ApiController {
             $opponent_workout->end_date = Time::parse($this->request->getData('end_date'));
 
             if (!$this->Workouts->save($opponent_workout)) {
-                return $this->response->withStatus(400);
+                return $this->response->withStatus(400)->withStringBody(json_encode($opponent_workout));
             }
         }
 
