@@ -35,9 +35,9 @@ export class ContestService extends RestApi {
     deleteContest(id: number) {
         return this.http.delete(this.apiBaseUrl + '/' + id, {headers: this.getHeaders()}).toPromise();
     }
-    getScoreOfMember(member_id: string,contest_id: number)
+    getScore(contest_id: number)
     {
-        return this.get(this.apiBaseUrl + '/');
+        return this.get(this.apiBaseUrl + '/' + contest_id + '/score');
     }
 
 }

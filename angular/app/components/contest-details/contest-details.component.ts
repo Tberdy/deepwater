@@ -105,12 +105,17 @@ export class ContestDetailsComponent implements OnInit {
         this.memberService.getMembers().then((members: Member[]) => {
             this.members = members;
             this.matchOpponent();
+            this.getScores();
         }).catch(() => {
             console.log('Error while loading members 3.');
         });
     }
     getScores(): void {
-        
+        this.contestService.getScore(this.contest.id).then((array : [any]) => {
+            array.forEach((key,value) => {
+                console.log('key : ' + key + ' value :' + value);
+            })
+        })
     }
     splitPastWorkouts(): void {
         this.workouts.forEach((workout: Workout, index) => {
