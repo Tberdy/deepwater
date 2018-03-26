@@ -18,6 +18,7 @@ import {Contest} from '../../models/contest';
 import {Workout} from '../../models/workout';
 import {Member} from '../../models/member';
 import {Log} from '../../models/log';
+import {Score} from '../../models/score';
 
 @Component({
     selector: 'app-contest-details',
@@ -31,18 +32,23 @@ export class ContestDetailsComponent implements OnInit {
     pastWorkouts: Workout[];
     allWorkouts: Workout[];
     members: Member[];
+    scores: Score[];
 
-    displayedColumns = ['sport', 'description', 'date', 'end_date', 'location_name', 'opponent', 'actions'];
-    displayedPastColumns = ['sport', 'description', 'end_date', 'location_name', 'opponent'];
+    displayedColumns = ['description', 'sport', 'date', 'end_date', 'location_name', 'opponent', 'actions'];
+    displayedPastColumns = ['description', 'sport', 'end_date', 'location_name', 'opponent'];
+    displayedScoreColumns = ['member', 'score','order'];
     dataMyWorkouts: MatTableDataSource<Workout>;
     dataMyPastWorkouts: MatTableDataSource<Workout>;
-    dataSourceOthersWorkouts: MatTableDataSource<Workout>;
+    dataScores: MatTableDataSource<Score>;
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
 
     @ViewChild(MatPaginator) pastPaginator: MatPaginator;
     @ViewChild(MatSort) pastSort: MatSort;
+    
+    @ViewChild(MatPaginator) scorePaginator: MatPaginator;
+    @ViewChild(MatSort) scoreSort: MatSort;
 
     error: string;
     constructor(private route: ActivatedRoute,
@@ -56,14 +62,13 @@ export class ContestDetailsComponent implements OnInit {
         public dialog: MatDialog) {
         this.dataMyWorkouts = new MatTableDataSource(this.workouts);
         this.dataMyPastWorkouts = new MatTableDataSource(this.pastWorkouts);
-        this.pastWorkouts = new Array < Workout>();
+        this.dataScores = new MatTableDataSource(this.scores);
+        this.pastWorkouts = new Array<Workout>();
+        this.scores = new Array<Score>();
     }
 
     ngOnInit() {
         this.getContest();
-        //this.getWorkouts();
-        //this.getContests();
-        //this.getMembers();
         this.cdRef.detectChanges();
     }
     ngAfterViewInit() {
@@ -71,6 +76,9 @@ export class ContestDetailsComponent implements OnInit {
         this.dataMyWorkouts.sort = this.sort;
         this.dataMyPastWorkouts.paginator = this.pastPaginator;
         this.dataMyPastWorkouts.sort = this.pastSort;
+        this.dataScores.paginator = this.scorePaginator;
+        this.dataScores.sort = this.scoreSort;
+        
     }
     getContest(): void {
         const id = +this.route.snapshot.paramMap.get('id');
@@ -111,10 +119,35 @@ export class ContestDetailsComponent implements OnInit {
         });
     }
     getScores(): void {
-        this.contestService.getScore(this.contest.id).then((array : [any]) => {
-            array.forEach((key,value) => {
-                console.log('key : ' + key + ' value :' + value);
-            })
+        this.contestService.getScore(this.contest.id).then((result: any) => {
+            let dic: {[index: string]: any;} = result;
+            for (let key in dic) {
+                let value = dic[key];
+                this.addScoreToUser(key, value);
+
+            }
+            this.sortScores();
+            this.refreshTable();
+        })
+    }
+    addScoreToUser(user_id: string, score: number) :void {
+
+        this.members.forEach((value) => {
+            if (value.id === user_id) {
+                let scoreAssociation: Score = new Score();
+                scoreAssociation.member = value;
+                scoreAssociation.score = score;
+                this.scores.push(scoreAssociation);
+            }
+        })
+
+
+    }
+    sortScores():void
+    {
+        this.scores.sort((n1, n2) => n2.score - n1.score);
+        this.scores.forEach((value,index)=> {
+            value.index=index+1;
         })
     }
     splitPastWorkouts(): void {
@@ -142,35 +175,33 @@ export class ContestDetailsComponent implements OnInit {
     matchOpponent(): void {
         this.allWorkouts.forEach((workout: Workout) => {
             this.workouts.forEach((userWorkout: Workout) => {
-                
-                if (workout.date == userWorkout.date
+
+                if (new Date(workout.date).getTime() == new Date(userWorkout.date).getTime()
                     && workout.end_date == userWorkout.end_date
                     && workout.location_name == userWorkout.location_name
                     && workout.description == userWorkout.description
                     && workout.member_id != userWorkout.member_id) {
                     userWorkout.opponent_id = workout.member_id;
-                    this.members.forEach((member : Member)=> {
-                        if (member.id == userWorkout.opponent_id)
-                        {
-                            userWorkout.opponent=member;
+                    this.members.forEach((member: Member) => {
+                        if (member.id == userWorkout.opponent_id) {
+                            userWorkout.opponent = member;
                         }
                     });
                 }
             });
-            this.pastWorkouts.forEach((userWorkout: Workout) => {          
-                if (workout.date == userWorkout.date
-                    && workout.end_date == userWorkout.end_date
+            this.pastWorkouts.forEach((userWorkout: Workout) => {
+                if (/*new Date(workout.date).getTime() == new Date(userWorkout.date).getTime()
+                    &&*/ new Date(workout.end_date).getTime() == new Date(userWorkout.end_date).getTime()
                     && workout.location_name == userWorkout.location_name
-                    && workout.description == userWorkout.description
+                    /*&& workout.description == userWorkout.description*/
                     && workout.member_id != userWorkout.member_id) {
                     userWorkout.opponent_id = workout.member_id;
-                    this.members.forEach((member : Member)=> {
-                        if (member.id == userWorkout.opponent_id)
-                        {
-                            userWorkout.opponent=member;
+                    this.members.forEach((member: Member) => {
+                        if (member.id == userWorkout.opponent_id) {
+                            userWorkout.opponent = member;
                         }
                     });
-                    
+
                 }
             });
         });
@@ -186,12 +217,17 @@ export class ContestDetailsComponent implements OnInit {
         this.dataMyPastWorkouts = new MatTableDataSource(this.pastWorkouts);
         this.dataMyPastWorkouts.paginator = this.pastPaginator;
         this.dataMyPastWorkouts.sort = this.pastSort;
+        
+        this.dataScores = new MatTableDataSource(this.scores);
+        this.dataScores.paginator = this.scorePaginator;
+        this.dataScores.sort = this.scoreSort;
     }
     applyFilter(filterValue: string, val: number) {
         filterValue = filterValue.trim(); // Remove whitespace
         filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
         if (val == 1) this.dataMyWorkouts.filter = filterValue;
         if (val == 2) this.dataMyPastWorkouts.filter = filterValue;
+        if (val == 3) this.dataScores.filter = filterValue;
     }
     matchFormDialog(action: string, workout: Workout | null): void {
         let params: any = {
@@ -253,7 +289,7 @@ export class ContestDetailsComponent implements OnInit {
             width: '500px',
             heigth: 'auto'
         };
-        
+
         params.data = {
             opponent: workout.opponent,
             user: this.authService.getUser(),
@@ -285,7 +321,7 @@ export class ContestDetailsComponent implements OnInit {
                 }
                 this.logService.addSpecialLog(logWinner, result.winner.id, workout.id).then(() => {
                     this.logService.addSpecialLog(logLooser, result.looser.id, workout.id).then(() => {
-                        if(result.draw) workout.description += ' - Gagnant : ' + result.winner.email + ', Perdant : ' + result.looser.email;
+                        if (!result.draw) workout.description += ' - Gagnant : ' + result.winner.email + ', Perdant : ' + result.looser.email;
                         else workout.description += ' - Match nul';
                         workout.date = workout.end_date;
                         this.workoutService.putWorkout(workout).then(() => {

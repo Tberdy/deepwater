@@ -6,23 +6,24 @@
             <li>Type : {{contest.type}}</li>
             <li>Description : {{contest.description}}</li>
         </ul>
+        
+        <div class="title">Mes matchs en cours</div>
         <div class="table-header">
             <mat-form-field>
-                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                <input matInput (keyup)="applyFilter($event.target.value,1)" placeholder="Filter">
             </mat-form-field>
         </div>
-        <div>Mes matchs en cours</div>
         <div fxLayout="column" fxLayoutAlign="center center" class="table-container mat-elevation-z8">
             <mat-table [dataSource]="dataMyWorkouts" matSort>
-
-                <ng-container matColumnDef="sport">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Sport </mat-header-cell>
-                    <mat-cell *matCellDef="let row"> {{row.sport}} </mat-cell>
-                </ng-container>
 
                 <ng-container matColumnDef="description">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Description </mat-header-cell>
                     <mat-cell *matCellDef="let row"> {{row.description}} </mat-cell>
+                </ng-container>
+                
+                <ng-container matColumnDef="sport">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Sport </mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.sport}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="date">
@@ -64,23 +65,29 @@
                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
             </mat-table>
             <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-            
+
         </div>
         <button mat-raised-button (click)="matchFormDialog('add', null)">Créer un match</button>
-        <div>Mes matchs terminées</div>
+
+        <div class="title">Mes matchs terminées</div>
+        <div class="table-header">
+            <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value,2)" placeholder="Filter">
+            </mat-form-field>
+        </div>
         <div fxLayout="column" fxLayoutAlign="center center" class="table-container mat-elevation-z8">
             <mat-table [dataSource]="dataMyPastWorkouts" matSort>
-
-                <ng-container matColumnDef="sport">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Sport </mat-header-cell>
-                    <mat-cell *matCellDef="let row"> {{row.sport}} </mat-cell>
-                </ng-container>
 
                 <ng-container matColumnDef="description">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Description </mat-header-cell>
                     <mat-cell *matCellDef="let row"> {{row.description}} </mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="sport">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Sport </mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.sport}} </mat-cell>
+                </ng-container>
+                
                 <ng-container matColumnDef="end_date">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Date de fin </mat-header-cell>
                     <mat-cell *matCellDef="let row"> {{row.end_date | date: 'dd/MM/yyyy'}} </mat-cell>
@@ -101,16 +108,37 @@
 
             <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
         </div>
-        
-    </div>
-    <div>Classement</div>
-    <div fxLayout="column" fxLayoutAlign="center center" class="table-container mat-elevation-z8">
-        <ul>
-            <li></li>
-        </ul>
+        <div class="title">Classement</div>
+        <div class="table-header">
+            <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value,3)" placeholder="Filter">
+            </mat-form-field>
+        </div>
+        <div fxLayout="column" fxLayoutAlign="center center" class="table-container mat-elevation-z8">
+            <mat-table [dataSource]="dataScores" matSort>
+
+                <ng-container matColumnDef="member">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Joueur </mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.member.email}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="score">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Score </mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.score}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="order">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Classement </mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.index}} </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedScoreColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedScoreColumns;"></mat-row>
+            </mat-table>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
     </div>
 
-    <button mat-raised-button (click)="matchFormDialog('add', null)">Créer un match</button>
 
     <button (click)="goBack()">Back</button>
     <ng-template #error_temp><div *ngIf="error">{{error}}</div></ng-template>

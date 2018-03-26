@@ -20,7 +20,7 @@ export class MemberService extends RestApi {
         return this.get(this.apiBaseUrl);
     }
 
-    getMember(id: number) {
+    getMember(id: string) {
         return this.get(this.apiBaseUrl + '/' + id);
     }
     

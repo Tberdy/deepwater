@@ -46,7 +46,6 @@ export class MatchFormDialog implements OnInit {
         }
         else {
             this.workout.opponent_id = this.workout.opponent.id;
-
             console.log(this.workout.opponent.id);
             this.dialogRef.close(this.workout);
         }
