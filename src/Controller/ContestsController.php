@@ -20,7 +20,7 @@ class ContestsController extends ApiController {
     public function initialize() {
         parent::initialize();
 
-        $this->Auth->allow(['index', 'view']);
+        $this->Auth->allow(['index', 'view', 'getScoreByContest']);
 
         $this->repoLogs = TableRegistry::get('logs');
     }
