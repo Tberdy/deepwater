@@ -45,6 +45,6 @@ class Workout extends Entity
     ];
     
     public function isMatch() {
-        return is_null($this->contest_id);
+        return !is_null($this->contest_id);
     }
 }
