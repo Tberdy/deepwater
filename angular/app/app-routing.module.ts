@@ -45,6 +45,11 @@ const routes: Routes = [{
     path: 'contests',
     canActivate: [AuthGuard],
     loadChildren: 'app/modules/contests/contests.module#ContestsModule'
+},
+{
+    path: 'ranking',
+    canActivate: [AuthGuard],
+    loadChildren: 'app/modules/ranking/ranking.module#RankingModule'
 }];
 
 
