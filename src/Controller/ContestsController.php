@@ -134,7 +134,7 @@ class ContestsController extends ApiController {
             }
         }
         
-        return $this->response->withStatus(200);
+        return $this->response->withStringBody(json_encode($score));
     }
 
 }
