@@ -14,45 +14,75 @@ import {WorkoutService} from '../../services/workout.service';
     styleUrls: ['./workouts.component.css']
 })
 export class WorkoutsComponent implements OnInit {
-    displayedColumns = ['sport', 'description', 'date', 'end_date', 'location_name', 'actions'];
-    dataSource: MatTableDataSource<Workout>;
-
+    displayedColumns = ['description', 'sport', 'date', 'end_date', 'location_name', 'actions'];
+    displayedPastColumns = ['description', 'sport', 'end_date', 'location_name'];
+    dataMyWorkouts: MatTableDataSource<Workout>;
+    dataMyPastWorkouts: MatTableDataSource<Workout>;
     workouts: Workout[];
+    pastWorkouts: Workout[];
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
+
+    @ViewChild(MatPaginator) pastPaginator: MatPaginator;
+    @ViewChild(MatSort) pastSort: MatSort;
 
     constructor(
         private workoutService: WorkoutService,
         public dialog: MatDialog
     ) {
-        this.dataSource = new MatTableDataSource(this.workouts);
+        this.dataMyWorkouts = new MatTableDataSource(this.workouts);
+        this.dataMyPastWorkouts = new MatTableDataSource(this.pastWorkouts);
+        this.pastWorkouts = new Array<Workout>();
     }
 
     ngOnInit() {
         this.workoutService.getWorkouts()
             .then((workouts: Workout[]) => {
                 this.workouts = workouts;
+                this.splitPastWorkouts();
                 this.refreshTable();
             }).catch(() => {
+                console.log('Error while loading workouts.');
+                this.splitPastWorkouts();
                 //this.snackBar.open('Invalid credentials !', 'OK', {duration: 5000});
                 //this.snackBar.open('Internal error', 'OK', {duration: 5000});
             });
     }
+    splitPastWorkouts(): void {
+        this.workouts.forEach((workout: Workout, index) => {
+            if (new Date(workout.end_date).getTime() > new Date().getTime()) {
+                let newWorkout: Workout = new Workout;
+                newWorkout.id = workout.id;
+                newWorkout.member = workout.member;
+                newWorkout.member_id = workout.member_id;
+                newWorkout.opponent = workout.opponent;
+                newWorkout.opponent_id = workout.opponent_id;
+                newWorkout.date = workout.date;
+                newWorkout.end_date = workout.end_date;
+                newWorkout.location_name = workout.location_name;
+                newWorkout.description = workout.description;
+                newWorkout.sport = workout.sport;
+                newWorkout.contest = workout.contest;
+                newWorkout.contest_id = workout.contest_id;
+                this.pastWorkouts.push(newWorkout);
+                this.workouts.splice(index, 1);
+            }
 
-    /**
-     * Set the paginator and sort after the view init since this component will
-     * be able to query its view for the initialized paginator and sort.
-     */
+        });
+    }
     ngAfterViewInit() {
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.dataMyWorkouts.paginator = this.paginator;
+        this.dataMyWorkouts.sort = this.sort;
+        this.dataMyPastWorkouts.paginator = this.pastPaginator;
+        this.dataMyPastWorkouts.sort = this.pastSort;
     }
 
-    applyFilter(filterValue: string) {
+    applyFilter(filterValue: string, val: number) {
         filterValue = filterValue.trim(); // Remove whitespace
         filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-        this.dataSource.filter = filterValue;
+        if (val == 1) this.dataMyWorkouts.filter = filterValue;
+        if (val == 2) this.dataMyPastWorkouts.filter = filterValue;
     }
 
     formDialog(action: string, workout: Workout | null): void {
@@ -104,9 +134,13 @@ export class WorkoutsComponent implements OnInit {
     }
 
     refreshTable() {
-        this.dataSource = new MatTableDataSource(this.workouts);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.dataMyWorkouts = new MatTableDataSource(this.workouts);
+        this.dataMyWorkouts.paginator = this.paginator;
+        this.dataMyWorkouts.sort = this.sort;
+        
+        this.dataMyPastWorkouts = new MatTableDataSource(this.pastWorkouts);
+        this.dataMyPastWorkouts.paginator = this.pastPaginator;
+        this.dataMyPastWorkouts.sort = this.pastSort;
     }
 
     deleteWorkout(workout: Workout) {
@@ -129,9 +163,9 @@ export class WorkoutsComponent implements OnInit {
             }
         });
     }
-    
+
     updateWorkoutInTable(updateWorkout: Workout) {
-        let array_index = this.workouts.findIndex(workout => workout.id == updateWorkout.id); 
+        let array_index = this.workouts.findIndex(workout => workout.id == updateWorkout.id);
         this.workouts[array_index] = updateWorkout;
         this.refreshTable();
     }

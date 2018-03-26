@@ -1,6 +1,6 @@
 <header>
     <nav>
-        <img src="logo.png" alt="Logo"/>
+        <img src="assets/images/logo-white.png" alt="Logo" width="64px" height="64px"/>
         <a mat-button routerLink="" id="title">{{title}}</a>
 
         <div *ngIf="authService.getUser().logged; then thenBlock else elseBlock"></div>

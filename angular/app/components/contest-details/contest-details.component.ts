@@ -152,7 +152,7 @@ export class ContestDetailsComponent implements OnInit {
     }
     splitPastWorkouts(): void {
         this.workouts.forEach((workout: Workout, index) => {
-            if (workout.date === workout.end_date) {
+            if (new Date(workout.date).getTime() === new Date(workout.end_date).getTime()) {
                 let newWorkout: Workout = new Workout;
                 newWorkout.id = workout.id;
                 newWorkout.member = workout.member;
