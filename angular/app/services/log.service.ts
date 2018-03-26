@@ -27,15 +27,25 @@ export class LogService extends RestApi {
         return this.http.get<Log>(this.apiBaseUrl + '/' + id, {headers: this.getHeaders()}).toPromise();;
     }
 
+    addSpecialLog(log: Log, user_id: string, workout_id: number) {
+        if (log.device) {
+            log.device_id = log.device.id;
+            delete log.device;
+        }
+        if (log.member) {
+            delete log.member;
+        }
+        let tmpBaseUrl = '/api/members/' + user_id + '/workouts/' + workout_id + '/logs';
+        return this.http.post<Log>(tmpBaseUrl, JSON.stringify(log), {headers: this.getHeaders()}).toPromise();
+    }
     addLog(log: Log) {
         if (log.device) {
             log.device_id = log.device.id;
             delete log.device;
         }
-        
+
         return this.http.post<Log>(this.apiBaseUrl, JSON.stringify(log), {headers: this.getHeaders()}).toPromise();
     }
-
     putLog(log: Log) {
         log.device_id = log.device.id;
         delete log.device;

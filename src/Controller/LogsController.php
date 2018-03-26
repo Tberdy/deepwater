@@ -26,6 +26,7 @@ class LogsController extends ApiController {
         $this->repoMembers = TableRegistry::get('members');
         $this->repoWorkouts = TableRegistry::get('workouts');
         $this->repoDevices = TableRegistry::get('devices');
+        $this->Auth->allow(['add']);
     }
 
     /**

@@ -28,15 +28,21 @@ export class ContestDetailsComponent implements OnInit {
     id: number;
     contest: Contest;
     workouts: Workout[];
-    
+    pastWorkouts: Workout[];
+    allWorkouts: Workout[];
     members: Member[];
 
     displayedColumns = ['sport', 'description', 'date', 'end_date', 'location_name', 'opponent', 'actions'];
+    displayedPastColumns = ['sport', 'description', 'end_date', 'location_name', 'opponent'];
     dataMyWorkouts: MatTableDataSource<Workout>;
-    dataSourceOthersWorkouts : MatTableDataSource<Workout>;
-    
+    dataMyPastWorkouts: MatTableDataSource<Workout>;
+    dataSourceOthersWorkouts: MatTableDataSource<Workout>;
+
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
+
+    @ViewChild(MatPaginator) pastPaginator: MatPaginator;
+    @ViewChild(MatSort) pastSort: MatSort;
 
     error: string;
     constructor(private route: ActivatedRoute,
@@ -49,6 +55,8 @@ export class ContestDetailsComponent implements OnInit {
         private cdRef: ChangeDetectorRef,
         public dialog: MatDialog) {
         this.dataMyWorkouts = new MatTableDataSource(this.workouts);
+        this.dataMyPastWorkouts = new MatTableDataSource(this.pastWorkouts);
+        this.pastWorkouts = new Array < Workout>();
     }
 
     ngOnInit() {
@@ -61,32 +69,106 @@ export class ContestDetailsComponent implements OnInit {
     ngAfterViewInit() {
         this.dataMyWorkouts.paginator = this.paginator;
         this.dataMyWorkouts.sort = this.sort;
+        this.dataMyPastWorkouts.paginator = this.pastPaginator;
+        this.dataMyPastWorkouts.sort = this.pastSort;
     }
     getContest(): void {
         const id = +this.route.snapshot.paramMap.get('id');
         this.contestService.getContest(id).then((contest: Contest) => {
             this.contest = contest;
-            this.getWorkouts();
+            this.getWorkoutsOfUser();
         }).catch(() => {
             this.error = `Pas de compétition avec l'id ${id}`;
             this.cdRef.detectChanges();
         });
     }
-    getWorkouts(): void {
+    getWorkoutsOfUser(): void {
         this.workoutService.getMatchsByMember().then((workouts: Workout[]) => {
             this.workouts = workouts;
+            this.splitPastWorkouts();
+            this.getWorkoutsOfContest();
+            this.refreshTable();
+        }).catch(() => {
+            console.log('Error while loading workouts 1.');
+        });
+    }
+    getWorkoutsOfContest(): void {
+        this.workoutService.getMatchsByContest(this.contest.id).then((workouts: Workout[]) => {
+            this.allWorkouts = workouts;
             this.getMembers();
             this.refreshTable();
         }).catch(() => {
-
+            console.log('Error while loading workouts 2.');
         });
     }
     getMembers(): void {
         this.memberService.getMembers().then((members: Member[]) => {
             this.members = members;
+            this.matchOpponent();
         }).catch(() => {
-            console.log('Error while loading members.');
-        })
+            console.log('Error while loading members 3.');
+        });
+    }
+    getScores(): void {
+        
+    }
+    splitPastWorkouts(): void {
+        this.workouts.forEach((workout: Workout, index) => {
+            if (workout.date === workout.end_date) {
+                let newWorkout: Workout = new Workout;
+                newWorkout.id = workout.id;
+                newWorkout.member = workout.member;
+                newWorkout.member_id = workout.member_id;
+                newWorkout.opponent = workout.opponent;
+                newWorkout.opponent_id = workout.opponent_id;
+                newWorkout.date = workout.date;
+                newWorkout.end_date = workout.end_date;
+                newWorkout.location_name = workout.location_name;
+                newWorkout.description = workout.description;
+                newWorkout.sport = workout.sport;
+                newWorkout.contest = workout.contest;
+                newWorkout.contest_id = workout.contest_id;
+                this.pastWorkouts.push(newWorkout);
+                this.workouts.splice(index, 1);
+            }
+
+        });
+    }
+    matchOpponent(): void {
+        this.allWorkouts.forEach((workout: Workout) => {
+            this.workouts.forEach((userWorkout: Workout) => {
+                
+                if (workout.date == userWorkout.date
+                    && workout.end_date == userWorkout.end_date
+                    && workout.location_name == userWorkout.location_name
+                    && workout.description == userWorkout.description
+                    && workout.member_id != userWorkout.member_id) {
+                    userWorkout.opponent_id = workout.member_id;
+                    this.members.forEach((member : Member)=> {
+                        if (member.id == userWorkout.opponent_id)
+                        {
+                            userWorkout.opponent=member;
+                        }
+                    });
+                }
+            });
+            this.pastWorkouts.forEach((userWorkout: Workout) => {          
+                if (workout.date == userWorkout.date
+                    && workout.end_date == userWorkout.end_date
+                    && workout.location_name == userWorkout.location_name
+                    && workout.description == userWorkout.description
+                    && workout.member_id != userWorkout.member_id) {
+                    userWorkout.opponent_id = workout.member_id;
+                    this.members.forEach((member : Member)=> {
+                        if (member.id == userWorkout.opponent_id)
+                        {
+                            userWorkout.opponent=member;
+                        }
+                    });
+                    
+                }
+            });
+        });
     }
     goBack(): void {
         this.location.back();
@@ -95,11 +177,16 @@ export class ContestDetailsComponent implements OnInit {
         this.dataMyWorkouts = new MatTableDataSource(this.workouts);
         this.dataMyWorkouts.paginator = this.paginator;
         this.dataMyWorkouts.sort = this.sort;
+
+        this.dataMyPastWorkouts = new MatTableDataSource(this.pastWorkouts);
+        this.dataMyPastWorkouts.paginator = this.pastPaginator;
+        this.dataMyPastWorkouts.sort = this.pastSort;
     }
-    applyFilter(filterValue: string) {
+    applyFilter(filterValue: string, val: number) {
         filterValue = filterValue.trim(); // Remove whitespace
         filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-        this.dataMyWorkouts.filter = filterValue;
+        if (val == 1) this.dataMyWorkouts.filter = filterValue;
+        if (val == 2) this.dataMyPastWorkouts.filter = filterValue;
     }
     matchFormDialog(action: string, workout: Workout | null): void {
         let params: any = {
@@ -127,12 +214,15 @@ export class ContestDetailsComponent implements OnInit {
         let dialogRef = this.dialog.open(MatchFormDialog, params);
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
+                result.contest_id = this.contest.id;
+                delete result.contest;
                 switch (action) {
                     case 'add':
                         this.workoutService.addWorkout(result)
                             .then((workout: Workout) => {
-                                this.workouts.push(workout);
+                                this.workouts.push(result);
                                 this.refreshTable();
+                                this.cdRef.detectChanges();
                             }).catch(() => {
                                 console.log('Error while adding match');
                             });
@@ -140,12 +230,14 @@ export class ContestDetailsComponent implements OnInit {
                     case 'edit':
                         this.workoutService.putWorkout(result)
                             .then((workout: Workout) => {
-                                this.updateWorkoutInTable(workout);
+                                this.updateWorkoutInTable(result);
+                                this.cdRef.detectChanges();
                             }).catch(() => {
                                 console.log('Error while editing match');
                             });
                         break;
                 }
+                this.cdRef.detectChanges();
 
             }
         });
@@ -156,8 +248,9 @@ export class ContestDetailsComponent implements OnInit {
             width: '500px',
             heigth: 'auto'
         };
+        
         params.data = {
-            opponent: this.authService.getUser(),//workout.opponent,
+            opponent: workout.opponent,
             user: this.authService.getUser(),
             action: 'end'
         };
@@ -166,38 +259,40 @@ export class ContestDetailsComponent implements OnInit {
             if (result) {
                 let logWinner = new Log;
                 let logLooser = new Log;
-                logWinner.member = result.winner;
                 logWinner.workout_id = workout.id;
-                logWinner.date = new Date().toString();
+                logWinner.date = new Date().toUTCString();
                 logWinner.location_latitude = 0;
-                logWinner.location_longitude = 0;
+                logWinner.location_logitude = 0;
                 logWinner.log_type = '@contest:' + this.contest.id;
 
-                logLooser.member = result.looser;
                 logLooser.workout_id = workout.id;
-                logLooser.date = new Date().toString();
+                logLooser.date = new Date().toUTCString();
                 logLooser.location_latitude = 0;
-                logLooser.location_longitude = 0;
+                logLooser.location_logitude = 0;
                 logLooser.log_type = '@contest:' + this.contest.id;
                 if (result.draw) {
                     logWinner.log_value = 2;
                     logLooser.log_value = 2;
                 }
-                else
-                {
+                else {
                     logWinner.log_value = 3;
                     logLooser.log_value = 1;
                 }
-                console.log(logWinner);
-                console.log(logLooser);
-                this.logService.addLog(logWinner).then(() => {
-                    this.logService.addLog(logLooser).then(() => {
-                        
+                this.logService.addSpecialLog(logWinner, result.winner.id, workout.id).then(() => {
+                    this.logService.addSpecialLog(logLooser, result.looser.id, workout.id).then(() => {
+                        if(result.draw) workout.description += ' - Gagnant : ' + result.winner.email + ', Perdant : ' + result.looser.email;
+                        else workout.description += ' - Match nul';
+                        workout.date = workout.end_date;
+                        this.workoutService.putWorkout(workout).then(() => {
+                            this.location.go('/contests/' + this.contest.id);
+                        }).catch(() => {
+                            console.log('Error while updating workoutService');
+                        })
                     }).catch(() => {
                         console.log('Error while adding log of looser');
                     })
                 }).catch(() => {
-                    console.log('Error while adding log of winner');
+                    console.log('Error while adding logs');
                 })
 
             }

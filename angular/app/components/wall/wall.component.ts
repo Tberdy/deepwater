@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 
 export class WallComponent implements OnInit {
 
+  showFiller= false;
   constructor() { }
 
 
