@@ -99,12 +99,18 @@ class LogsController extends ApiController {
             return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
         }
 
-        $device_id = $this->request->getData('device_id');
+        $device_id = $this->request->getData('device_id', null);
         if (is_null($device_id)) {
             $device = $this->repoDevices->find('all', ['conditions' => ['Devices.serial' => '@match']])->matching('Members', function ($q) use ($member) {
-                return $q->where(['Members.id' => $member->id]);
-            })->first();
+                        return $q->where(['Members.id' => $member->id]);
+                    })->first();
             $device_id = $device->id;
+        } else {
+            try {
+                $device = $this->repoDevices->get($this->request->getData('device_id'));
+            } catch (RecordNotFoundException $ex) {
+                return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
+            }
         }
 
         $log->member_id = $member->id;
