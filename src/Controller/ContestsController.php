@@ -16,6 +16,7 @@ use Cake\ORM\TableRegistry;
 class ContestsController extends ApiController {
 
     protected $repoLogs;
+    protected $repoWorkouts;
 
     public function initialize() {
         parent::initialize();
@@ -23,6 +24,7 @@ class ContestsController extends ApiController {
         $this->Auth->allow(['index', 'view', 'getScoreByContest']);
 
         $this->repoLogs = TableRegistry::get('logs');
+        $this->repoWorkouts = TableRegistry::get('workouts');
     }
 
     /**
@@ -102,6 +104,11 @@ class ContestsController extends ApiController {
             $contest = $this->Contests->get($id);
         } catch (RecordNotFoundException $ex) {
             return $this->response->withStatus(404)->withStringBody(json_encode($this->error_entity_not_found));
+        }
+        
+        $workouts = $this->repoWorkouts->find('all')->where(['contest_id' => $contest->id]);
+        foreach ($workouts as $workout) {
+            $this->repoWorkouts->delete($workout);
         }
 
         if ($this->Contests->delete($contest)) {

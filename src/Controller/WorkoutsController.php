@@ -136,7 +136,7 @@ class WorkoutsController extends ApiController {
             $opponent_workout->end_date = Time::parse($this->request->getData('end_date'));
 
             if (!$this->Workouts->save($opponent_workout)) {
-                return $this->response->withStatus(400);
+                return $this->response->withStatus(400)->withStringBody(json_encode($opponent_workout));
             }
         }
 
@@ -163,12 +163,13 @@ class WorkoutsController extends ApiController {
 
         if ($workout->isMatch()) {
             $opponent_workout = $this->Workouts->find('all')->where([
-                        'sport ' => $workout->sport,
-                        'description ' => $workout->description,
-                        'date ' => $workout->date,
-                        'end_date ' => $workout->end_date,
+                        'sport' => $workout->sport,
+                        'description' => $workout->description,
+                        'date' => $workout->date,
+                        'end_date' => $workout->end_date,
                         'location_name' => $workout->location_name,
-                    ])->first();
+                        'id !=' => $workout->id
+                    ])->first();            
 
             $opponent_workout = $this->Workouts->patchEntity($opponent_workout, $this->request->getData());
 
@@ -216,11 +217,12 @@ class WorkoutsController extends ApiController {
 
         if ($workout->isMatch()) {
             $opponent_workout = $this->Workouts->find('all')->where([
-                        'sport ' => $workout->sport,
-                        'description ' => $workout->description,
-                        'date ' => $workout->date,
-                        'end_date ' => $workout->end_date,
+                        'sport' => $workout->sport,
+                        'description' => $workout->description,
+                        'date' => $workout->date,
+                        'end_date' => $workout->end_date,
                         'location_name' => $workout->location_name,
+                        'id !=' => $workout->id
                     ])->first();
 
             if (!$this->Workouts->delete($opponent_workout)) {

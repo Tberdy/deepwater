@@ -30,7 +30,6 @@ Router::scope('/api', function (RouteBuilder $routes) {
             $routes->resources('Logs');
         });
         $routes->connect('/matchs', ['controller' => 'Workouts', 'action' => 'indexMatchByMember', '_method' => 'GET']);
-        $routes->connect('/performance', ['controller' => 'Members', 'action' => 'getPerformance', '_method' => 'GET']);
     });
     $routes->connect('/members/register', ['controller' => 'Members', 'action' => 'add', '_method' => 'POST']);
     $routes->connect('/members/login', ['controller' => 'Members', 'action' => 'token', '_method' => 'POST']);
@@ -40,6 +39,7 @@ Router::scope('/api', function (RouteBuilder $routes) {
         $routes->connect('/score', ['controller' => 'Contests', 'action' => 'getScoreByContest', '_method' => 'GET']);
     });
     $routes->resources('Stickers');
+    $routes->connect('/performance', ['controller' => 'Members', 'action' => 'getPerformance', '_method' => 'GET']);
 
     $routes->connect('/registerdevice/:member_id/:device_serial/:device_description', ['controller' => 'DirtyApis', 'action' => 'registerdevice', '_method' => 'GET'], ['pass' => ['member_id', 'device_serial', 'device_description']]);
     $routes->connect('/workoutparameters/:device_id/:workout_id', ['controller' => 'DirtyApis', 'action' => 'workoutparameters', '_method' => 'GET'], ['pass' => ['device_id', 'workout_id']]);
