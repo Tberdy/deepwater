@@ -29,6 +29,7 @@ export class RankingComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.getMembers();
     }
     ngAfterViewInit() {
         this.dataScores.paginator = this.scorePaginator;
@@ -39,8 +40,9 @@ export class RankingComponent implements OnInit {
     getMembers(): void {
         this.memberService.getMembers().then((members: Member[]) => {
             this.members = members;
+            this.getScores();
         }).catch(() => {
-            console.log('Error while loading members 3.');
+            console.log('Error while loading members 1.');
         });
     }
     getScores(): void {
@@ -53,7 +55,9 @@ export class RankingComponent implements OnInit {
             }
             this.sortScores();
             this.refreshTable();
-        })
+        }).catch(()=> {
+            console.log('Error while loading performances 2.');
+        });
     }
     sortScores():void
     {

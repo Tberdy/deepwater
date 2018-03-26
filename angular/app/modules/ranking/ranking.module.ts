@@ -34,6 +34,9 @@ import {MemberService} from '../../services/member.service';
         MatDialogModule, MatNativeDateModule, MatCardModule,
         MatSelectModule, MatSidenavModule,
     ],
-    declarations: [WorkoutService, LogService, ContestService, MemberService]
+    declarations: [
+        RankingComponent
+    ],
+    providers: [WorkoutService, LogService, ContestService, MemberService]
 })
 export class RankingModule {}
