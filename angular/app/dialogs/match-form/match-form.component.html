@@ -22,7 +22,11 @@
         <mat-form-field>
             <input required matInput name="location_name" placeholder="Location" ngModel #location_name="ngModel" [(ngModel)]="workout.location_name">
         </mat-form-field>
-
+        
+        <mat-form-field>
+            <input required matInput name="sport_name" placeholder="Sport" ngModel #sport_name="ngModel" [(ngModel)]="workout.sport">
+        </mat-form-field>
+        
         <mat-form-field>
             <mat-select [(value)]="workout.opponent" placeholder="Adversaire" name="opponent">
                 <mat-option *ngFor="let member of members" [value]="member" >{{member.email}}</mat-option>
