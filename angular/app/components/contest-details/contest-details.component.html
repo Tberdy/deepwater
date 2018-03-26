@@ -1,5 +1,5 @@
-<div class="contest-details-container">
-    <div *ngIf="!error && contest;else error_temp">
+<div class="contest-details-container" fxLayout="column" fxLayoutAlign="center center">
+    <div class="contest-details-container" fxLayout="column" fxLayoutAlign="center center" style="width:100%;" *ngIf="!error && contest;else error_temp">
         <h2>Compétition</h2>
         <ul>
             <li>Nom : {{contest.name}}</li>
