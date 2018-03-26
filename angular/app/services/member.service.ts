@@ -35,5 +35,10 @@ export class MemberService extends RestApi {
     deleteMember(member: Member) {
         return this.delete(this.apiBaseUrl + '/' + member.id);
     }
+    getPerformances()
+    {
+        let tmpBaseUrl = 'api/performance';
+        return this.get(tmpBaseUrl + '/');
+    }
 
 }
