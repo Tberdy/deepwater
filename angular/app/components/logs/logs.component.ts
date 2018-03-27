@@ -53,28 +53,43 @@ export class LogsComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.workoutService.getWorkout(this.workout_id)
+        this.getWorkout(this.workout_id);
+    }
+    getWorkout(workout_id: number) {
+        this.workoutService.getWorkout(workout_id)
             .then((workout: Workout) => {
                 this.workout = workout;
-            }).catch(() => {});
-
+                this.getDevices();
+            }).catch(() => {
+                console.log('Error while loading workout.');
+            });
+    }
+    getDevices() {
         this.deviceService.getDevices()
             .then((devices: Device[]) => {
                 this.devices = devices;
 
-                this.logService.getLogs()
-                    .then((logs: Log[]) => {
-                        this.logs = logs;
-
-                        this.logs.forEach(log => {
-                            log.device = this.devices[this.devices.findIndex(device => device.id == log.device_id)];
-                        });
-
-                        this.refreshTable();
-                    }).catch(() => {});
-            }).catch(() => {});
+                this.getLogs();
+            }).catch(() => {
+                console.log('Error while loading devices');
+            });
     }
-
+    getLogs() {
+        this.logService.getLogs()
+            .then((logs: Log[]) => {
+                this.logs = logs;
+                this.logs.forEach(log => {
+                    log.device = this.devices[this.devices.findIndex(device => device.id == log.device_id)];
+                });
+                this.refreshTable();
+            }).catch(() => {
+                this.logs.forEach(log => {
+                    log.device = this.devices[this.devices.findIndex(device => device.id == log.device_id)];
+                });
+                this.refreshTable();
+                console.log('Error while loading logs');
+            });
+    }
     /**
      * Set the paginator and sort after the view init since this component will
      * be able to query its view for the initialized paginator and sort.
