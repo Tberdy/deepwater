@@ -23,6 +23,9 @@ npm -g install angular-cli
 ```bash
 npm install
 ```
+```bash
+ng build
+```
 
 ## Web server configuration
 

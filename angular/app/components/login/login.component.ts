@@ -49,6 +49,7 @@ export class LoginComponent implements OnInit {
                         loginResponse.authResponse.userID
                     ).then((response: LoginResponse) => {
                         this.authService.logUser(response);
+                        this.authService.setSession(response.token);
                         this.router.navigate(['']);
                     }).catch(() => {});
                 }));
