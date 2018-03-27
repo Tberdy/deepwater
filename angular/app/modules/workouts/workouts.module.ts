@@ -46,9 +46,7 @@ import {LogFormDialog} from '../../dialogs/log-form/log-form.component';
         MatDialogModule, MatDatepickerModule, MatNativeDateModule,
         MatCardModule, MatSelectModule, MatSliderModule,
         
-        AgmCoreModule.forRoot({
-            apiKey: 'AIzaSyC2_rXFG_O_ciEydc2VYw0514v9iEAjvqY'
-        }),
+        AgmCoreModule,
     ],
     declarations: [
         WorkoutsComponent,

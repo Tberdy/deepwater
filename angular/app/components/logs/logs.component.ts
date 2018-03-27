@@ -13,6 +13,8 @@ import {WorkoutService} from '../../services/workout.service';
 import {LogService} from '../../services/log.service';
 import {DeviceService} from '../../services/device.service';
 
+import {AgmMap} from '@agm/core';
+
 @Component({
     selector: 'app-logs',
     templateUrl: './logs.component.html',
@@ -26,9 +28,15 @@ export class LogsComponent implements OnInit {
     workout: Workout;
     logs: Log[];
     devices: Device[];
+    markers: marker[];
+
+    lat: number = 48.864716;
+    lng: number = 2.349014;
+    zoom: number = 8;
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(AgmMap) map: AgmMap;
 
     constructor(
         private workoutService: WorkoutService,
@@ -59,7 +67,7 @@ export class LogsComponent implements OnInit {
                         this.logs = logs;
 
                         this.logs.forEach(log => {
-                            log.device = this.devices[this.devices.findIndex(device => device.id == log.device_id)]
+                            log.device = this.devices[this.devices.findIndex(device => device.id == log.device_id)];
                         });
 
                         this.refreshTable();
@@ -173,10 +181,17 @@ export class LogsComponent implements OnInit {
         this.refreshTable();
 
     }
-    
+
     bindLogDevice(log: Log) {
         log.device = this.devices[this.devices.findIndex(device => device.id == log.device_id)]
         return log;
     }
 
+}
+
+interface marker {
+    lat: number;
+    lng: number;
+    label?: string;
+    draggable: boolean;
 }

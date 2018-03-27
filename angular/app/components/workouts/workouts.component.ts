@@ -21,10 +21,10 @@ export class WorkoutsComponent implements OnInit {
     workouts: Workout[];
     pastWorkouts: Workout[];
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild('dataMyWorkoutsPaginator') paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
 
-    @ViewChild(MatPaginator) pastPaginator: MatPaginator;
+    @ViewChild('dataMyPastWorkoutsPaginator') pastPaginator: MatPaginator;
     @ViewChild(MatSort) pastSort: MatSort;
 
     constructor(

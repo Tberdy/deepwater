@@ -5,6 +5,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {HttpClientModule} from '@angular/common/http';
 
 import {MatButtonModule} from '@angular/material/button';
+import {AgmCoreModule} from '@agm/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AuthService} from './services/auth.service';
@@ -31,6 +32,10 @@ import {ConfirmDialog} from './dialogs/confirm/confirm.component';
         FlexLayoutModule,
         HttpClientModule,
         MatButtonModule,
+        
+        AgmCoreModule.forRoot({
+            apiKey: 'AIzaSyBabLcUh4WekLaJCXvjXSR18gyxsZI36yY'
+        }),
 
     ],
     entryComponents: [

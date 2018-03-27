@@ -5,7 +5,6 @@
 
         <div *ngIf="authService.getUser().logged; then thenBlock else elseBlock"></div>
         <ng-template #thenBlock>
-            <a id='header-button' mat-button routerLink="/social/chat">Chat</a>
             <a id='header-button' mat-button routerLink="/contests">Compétitions</a>
             <a id='header-button' mat-button routerLink="/workouts">Mes séances</a>
             <a id='header-button' mat-button routerLink="/devices">Mes appareils</a>

@@ -39,3 +39,12 @@ div.logs-container {
 button {
     margin-top: 16px
 }
+
+div.map-container {
+    margin: 5vh;
+}
+
+agm-map {
+    height: 500px;
+    width: 100%;
+}
