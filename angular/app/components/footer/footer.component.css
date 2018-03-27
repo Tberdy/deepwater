@@ -2,7 +2,7 @@ footer {
     position: fixed;
     bottom: 0;
     width: 100%;
-    height: auto;
+    height: 13vh;
     padding : 16px;
     background-color: #EEEEEE;
 }
