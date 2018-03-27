@@ -1,5 +1,14 @@
 <div class="workouts-container" fxLayout="column" fxLayoutAlign="center center">
-    <div class="title">Mes séances</div>
+    
+    <div class="container-text">
+    
+            <div class="text-container-big">
+            <h3 class="fade-text">Mes séances </h3>
+            <h1> Suis régulièrement tes entraînement pour améliorer tes performances !  </h1>
+            </div>
+
+    </div>
+
     <div class="table-header">
         <mat-form-field>
             <input matInput (keyup)="applyFilter($event.target.value,1)" placeholder="Rechercher">
@@ -57,7 +66,14 @@
     
     <button mat-raised-button (click)="formDialog('add', null)">Ajouter une séance</button>
     
-    <div class="title">Mes séances passées</div>
+    <div class="container-text">
+    
+            <div class="text-container-big">
+            <h3 class="fade-text">Mes séances passées </h3>
+            <h1> Voilà un historique de tes entraînement  </h1>
+            </div>
+
+    </div>
     
     <div class="table-header">
         <mat-form-field>

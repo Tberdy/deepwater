@@ -9,10 +9,13 @@
         <mat-drawer-container class="example-container" style="background-color: #f3f3f3; position:fixed;">
             
             <mat-drawer #drawer class="example-sidenav" style="position:relative;">
-                <a href=""><mat-card _ngcontent-c36="" class="mat-card">Link 1</mat-card></a>
-                <a href=""><mat-card _ngcontent-c36="" class="mat-card">Link 2</mat-card></a>
-                <a href=""><mat-card _ngcontent-c36="" class="mat-card">Link 3</mat-card></a>
-                <a href=""><mat-card _ngcontent-c36="" class="mat-card">Link 4</mat-card></a>
+                <a href="" routerLink="/workouts"><mat-card _ngcontent-c36="" class="mat-card">Mes séances</mat-card></a>
+                <a href="" routerLink="/devices"><mat-card _ngcontent-c36="" class="mat-card">Mes appareils</mat-card></a>
+                <a href="" routerLink="/ranking"><mat-card _ngcontent-c36="" class="mat-card">Classement</mat-card></a>
+                <a href="" routerLink="/contact"><mat-card _ngcontent-c36="" class="mat-card">Contact</mat-card></a>
+                <a href="" routerLink="/mention"><mat-card _ngcontent-c36="" class="mat-card">Mention</mat-card></a>
+                <a href="" routerLink="/title"><mat-card _ngcontent-c36="" class="mat-card">Accueil</mat-card></a>
+                <a href="" routerLink="/account/my"><mat-card _ngcontent-c36="" class="mat-card">{{authService.getUser().email}}</mat-card></a>
             </mat-drawer>
             
             <div class="example-sidenav-content">
@@ -31,7 +34,7 @@
               </a>
               <div class="card-body">
                 <h6 class="card-title mb-1"><a href="#">David Miller</a></h6>
-                <p class="card-text small">Quelqu'un pour un séance de surf !?
+                <p class="card-text small">Someone is up for surfing !?
                   <a href="#">#surfsup</a>
                 </p>
               </div>
@@ -82,11 +85,11 @@
               <div class="card-footer small text-muted">Posted 32 mins ago</div>
 
               <a href="#">
-                <img class="card-img-top img-fluid w-100" src="https://unsplash.it/700/450?image=180" alt="">
+                <img class="card-img-top img-fluid w-100" src="https://unsplash.it/700/450?image=73" alt="">
               </a>
               <div class="card-body">
                 <h6 class="card-title mb-1"><a href="#">John Smith</a></h6>
-                <p class="card-text small">Another day at the office...
+                <p class="card-text small">Baseball anyone ?
                   <a href="#">#workinghardorhardlyworking</a>
                 </p>
               </div>
@@ -104,7 +107,7 @@
                 <div class="media">
                   <img class="d-flex mr-3" src="http://placehold.it/45x45" alt="">
                   <div class="media-body">
-                    <h6 class="mt-0 mb-1"><a href="#">Jessy Lucas</a></h6>Where did you get that camera?! I want one!
+                    <h6 class="mt-0 mb-1"><a href="#">Jessy Lucas</a></h6>Let me join you at the training !
                     <ul class="list-inline mb-0">
                       <li class="list-inline-item">
                         <a href="#">Like</a>

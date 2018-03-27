@@ -1,6 +1,15 @@
 <div class="ranking-container" fxLayout="column" fxLayoutAlign="center center">
     <div class="ranking-container" fxLayout="column" fxLayoutAlign="center center" style="width:100%;" *ngIf="!error;else error_temp">
-        <div class="title">Classement général</div>
+        
+         <div class="container-text">
+    
+            <div class="text-container-big">
+            <h3 class="fade-text"> Classement générale </h3>
+            <h1> Compare ton score avec tes amis, évolution rhyme avec compétition !  </h1>
+            </div>
+
+        </div>
+         
         <div class="table-header">
             <mat-form-field>
                 <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Rechercher">
