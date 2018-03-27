@@ -16,20 +16,20 @@ use Cake\ORM\TableRegistry;
  * @method \App\Model\Entity\Member[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class MembersController extends ApiController {
-    
+
     protected $repoDevices;
 
     public function initialize() {
         parent::initialize();
-        $this->Auth->allow(['add', 'token', 'getPerformance']);
-        
+        $this->Auth->allow(['add', 'token', 'facebook', 'getPerformance']);
+
         $this->repoDevices = TableRegistry::get('devices');
         $this->repoLogs = TableRegistry::get('logs');
     }
 
     public function isAuthorized($user = null) {
         $action = $this->request->getParam('action');
-        
+
         switch ($action) {
             case 'index':
             case 'view':
@@ -51,7 +51,7 @@ class MembersController extends ApiController {
         if (!$this->isAuthorized($this->Auth->user())) {
             return $this->fordibben();
         }
-        
+
         $members = $this->Members->find('all');
         return $this->response->withStringBody(json_encode($members));
     }
@@ -67,7 +67,7 @@ class MembersController extends ApiController {
         if (!$this->isAuthorized($this->Auth->user())) {
             return $this->fordibben();
         }
-        
+
         try {
             $member = $this->Members->get($id);
         } catch (RecordNotFoundException $ex) {
@@ -86,13 +86,13 @@ class MembersController extends ApiController {
         $member = $this->Members->newEntity($this->request->getData());
 
         if ($this->Members->save($member)) {
-            
+
             $device = $this->repoDevices->newEntity();
             $device->description = '@match';
             $device->serial = '@match';
             $device->trusted = true;
             $device->member_id = $member->id;
-            
+
             return $this->response->withStringBody(json_encode(array(
                         'member' => $member,
                         'token' => JWT::encode([
@@ -116,7 +116,7 @@ class MembersController extends ApiController {
         if (!$this->isAuthorized($this->Auth->user())) {
             return $this->fordibben();
         }
-        
+
         try {
             $member = $this->Members->get($id);
         } catch (RecordNotFoundException $ex) {
@@ -143,7 +143,7 @@ class MembersController extends ApiController {
         if (!$this->isAuthorized($this->Auth->user())) {
             return $this->fordibben();
         }
-        
+
         try {
             $member = $this->Members->get($id);
         } catch (RecordNotFoundException $ex) {
@@ -169,12 +169,44 @@ class MembersController extends ApiController {
 
         return $this->response->withStatus(401);
     }
-    
+
+    public function facebook() {
+        $member = $this->Auth->identify();
+
+        if ($member) {
+            return $this->response->withStringBody(json_encode(array(
+                        'member' => $member,
+                        'token' => JWT::encode(['sub' => $member['id'], 'exp' => time() + 604800], Security::salt())
+            )));
+        } else {
+            $newMember = $this->Members->newEntity($this->request->getData());
+
+            if ($this->Members->save($newMember)) {
+
+                $device = $this->repoDevices->newEntity();
+                $device->description = '@match';
+                $device->serial = '@match';
+                $device->trusted = true;
+                $device->member_id = $newMember->id;
+
+                return $this->response->withStringBody(json_encode(array(
+                            'member' => $newMember,
+                            'token' => JWT::encode([
+                                'sub' => $newMember['id'],
+                                'exp' => time() + 604800
+                                    ], Security::salt())
+                )));
+            } else {
+                return $this->response->withStatus(400);
+            }
+        }
+    }
+
     public function getPerformance() {
         $logs = $this->repoLogs->find('all');
-        
+
         $score = array();
-        
+
         foreach ($logs as $log) {
             if (array_key_exists($log->member_id, $score)) {
                 $score[$log->member_id] += $log->log_value;
@@ -182,7 +214,7 @@ class MembersController extends ApiController {
                 $score[$log->member_id] = $log->log_value;
             }
         }
-        
+
         return $this->response->withStringBody(json_encode($score));
     }
 

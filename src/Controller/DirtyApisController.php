@@ -111,7 +111,7 @@ class DirtyApisController extends ApiController {
     }
 
     public function addlog($device_id, $match_id, $member_id, $points) {
-        
+        return $this->response->withStringBody('Incomplete subject, incomplete work...');
     }
 
 }
