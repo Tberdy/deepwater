@@ -5,8 +5,7 @@ import {NgForm} from '@angular/forms';
 import {MatSnackBar} from '@angular/material';
 
 import {AuthService} from '../../services/auth.service';
-import {FacebookService, InitParams} from 'ngx-facebook';
-import {LoginResponse as FbLoginResponse} from 'ngx-facebook';
+import {FacebookService, InitParams, LoginOptions, LoginResponse as FbLoginResponse} from 'ngx-facebook';
 
 import {LoginResponse} from '../../models/api-response';
 
@@ -36,7 +35,13 @@ export class LoginComponent implements OnInit {
     }
 
     loginFacebook() {
-        this.fb.login()
+        const options: LoginOptions = {
+            scope: 'email',
+            return_scopes: true,
+            enable_profile_selector: true
+        };
+        
+        this.fb.login(options)
             .then((response: FbLoginResponse) => console.log(response))
             .catch((error: any) => console.error(error));
     }
