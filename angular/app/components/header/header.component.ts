@@ -8,10 +8,10 @@ import {AuthService} from '../../services/auth.service';
     styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-    title = 'Oh Say Sport !';
+    title = 'Oh Say SPORT !';
 
     constructor(private authService: AuthService) {}
-
+    
     ngOnInit() {
     }
 

@@ -1,14 +1,18 @@
-<div class="workout-container" fxLayout="column" fxLayoutAlign="center center">
-
-    <h2>Ma séance</h2>
-
-    <mat-card fxLayout="column" fxLayoutAlign="center center" class="example-card">
-        <mat-card-header>
-            <mat-card-title>{{workout.description}}</mat-card-title>
-            <mat-card-subtitle>{{workout.sport}}</mat-card-subtitle>
-        </mat-card-header>
-    </mat-card>
+<div class="contest-details-container" fxLayout="column" fxLayoutAlign="center center">
+    <div class="round-container">
+            <h2>Ma séance</h2>
+            <ul>
+                <li class="boxed-text"> Nom  :</li>
+                <li class="descript"> {{workout.description}}</li>
+                <li class="boxed-text">Sport : </li>
+                <li class="descript">{{workout.sport}}</li>
+            </ul>
+    </div>
+    
 </div>
+
+    
+
 
 <div class="logs-container" fxLayout="column" fxLayoutAlign="center center">
     <div class="table-header">
