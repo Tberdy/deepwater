@@ -6,24 +6,18 @@ button[mat-raised-button] {
     margin: 24px 0px;
     width: 300px;
 }
-
+.mat-card{
+    opacity : 0.8;
+    width: 600px;
+    height: 700px;
+}
 h1 {
   padding: 20px;
-  padding-top: 100px;
   margin: 0;
   color: white;
   font-family: 'Montserrat';
   letter-spacing: 2px;
-}
-
-h1:hover {
-  padding-left: 25px;
-  padding-right: 15px;
-}
-
-p:hover {
-  padding-right: 15px;
-  padding-left: 25px;
+  word-wrap: break-word;
 }
 
 p{
@@ -42,20 +36,12 @@ a {
   margin-bottom: 200px;
 }
 
-#apropos {
-  background: url(image1.png);
-  background-repeat: no-repeat;
-  background-size: 120%;
-  height: 100%;
+#apropos h1,#apropos h2,#apropos div,#apropos p{
+    color:black!important;
 }
-
-.slides-wrapper {
-  height: 674px;
-}
-
 .items img {
-    width: 750px;
-    height: 674px;
+    width: 600px;
+    height: 600px;
     object-fit: cover;
 }
 
@@ -63,13 +49,26 @@ a {
     margin: 30px;
 }
 
-h2 {
+.text {
   position: absolute;
   color: white;
   top: 400px;
-  height: 50px;
-  width: 750px;
+  height: auto;
+  width: 100%;
   background-color: rgba(0,0,0,0.5);
   z-index: 1000;
   padding-top: 15px;
+  
+  
+}
+.text h2
+{
+    word-wrap: break-word;
+}
+.container
+{
+    text-align: center;
+}
+.contentResp{
+    margin :auto!important;
 }

@@ -1,6 +1,6 @@
 <div class="container">
     <div fxLayout="row" fxLayoutAlign="start center" class="content" fxLayout.xs="column" fxLayout.sm="column" fxFlex class="contentResp">
-        <div class="blocks" fxFlex = "100%" id="apropos">
+        <mat-card fxFlex = "50%" id="apropos">
             <h1>Qui sommes nous ?</h1>
             <p>Notre site est un réseau social basé sur le sport. Il vous permettra d'organiser des tournois, compétitions et entrainements avec vos amis et notre communauté.</p><p>Vous pourrez suivre vos performances physiques et les comparer aux autres, et vous pourrez regarder les résultats des différents évènements organisés. OhSaySport vous permettra de vivre votre passion à fond !</p>
             <div fxLayout="row" fxLayoutAlign="space-around center" class="content" *ngIf="!authService.getUser().logged">
@@ -8,13 +8,12 @@
                     <a mat-button routerLink="/account/register" class="blocks">Créer un compte</a>
 
             </div>
-        </div>
-        <div class="blocks" fxFlex = "50%">
+        </mat-card>
+        <mat-card class="blocks" fxFlex = "50%">
             <div
                 ng2-carouselamos
                 class="slides-wrapper"
                 [items]="items"
-                [width]="900"
                 [$prev]="prev"
                 [$next]="next"
                 [$item]="item"
@@ -32,11 +31,14 @@
 
                 <div class="items">
                     <img src="{{item.name}}">
-                    <h2>{{item.text}}</h2>
+                    <div class="text">
+                        <h2>{{item.text}}</h2>
+                    </div>
+                    
                 </div>
 
             </ng-template>
-        </div>
+        </mat-card>
 
     </div>
-
+</div>

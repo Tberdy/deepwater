@@ -5,6 +5,7 @@ import {MatButtonModule, MatInputModule, MatIconModule, MatSnackBarModule, MatSt
 import {Ng2CarouselamosModule} from 'ng2-carouselamos';
 import {HomeRoutingModule} from './home-routing.module';
 import {HomeComponent} from '../../components/home/home.component';
+import {MatCardModule} from '@angular/material/card';
 
 @NgModule({
   imports: [
@@ -12,7 +13,7 @@ import {HomeComponent} from '../../components/home/home.component';
     HomeRoutingModule,
     FlexLayoutModule,
     MatButtonModule, MatInputModule, MatIconModule, MatSnackBarModule, MatStepperModule,
-    Ng2CarouselamosModule
+      Ng2CarouselamosModule, MatCardModule
   ],
   declarations: [HomeComponent]
 })
