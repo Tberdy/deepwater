@@ -16,6 +16,8 @@ import {FooterComponent} from './components/footer/footer.component';
 
 import {ConfirmDialog} from './dialogs/confirm/confirm.component';
 
+import { FacebookModule } from 'ngx-facebook';
+
 
 
 @NgModule({
@@ -36,6 +38,8 @@ import {ConfirmDialog} from './dialogs/confirm/confirm.component';
         AgmCoreModule.forRoot({
             apiKey: 'AIzaSyBabLcUh4WekLaJCXvjXSR18gyxsZI36yY'
         }),
+        
+        FacebookModule.forRoot(),
 
     ],
     entryComponents: [

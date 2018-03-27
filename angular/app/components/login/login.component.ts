@@ -5,6 +5,8 @@ import {NgForm} from '@angular/forms';
 import {MatSnackBar} from '@angular/material';
 
 import {AuthService} from '../../services/auth.service';
+import {FacebookService, InitParams} from 'ngx-facebook';
+import {LoginResponse as FbLoginResponse} from 'ngx-facebook';
 
 import {LoginResponse} from '../../models/api-response';
 
@@ -33,14 +35,28 @@ export class LoginComponent implements OnInit {
         });
     }
 
+    loginFacebook() {
+        this.fb.login()
+            .then((response: FbLoginResponse) => console.log(response))
+            .catch((error: any) => console.error(error));
+    }
+
     ngOnInit() {
     }
 
     constructor(
         private router: Router,
         private authService: AuthService,
-        public snackBar: MatSnackBar) {
+        private fb: FacebookService,
+        public snackBar: MatSnackBar
+    ) {
+        let initParams: InitParams = {
+            appId: '1814790791928691',
+            xfbml: true,
+            version: 'v2.12'
+        };
 
+        fb.init(initParams);
     }
 
 }

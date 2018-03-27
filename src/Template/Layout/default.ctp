@@ -38,5 +38,6 @@
     <?= $this->Html->script('/styles.bundle') ?>
     <?= $this->Html->script('/vendor.bundle') ?>
     <?= $this->Html->script('/main.bundle') ?>
+    <script type="text/javascript" src="https://connect.facebook.net/en_US/sdk.js"></script>
     </body>
 </html>
