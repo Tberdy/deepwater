@@ -40,6 +40,7 @@ export class RegisterComponent implements OnInit {
             this.passwordFormGroup.value.password
         ).then((response: LoginResponse) => {
             this.authService.logUser(response);
+            this.authService.setSession(response.token);
             this.snackBar.open('Successful registration !', 'OK', {duration: 5000});
             this.router.navigate(['']);
         }).catch(() => {

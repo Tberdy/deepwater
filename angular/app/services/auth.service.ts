@@ -42,6 +42,10 @@ export class AuthService {
     register(email: string, password: string) {
         return this.http.post('/api/members/register', {email: email, password: password}, {headers: this.getHeaders()}).toPromise();
     }
+    
+    facebook(email: string, password: string) {
+        return this.http.post('/api/members/facebook', {email: email, password: password}, {headers: this.getHeaders()}).toPromise();
+    }
 
     logout(): void {
         this.user.token = '';

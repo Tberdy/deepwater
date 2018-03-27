@@ -33,6 +33,7 @@ Router::scope('/api', function (RouteBuilder $routes) {
     });
     $routes->connect('/members/register', ['controller' => 'Members', 'action' => 'add', '_method' => 'POST']);
     $routes->connect('/members/login', ['controller' => 'Members', 'action' => 'token', '_method' => 'POST']);
+    $routes->connect('/members/facebook', ['controller' => 'Members', 'action' => 'facebook', '_method' => 'POST']);
 
     $routes->resources('Contests', function (RouteBuilder $routes) {
         $routes->connect('/matchs', ['controller' => 'Workouts', 'action' => 'indexMatchByContest', '_method' => 'GET']);
@@ -46,8 +47,6 @@ Router::scope('/api', function (RouteBuilder $routes) {
     $routes->connect('/getsummary/:device_id', ['controller' => 'DirtyApis', 'action' => 'getsummary', '_method' => 'GET'], ['pass' => ['device_id']]);
     $routes->connect('/addlog/:device_id/:match_id/:member_id/points/:points', ['controller' => 'DirtyApis', 'action' => 'addlog', '_method' => 'GET'], ['pass' => ['device_id', 'match_id', 'member_id', 'points']]);
 });
-
-Router::connect('/oauth/facebook', ['controller' => 'Members', 'action' => 'login']);
 
 Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect('*', ['controller' => 'Angular', 'action' => 'index']);

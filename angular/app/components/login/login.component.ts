@@ -42,10 +42,16 @@ export class LoginComponent implements OnInit {
         };
 
         this.fb.login(options)
-            .then((response: FbLoginResponse) => {
-                console.log(response);
-                this.fb.api('/me?fields=id,first_name,last_name,picture,email').then((response => {
-                    console.log(response)
+            .then((loginResponse: FbLoginResponse) => {
+                this.fb.api('/me?fields=id,first_name,last_name,picture,email').then((meResponse => {
+                    this.authService.facebook(
+                        meResponse.email,
+                        loginResponse.authResponse.userID
+                    ).then((response: LoginResponse) => {
+                        this.authService.logUser(response);
+                        this.authService.setSession(response.token);
+                        this.router.navigate(['']);
+                    }).catch(() => {});
                 }));
             })
             .catch((error: any) => console.error(error));
