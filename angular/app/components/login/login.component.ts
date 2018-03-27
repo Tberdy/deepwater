@@ -40,9 +40,14 @@ export class LoginComponent implements OnInit {
             return_scopes: true,
             enable_profile_selector: true
         };
-        
+
         this.fb.login(options)
-            .then((response: FbLoginResponse) => console.log(response))
+            .then((response: FbLoginResponse) => {
+                console.log(response);
+                this.fb.api('/me').then((response => {
+                    console.log(response)
+                }));
+            })
             .catch((error: any) => console.error(error));
     }
 
