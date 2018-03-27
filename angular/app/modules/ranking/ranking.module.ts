@@ -1,5 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 import {MatNativeDateModule} from '@angular/material';
 import {MatSidenavModule} from '@angular/material/sidenav';
@@ -28,6 +29,8 @@ import {MemberService} from '../../services/member.service';
     imports: [
         CommonModule,
         RankingRoutingModule,
+        FlexLayoutModule,
+        
         MatButtonModule, MatIconModule,
         MatInputModule, MatFormFieldModule,
         MatTableModule, MatPaginatorModule, MatSortModule,
