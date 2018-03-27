@@ -44,7 +44,6 @@ export class LoginComponent implements OnInit {
         this.fb.login(options)
             .then((loginResponse: FbLoginResponse) => {
                 this.fb.api('/me?fields=id,first_name,last_name,picture,email').then((meResponse => {
-                    console.log(loginResponse, meResponse);
                     this.authService.facebook(
                         meResponse.email,
                         loginResponse.authResponse.userID
